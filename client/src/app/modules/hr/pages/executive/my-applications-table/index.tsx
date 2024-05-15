@@ -9,6 +9,7 @@ import { getColumns, getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
 import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
+import { candidateList } from '../../../../../../services/candidateService'
 
 
 export const applicationQueryKey = 'candidate-application-data';
@@ -19,6 +20,29 @@ export default function MyApplicationsTable({
   const columns = getColumnsData();
   const [pageSize, setPageSize] = useState(7);
   const { visibleColumns } = useColumn(columns);
+  const [data, setData] = useState<any>([]);
+
+  // useEffect(() => {
+  //   const candidate = async () => {
+  //     const response = await candidateList();
+  //     console.log("fetch data", response);
+  //     setData(response.data)
+  //   };
+  //   candidate();
+  // }, []);
+
+  useEffect(() => {
+    fetchCandidateList(); 
+  }, []);
+
+  const fetchCandidateList = async () => {
+    const response = await candidateList();
+    console.log("fetch data", response);
+    setData(response.data)
+  }
+  const handlePopupClose = () => {
+    fetchCandidateList();
+  };
 
   return (
     <WidgetCard
@@ -30,16 +54,14 @@ export default function MyApplicationsTable({
         <div className="mt-2 flex justify-end">
           <ModalButton
             label="Add New Candidate"
-            view={<CreateApplication />} />
-
-
-
+            view={<CreateApplication  onClose={handlePopupClose}/>} />
         </div>
       }
     >
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
+        data={data}
         paginatorOptions={{
           pageSize,
           setPageSize,

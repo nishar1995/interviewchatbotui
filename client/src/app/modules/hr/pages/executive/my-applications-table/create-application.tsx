@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PiFilePdf, PiXBold } from 'react-icons/pi';
 import { Controller, SubmitHandler } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
@@ -8,99 +8,120 @@ import { Input, Button, ActionIcon, Title, Select, Text } from 'rizzui';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import Upload from '@/components/ui/upload';
 import SimpleBar from 'simplebar-react';
-import {
-  CreateApplicationInput,
-  createApplicationSchema,
-} from '@/utils/validators/create-application.schema';
+
 import { useQueryClient } from '@tanstack/react-query';
 import { applicationQueryKey } from '.';
+import { candidateSchema } from '@/utils/validators/candidate.schema'
+import { addCandidate } from '@/services/candidateService';
+import { CreateApplicationInput } from '@/utils/validators/create-application.schema';
+import { getJobList } from '../../../../../../services/jobPostingService'
 
-export default function CreateApplication() {
+
+
+
+export default function CreateApplication({ onClose }) {
+
   const defaultValues: Omit<
-    CreateApplicationInput,
-    'meetingSchedule' | 'dob'
+    candidateSchema,
+    'candidate'
   > & {
-    meetingSchedule: Date | undefined;
-    dob: Date | undefined;
+    name: string,
+    job_id: string,
+    resume: string,
+    username: string,
+    email: string,
+    phone_number: string,
+    application_id: string
+    // role: string,
   } = {
-    candidateFiles: [],
-    candidateName: '',
-    meetingSchedule: undefined,
-    dob: undefined,
-    job: '',
+    name: '',
+    job_id: '',
+    resume: '',
+    username: '',
+    email: '',
+    phone_number: '',
+    application_id: ''
+    // role: '1',
   };
+  // const queryClient = useQueryClient();
+  // const { closeModal } = useModal();
+  // const [reset, setReset] = useState(defaultValues);
+  // const [isLoading, setLoading] = useState(false);
+
+  // const imageRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
   const [isLoading, setLoading] = useState(false);
-
   const imageRef = useRef<HTMLInputElement>(null);
+  const [data, setData] = useState<any>([]);
+  const [selectedJobId, setSelectedJobId] = useState<string>('');
 
-  const onSubmit: SubmitHandler<CreateApplicationInput> = (data: any) => {
+  useEffect(() => {
+    jobList();
+  }, []);
+
+  const jobList = async () => {
+    try {
+      const response = await getJobList()
+      console.log("job lis", response.data)
+      if (response) {
+        setData(response.data)
+        console.log("data....", data)
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+
+  }
+  const generateApplicationId = () => {
+    let data = '#AiInfox' + (Math.floor(Math.random() * 10) + 1);
+    return data;
+  }
+  const onSubmit: SubmitHandler<CreateApplicationInput> = async (data: any) => {
+    console.log("add candidate ", data)
     setLoading(true);
-    // set timeout ony required to display loading state of the create category button
-    const formattedData = {
-      ...data,
-      createdAt: new Date(),
-    };
-
     console.log(data);
     const formData = new FormData();
+    let id = generateApplicationId();
+    data.application_id = id;
+    console.log('aPPlication _id.....',data.application_id)
+    //formData.append('application_id', id);
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        if (key === 'candidateFiles' && data[key]) {
-          // data[key].forEach((file: any, index: any) => {
-          //   formData.append(`${key}[${index}]`, file);
-          // });
-          formData.append('candidateFiles', data.candidateFiles[0]);
+        if (key === 'resume' && data[key]) {
+          formData.append('resume', data.resume[0]);
         } else {
           formData.append(key, data[key]);
         }
       }
     }
-    
-    let uploadedFilePath = '';
-    console.log(formData);
-    formData.append('candidateFiles', uploadedFilePath);
-    fetch('http://127.0.0.1:5000/upload_application_data', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        // 'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        'Access-Control-Allow-Origin': '*'
-      }
-    })
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
+    console.log(formData.get('resume'))
+    try {
+      const response = await addCandidate(formData);
+      console.log("add candidate", response);
+      if (response) {
         queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
-        setLoading(false);
-        setReset({
-          ...defaultValues,
-        });
         closeModal();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        setLoading(false);
-      });
-    setLoading(true);
-    setTimeout(() => {
-      console.log('formattedData', formattedData);
+        onClose();
+      }
+    } catch (error) {
+      console.error('Error:', error);
       setLoading(false);
-      setReset({
-        ...defaultValues,
-      });
-      closeModal();
-    }, 600);
+    };
+  };
+
+  const onChangeJob = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log("selected job value", event.target.value);
+    setSelectedJobId(event.target.value);
+    console.log("selected job id", selectedJobId)
   };
 
   return (
     <Form<CreateApplicationInput>
       resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={createApplicationSchema}
+      validationSchema={candidateSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
@@ -117,17 +138,52 @@ export default function CreateApplication() {
             <Input
               label="Candidate Name"
               placeholder="Enter Candidate's full name"
-              {...register('candidateName')}
+              {...register('name')}
               className="col-span-full"
-              error={errors.candidateName?.message}
+              error={errors.name?.message}
+            />
+
+            {/* <Input
+              label="Job"
+              placeholder="Enter Job id"
+              className="col-span-full"
+              {...register('job_id')}
+              error={errors.job_id?.message}
+            /> */}
+            <select
+              id="job-select"
+              className="col-span-full"
+              {...register('job_id')}
+              onChange={onChangeJob}
+            >
+              <option value="">Select a job</option>
+              {data.map((job: any) => (
+                <option key={job.id} value={job.id}>
+                  {job.title}
+                </option>
+              ))}
+            </select>
+            <Input
+              label="User Name"
+              placeholder="Enter username"
+              {...register('username')}
+              className="col-span-full"
+              error={errors.username?.message}
             />
 
             <Input
-              label="Job"
-              placeholder="Enter Job title"
+              label="Email"
+              placeholder="Enter candidate email"
+              {...register('email')}
               className="col-span-full"
-              {...register('job')}
-              error={errors.job?.message}
+              error={errors.email?.message}
+            />
+            <Input
+              label="Contact No."
+              placeholder="Enter contact no."
+              {...register('phone_number')}
+              className="col-span-full"
+              error={errors.phone_number?.message}
             />
 
             <Input
@@ -138,7 +194,7 @@ export default function CreateApplication() {
               error={errors.meetingSchedule?.message}
             />
             <Controller
-              name="candidateFiles"
+              name="resume"
               control={control}
               render={({ field: { value, onChange, onBlur } }) => (
                 <div className="col-span-full">
@@ -148,6 +204,7 @@ export default function CreateApplication() {
                     accept={'pdf'}
                     multiple={false}
                     onChange={(event) => {
+                      console.log(event)
                       const uploadedFiles = (event.target as HTMLInputElement)
                         .files;
                       const newFiles = Object.entries(uploadedFiles as object)

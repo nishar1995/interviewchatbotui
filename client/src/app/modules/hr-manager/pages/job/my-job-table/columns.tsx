@@ -128,21 +128,21 @@ export const getColumnsData = () => {
     {
       title: <HeaderCell title="Job Id" />,
       //onHeaderCell: () => onHeaderCellClick('jobId'),
-      dataIndex: 'jobId',
-      key: 'jobId',
+      dataIndex: 'job_id',
+      key: 'job_id',
       width: 130,
-      render: (jobId: string) => <Text>#{jobId}</Text>,
+      render: (job_id: string) => <Text>{job_id}</Text>,
     },
     {
       title: <HeaderCell title="Job Name" />,
       //onHeaderCell: () => onHeaderCellClick('jobName'),
-      dataIndex: 'jobName',
-      key: 'jobName',
+      dataIndex: 'title',
+      key: 'title',
       width: 130,
-      render: (jobName: string) => (
+      render: (title: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {jobName}
+            {title}
           </Text>
         </div>
       ),

@@ -15,20 +15,30 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 
 import { tenantQueryKey } from '../add-tenant';
+import { tenantSchema } from '@/utils/validators/tenant.schema';
+import { addTenant } from '@/services/tenantService';
 
 export default function CreateTenant() {
   const defaultValues: Omit<
-    CreateApplicationInput,
-    'meetingSchedule' | 'dob'
+    tenantSchema,
+    'tenantName'
   > & {
-    meetingSchedule: Date | undefined;
-    dob: Date | undefined;
+    name: string;
+    address_line1: string;
+    address_line2: string;
+    city: string;
+    state: string;
+    country: string;
+    zip_code: string; // Add 'tenantName' property
   } = {
-    candidateFiles: [],
-    candidateName: '',
-    meetingSchedule: undefined,
-    dob: undefined,
-    job: '',
+    name: '', // Initialize 'tenantName' property
+    address_line1: '',
+    address_line2: '',
+    city: '',
+    state: '',
+    country: '',
+    zip_code: '',
+
   };
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
@@ -37,71 +47,85 @@ export default function CreateTenant() {
 
   const imageRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit: SubmitHandler<CreateApplicationInput> = (data: any) => {
-    setLoading(true);
-    // set timeout ony required to display loading state of the create category button
-    const formattedData = {
-      ...data,
-      createdAt: new Date(),
-    };
-
+  const onSubmit: SubmitHandler<tenantSchema> = async (data: any) => {
     console.log(data);
-    const formData = new FormData();
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        if (key === 'candidateFiles' && data[key]) {
-          // data[key].forEach((file: any, index: any) => {
-          //   formData.append(`${key}[${index}]`, file);
-          // });
-          formData.append('candidateFiles', data.candidateFiles[0]);
-        } else {
-          formData.append(key, data[key]);
-        }
-      }
-    }
-
-    let uploadedFilePath = '';
-    console.log(formData);
-    formData.append('candidateFiles', uploadedFilePath);
-    fetch('http://127.0.0.1:5000/upload_application_data', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        // 'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        'Access-Control-Allow-Origin': '*'
-      }
-    })
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-        queryClient.invalidateQueries({ queryKey: [tenantQueryKey] });
-        setLoading(false);
+    try {
+      const response = await addTenant(data);
+      if (response) {
+        console.log(response);
         setReset({
           ...defaultValues,
         });
         closeModal();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        setLoading(false);
-      });
-    setLoading(true);
-    setTimeout(() => {
-      console.log('formattedData', formattedData);
-      setLoading(false);
-      setReset({
-        ...defaultValues,
-      });
-      closeModal();
-    }, 600);
+      }
+    } catch (error) {
+
+    }
+
+    // setLoading(true);
+    // // set timeout ony required to display loading state of the create category button
+    // const formattedData = {
+    //   ...data,
+    //   createdAt: new Date(),
+    // };
+
+    // console.log(data);
+    // const formData = new FormData();
+    // for (const key in data) {
+    //   if (data.hasOwnProperty(key)) {
+    //     if (key === 'candidateFiles' && data[key]) {
+    //       // data[key].forEach((file: any, index: any) => {
+    //       //   formData.append(`${key}[${index}]`, file);
+    //       // });
+    //       formData.append('candidateFiles', data.candidateFiles[0]);
+    //     } else {
+    //       formData.append(key, data[key]);
+    //     }
+    //   }
+    // }
+
+    // let uploadedFilePath = '';
+    // console.log(formData);
+    // formData.append('candidateFiles', uploadedFilePath);
+    // fetch('http://127.0.0.1:5000/upload_application_data', {
+    //   method: 'POST',
+    //   body: formData,
+    //   headers: {
+    //     // 'Content-Type': 'application/json',
+    //     // 'Content-Type': 'application/x-www-form-urlencoded',
+    //     'Access-Control-Allow-Origin': '*'
+    //   }
+    // })
+    //   .then(response => response.json())
+    //   .then(result => {
+    //     console.log(result);
+    //     queryClient.invalidateQueries({ queryKey: [tenantQueryKey] });
+    //     setLoading(false);
+    //     setReset({
+    //       ...defaultValues,
+    //     });
+    //     closeModal();
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //     setLoading(false);
+    //   });
+    // setLoading(true);
+    // setTimeout(() => {
+    //   console.log('formattedData', formattedData);
+    //   setLoading(false);
+    //   setReset({
+    //     ...defaultValues,
+    //   });
+    //   closeModal();
+    // }, 600);
   };
 
   return (
-    <Form<CreateApplicationInput>
+    <Form<tenantSchema>
       resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={createApplicationSchema}
+      validationSchema={tenantSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
@@ -118,7 +142,7 @@ export default function CreateTenant() {
             <Input
               label="Tenant Name"
               placeholder="Enter Tenant full name"
-              // {...register('candidateName')}
+              {...register('name')}
               className="col-span-full"
             //error={errors.candidateName?.message}
             />
@@ -127,7 +151,7 @@ export default function CreateTenant() {
               label="Address Line1"
               placeholder="Address Line1"
               className="col-span-full"
-            //{...register('job')}
+              {...register('address_line1')}
             //error={errors.job?.message}
             />
 
@@ -135,7 +159,7 @@ export default function CreateTenant() {
               label="Address Line2"
               placeholder="Enter Address Line2"
               className="col-span-full"
-            //{...register('meetingSchedule')}
+              {...register('address_line2')}
             //error={errors.meetingSchedule?.message}
             />
 
@@ -143,30 +167,44 @@ export default function CreateTenant() {
               label="City"
               placeholder="Enter city"
               className="col-span-full"
-            //{...register('meetingSchedule')}
+              {...register('city')}
             //error={errors.meetingSchedule?.message}
             />
 
-            <Input
+            {/* <Input
               label="State"
               placeholder="Enter State"
               className="col-span-full"
-            //{...register('meetingSchedule')}
+              {...register('state')}
             //error={errors.meetingSchedule?.message}
-            />
+            /> */}
+
+            {/* <label htmlFor="state" className="block text-gray-700 font-bold mb-2">State</label> */}
+            <select
+            aria-label='state'
+              id="state"
+              className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              {...register('state', { required: 'State is required' })}
+            >
+              <option value="">Select a state</option>
+              <option value="AL">Alabama</option>
+              <option value="AK">Alaska</option>
+              <option value="AZ">Arizona</option>
+             
+            </select>
 
             <Input
               label="Country"
               placeholder="Enter Country"
               className="col-span-full"
-            //{...register('meetingSchedule')}
+              {...register('country')}
             //error={errors.meetingSchedule?.message}
             />
             <Input
               label="Zip Code"
               placeholder="Enter Zip Code"
               className="col-span-full"
-            //{...register('meetingSchedule')}
+              {...register('zip_code')}
             //error={errors.meetingSchedule?.message}
             />
             {/* <Controller

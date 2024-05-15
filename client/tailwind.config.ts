@@ -5,6 +5,7 @@ export default {
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
     './node_modules/rizzui/dist/*.{js,ts,jsx,tsx}', // must use this line to compile and generate our RizzUI components style
+    './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
   ],
   darkMode: ['class', '[data-theme="dark"]'],
   theme: {

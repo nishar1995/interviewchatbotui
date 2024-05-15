@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import refreshToken from '../services/authService';
-import { env } from "../env.local";
+
 
 const axiosInterceptorInstance = axios.create({
     baseURL: process.env.BASE_URL || 'http://intapp.learninginbits.com:8080/',
@@ -10,7 +10,8 @@ const axiosInterceptorInstance = axios.create({
 
 axiosInterceptorInstance.interceptors.request.use((config) => {
     console.log("interceptor file.....");
-    const token = JSON.parse(localStorage.getItem('token'));
+    // const token = JSON.parse(localStorage.getItem('token'));
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1NzgxOTI3LCJpYXQiOjE3MTU3NzgzMjcsImp0aSI6IjI4NjYxMjNkNTU2ZjQ3MTliNTI5Y2I5YTRmMDA1OWY3IiwidXNlcl9pZCI6Mn0.TrJz04hXtdOCeKm8K_LiHky9qxrO4R5-PRwGwi1CB5c';
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -21,6 +22,7 @@ axiosInterceptorInstance.interceptors.request.use((config) => {
             const response = await refreshToken(token)
             if (response) {
                 config.headers['Authorization'] = `Bearer ${response.token}`;
+                return axiosInterceptorInstance(config);
             }
         } catch (error) {
             console.log("error occur in refresh token", error);
@@ -30,7 +32,6 @@ axiosInterceptorInstance.interceptors.request.use((config) => {
 })
 
 export default axiosInterceptorInstance;
-
 
 
 

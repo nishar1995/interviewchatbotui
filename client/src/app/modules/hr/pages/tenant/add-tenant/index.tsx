@@ -10,6 +10,7 @@ import ModalButton from '@/app/shared/modal-button';
 import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
 import CreateTenant from './create-application';
+import { fetchData } from '../../../../../../services/tenantService'
 
 
 export const tenantQueryKey = 'tenant-application-data';
@@ -20,7 +21,16 @@ export default function MyTenantTable({
   const columns = getColumnsData();
   const [pageSize, setPageSize] = useState(7);
   const { visibleColumns } = useColumn(columns);
+ const [data,setData] = useState<any>([]);
 
+  useEffect(() => {
+    const tentant = async () => {
+      const response = await fetchData();
+      console.log("fetch data", response);
+      setData(response.data)
+    };
+    tentant();
+  }, []);
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -41,6 +51,7 @@ export default function MyTenantTable({
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
+        data={data}
         paginatorOptions={{
           pageSize,
           setPageSize,

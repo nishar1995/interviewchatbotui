@@ -1,11 +1,12 @@
 'use client';
 
 import { HeaderCell } from '@/components/ui/table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
 import { Text, Checkbox, Select } from 'rizzui';
-
+import { fetchData } from '../../../../../../services/tenantService'
 import 'react-datepicker/dist/react-datepicker.css';
+let getTenantData: any;
 // const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
 //   // Check if scheduleString is null or undefined
 //   if (scheduleString === null || scheduleString === undefined) {
@@ -219,17 +220,6 @@ export const getColumns = ({
       ),
     },
 
-    // {
-    //   title: (
-    //     <HeaderCell
-    //       title={<span className="whitespace-nowrap">Date of Birth</span>}
-    //     />
-    //   ),
-    //   dataIndex: 'dob',
-    //   key: 'dob',
-    //   width: 250,
-    //   render: (dob: Date) => <DateCell date={dob} />,
-    // },
     {
       title: (
         <HeaderCell
@@ -247,43 +237,6 @@ export const getColumns = ({
         </div>
       ),
     },
-    //   render: (meetingSchedule: string | undefined)=> {
-    //     // Ensure meetingSchedule is a Date object
-    //     if (meetingSchedule === null || meetingSchedule === undefined) {
-    //       return null;
-    //     }
-    //     const parsedMeetingSchedule = parseMeetingSchedule(meetingSchedule);
-
-    //     return (
-    //       <div>
-    //         <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //         {parsedMeetingSchedule?.toLocaleString() ?? 'Invalid Date'}
-    //         </time>
-    //       </div>
-    //     );
-    //   },
-    // },
-
-
-
-
-
-    //     render: (meetingSchedule: Date) => (
-    //       <div>
-    //         {/* <> {console.log(meetingSchedule)} </> */}
-
-    //         <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //         {meetingSchedule.toLocaleDateString()}
-    //         </time>
-    //          {/* <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //             {`${selectedDateRange[0].toLocaleDateString()} - ${selectedDateRange[1].toLocaleDateString()}`}
-    //            </time> */}
-    //           {/* <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //   {starRangeDate && endRangeDate && `${starRangeDate.toLocaleDateString()} - ${endRangeDate.toLocaleDateString()}`}
-    // </time> */}
-    //       </div>
-    //     ),
-    //  },
 
 
     {
@@ -309,10 +262,43 @@ export const getColumns = ({
 
 // const [selectAllChecked, setSelectAllChecked] = useState(true);
 // setSelectAllChecked(!selectAllChecked);
-export function handleSelectAll() {
-  console.log("handle select all")
+export async function handleSelectAll() {
+  console.log("handle select all");
+  // const data = await fetchData();
+  // getTenantData = data.data
+  // console.log("fetch data",getTenantData)
 }
+
+const TenantTable = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const fetchedData = await fetchData();
+        console.log(fetchedData)
+      } catch (error) {
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+
+};
+
+export default TenantTable;
+
+// useEffect(() => {
+//   console.log('implement fetch data here');
+// })
 export const getColumnsData = () => {
+
   return [
     {
       title: (
@@ -354,13 +340,13 @@ export const getColumnsData = () => {
           title={<span className="whitespace-nowrap">Tenant Name</span>}
         />
       ),
-      dataIndex: 'tenantName',
-      key: 'tenantName',
+      dataIndex: 'name',
+      key: 'name',
       width: 130,
-      render: (tenantName: string) => (
+      render: (name: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {tenantName}
+            {name}
           </Text>
         </div>
       ),
@@ -368,13 +354,13 @@ export const getColumnsData = () => {
     {
       title: <HeaderCell title="Address Line1" />,
       //onHeaderCell: () => onHeaderCellClick('passWord'),
-      dataIndex: 'addressLine1',
-      key: 'addressLine1',
+      dataIndex: 'address_line1',
+      key: 'address_line1',
       width: 150,
-      render: (addressLine1: string) => (
+      render: (address_line1: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {addressLine1}
+            {address_line1}
           </Text>
         </div>
       ),
@@ -382,13 +368,14 @@ export const getColumnsData = () => {
     {
       title: <HeaderCell title="Address Line2" />,
       //onHeaderCell: () => onHeaderCellClick('passWord'),
-      dataIndex: 'addressLine2',
-      key: 'addressLine2',
+      dataIndex: 'address_line2',
+      key: 'address_line2',
       width: 150,
-      render: (addressLine1: string) => (
+      render: (
+        address_line2: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {addressLine1}
+            {address_line2}
           </Text>
         </div>
       ),
@@ -441,18 +428,19 @@ export const getColumnsData = () => {
           title={<span className="whitespace-nowrap">Zip Code</span>}
         />
       ),
-      dataIndex: 'zipCode',
-      key: 'zipCode',
+      dataIndex: 'zip_code',
+      key: 'zip_code',
       width: 130,
-      render: (zipCode: string) => (
+      render: (
+        zip_code: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {zipCode}
+            {zip_code}
           </Text>
         </div>
       ),
     },
-   
+
   ];
 };
 export const getColumns2 = ({

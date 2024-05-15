@@ -123,7 +123,11 @@ type Columns = {
 
 };
 
-
+const generateApplicationId = (id: string) => {
+  let data = `AiInfox-${id.padStart(5, '0')}`;
+  console.log("Generated Application ID:", data);
+  return data;
+};
 export const getColumns = ({
   handleSelectAll,
   sortConfig,
@@ -168,10 +172,10 @@ export const getColumns = ({
     {
       title: <HeaderCell title="Application Id" />,
       onHeaderCell: () => onHeaderCellClick('applicationId'),
-      dataIndex: 'applicationId',
+      dataIndex: 'applicationId', // Make sure this matches your data structure
       key: 'applicationId',
       width: 130,
-      render: (applicationId: string) => <Text>#{applicationId}</Text>,
+      render: (id: string) => <Text># {generateApplicationId(id)}</Text>
     },
     {
       title: (
@@ -343,10 +347,10 @@ export const getColumnsData = () => {
     {
       title: <HeaderCell title="Application Id" />,
       //onHeaderCell: () => onHeaderCellClick('applicationId'),
-      dataIndex: 'applicationId',
-      key: 'applicationId',
+      dataIndex: 'application_id',
+      key: 'application_id',
       width: 130,
-      render: (applicationId: string) => <Text>#{applicationId}</Text>,
+      render: (application_id: string) => <Text>{application_id}</Text>,
     },
     {
       title: (
@@ -365,51 +369,51 @@ export const getColumnsData = () => {
         </div>
       ),
     },
-    {
-      title: <HeaderCell title="password" />,
-      //onHeaderCell: () => onHeaderCellClick('passWord'),
-      dataIndex: 'password',
-      key: 'password',
-      width: 150,
-      render: (passWord: string) => (
-        <div>
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {passWord}
-          </Text>
-        </div>
-      ),
-    },
+    // {
+    //   title: <HeaderCell title="password" />,
+    //   //onHeaderCell: () => onHeaderCellClick('passWord'),
+    //   dataIndex: 'password',
+    //   key: 'password',
+    //   width: 150,
+    //   render: (passWord: string) => (
+    //     <div>
+    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+    //         {passWord}
+    //       </Text>
+    //     </div>
+    //   ),
+    // },
     {
       title: <HeaderCell title="Candidate Name" />,
       //onHeaderCell: () => onHeaderCellClick('candidateName'),
-      dataIndex: 'candidateName',
-      key: 'candidateName',
+      dataIndex: 'name',
+      key: 'name',
       width: 150,
-      render: (candidateName: string) => (
+      render: (name: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {candidateName}
+            {name}
           </Text>
         </div>
       ),
     },
-    {
-      title: (
-        <HeaderCell
-          title={<span className="whitespace-nowrap">Meeting Schedule</span>}
-        />
-      ),
-      dataIndex: 'meetingSchedule',
-      key: 'meetingSchedule',
-      width: 130,
-      render: (meetingSchedule: string) => (
-        <div>
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {meetingSchedule}
-          </Text>
-        </div>
-      ),
-    },
+    // {
+    //   title: (
+    //     <HeaderCell
+    //       title={<span className="whitespace-nowrap">Meeting Schedule</span>}
+    //     />
+    //   ),
+    //   dataIndex: 'meetingSchedule',
+    //   key: 'meetingSchedule',
+    //   width: 130,
+    //   render: (meetingSchedule: string) => (
+    //     <div>
+    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+    //         {meetingSchedule}
+    //       </Text>
+    //     </div>
+    //   ),
+    // },
     {
       title: (
         <HeaderCell

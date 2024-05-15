@@ -1,13 +1,14 @@
 import cn from '@/utils/class-names';
-import MyMeetingSchedule from './my-meeting-schedule';
-// import MyMeetingSchedule from '../schedule-meeting/my-schedule-meeting';
+
+
+import MyMeeting from './my-meeting';
 
 
 interface IndexProps {
   className?: string;
 }
 
-export default function ExecutiveDashboard({ className }: IndexProps) {
+export default function ExecutiveMeetingDashboard({ className }: IndexProps) {
   return (
     <div
       className={cn(
@@ -15,30 +16,9 @@ export default function ExecutiveDashboard({ className }: IndexProps) {
         className
       )}
     >
-    
-      <MyMeetingSchedule />
-      {/* <StatsCards />
-      <div className="grid grid-cols-1 gap-5 @4xl:grid-cols-2 2xl:gap-x-6 2xl:gap-y-7">
-        <RevenueExpense />
-        <Forecast />
-      </div>
-      <TotalProfitLoss />
-      <div className="grid grid-cols-1 gap-5 @4xl:grid-cols-2 @7xl:grid-cols-4 2xl:gap-x-6 2xl:gap-y-7">
-        <MRRReport />
-        <SocialFollowers />
-        <WebAnalytics />
-        <BiggestDeal />
-      </div>
-      <div className="grid grid-cols-1 gap-5 @4xl:grid-cols-2 2xl:gap-x-6 2xl:gap-y-7">
-        <SalesByCategory />
-        <MonthlySalesGrowth />
-      </div>
-      <OperatingCashFlow />
-      <div className="grid grid-cols-1 gap-5 @4xl:grid-cols-2 2xl:gap-x-6 2xl:gap-y-7">
-        <ArrBySignUp />
-        <ActiveUsers />
-      </div>
-      <RecentCustomers /> */}
+
+      {<MyMeeting/>}
+     
     </div>
   );
 }

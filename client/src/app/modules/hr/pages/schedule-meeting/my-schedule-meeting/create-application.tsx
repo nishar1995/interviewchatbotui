@@ -8,30 +8,28 @@ import { Input, Button, ActionIcon, Title, Select, Text } from 'rizzui';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import Upload from '@/components/ui/upload';
 import SimpleBar from 'simplebar-react';
+import Datepicker from "tailwind-datepicker-react"
 import {
   CreateApplicationInput,
   createApplicationSchema,
 } from '@/utils/validators/create-application.schema';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { questionsQueryKey } from '.';
-import { tenantQuestionsSchema } from '@/utils/validators/tenantQuestions.schema'
-import { addQuestion } from '@/services/tenantQuestionsService';
+import { meetingQueryKey } from '.';
 
-export default function CreateQuestions({ onClose }) {
+export default function CreateMeeting() {
   const defaultValues: Omit<
-    tenantQuestionsSchema,
-    'questions'
+    CreateApplicationInput,
+    'meetingSchedule' | 'dob'
   > & {
-    question: string;
-    answer: string;
-    tenant_id: string;
-    job_id: string;
+    meetingSchedule: Date | undefined;
+    dob: Date | undefined;
   } = {
-    question: '',
-    answer: '',
-    tenant_id: '',
-    job_id: ''
+    candidateFiles: [],
+    candidateName: '',
+    meetingSchedule: undefined,
+    dob: undefined,
+    job: '',
   };
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
@@ -40,84 +38,72 @@ export default function CreateQuestions({ onClose }) {
 
   const imageRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit: SubmitHandler<tenantQuestionsSchema> = async (data: any) => {
+  
+  const onSubmit: SubmitHandler<CreateApplicationInput> = (data: any) => {
     setLoading(true);
-    try {
-      const response = await addQuestion(data);
-      if (response) {
-        console.log(response);
+    // set timeout ony required to display loading state of the create category button
+    const formattedData = {
+      ...data,
+      createdAt: new Date(),
+    };
+
+    console.log(data);
+    const formData = new FormData();
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        if (key === 'candidateFiles' && data[key]) {
+          // data[key].forEach((file: any, index: any) => {
+          //   formData.append(`${key}[${index}]`, file);
+          // });
+          formData.append('candidateFiles', data.candidateFiles[0]);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+    }
+
+    let uploadedFilePath = '';
+    console.log(formData);
+    formData.append('candidateFiles', uploadedFilePath);
+    fetch('http://127.0.0.1:5000/upload_application_data', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        // 'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        queryClient.invalidateQueries({ queryKey: [meetingQueryKey] });
+        setLoading(false);
         setReset({
           ...defaultValues,
         });
         closeModal();
-        onClose();
-      }
-    } catch (error) {
-
-    }
-    // set timeout ony required to display loading state of the create category button
-    // const formattedData = {
-    //   ...data,
-    //   createdAt: new Date(),
-    // };
-
-    // console.log(data);
-    // const formData = new FormData();
-    // for (const key in data) {
-    //   if (data.hasOwnProperty(key)) {
-    //     if (key === 'candidateFiles' && data[key]) {
-    //       // data[key].forEach((file: any, index: any) => {
-    //       //   formData.append(`${key}[${index}]`, file);
-    //       // });
-    //       formData.append('candidateFiles', data.candidateFiles[0]);
-    //     } else {
-    //       formData.append(key, data[key]);
-    //     }
-    //   }
-    // }
-
-    // let uploadedFilePath = '';
-    // console.log(formData);
-    // formData.append('candidateFiles', uploadedFilePath);
-    // fetch('http://127.0.0.1:5000/upload_application_data', {
-    //   method: 'POST',
-    //   body: formData,
-    //   headers: {
-    //     // 'Content-Type': 'application/json',
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     'Access-Control-Allow-Origin': '*'
-    //   }
-    // })
-    //   .then(response => response.json())
-    //   .then(result => {
-    //     console.log(result);
-    //     queryClient.invalidateQueries({ queryKey: [questionsQueryKey] });
-    //     setLoading(false);
-    //     setReset({
-    //       ...defaultValues,
-    //     });
-    //     closeModal();
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //     setLoading(false);
-    //   });
-    // setLoading(true);
-    // setTimeout(() => {
-    //   console.log('formattedData', formattedData);
-    //   setLoading(false);
-    //   setReset({
-    //     ...defaultValues,
-    //   });
-    //   closeModal();
-    //}, 600);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setLoading(false);
+      });
+    setLoading(true);
+    setTimeout(() => {
+      console.log('formattedData', formattedData);
+      setLoading(false);
+      setReset({
+        ...defaultValues,
+      });
+      closeModal();
+    }, 600);
   };
 
   return (
-    <Form<tenantQuestionsSchema>
+    <Form<CreateApplicationInput>
       resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={tenantQuestionsSchema}
+      validationSchema={createApplicationSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
@@ -125,7 +111,7 @@ export default function CreateQuestions({ onClose }) {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Add Questions
+                Add Meeting
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
@@ -134,7 +120,7 @@ export default function CreateQuestions({ onClose }) {
             <Input
               label="Tenant Id"
               placeholder="Enter Tenant id"
-              {...register('tenant_id')}
+              // {...register('candidateName')}
               className="col-span-full"
             //error={errors.candidateName?.message}
             />
@@ -143,23 +129,57 @@ export default function CreateQuestions({ onClose }) {
               label="Job Id"
               placeholder="Job Id"
               className="col-span-full"
-              {...register('job_id')}
+            //{...register('job')}
             //error={errors.job?.message}
             />
 
             <Input
-              label="Question"
-              placeholder="Enter Question"
+              label="Candidate Id"
+              placeholder="candidate id"
               className="col-span-full"
-              {...register('question')}
+            //{...register('meetingSchedule')}
             //error={errors.meetingSchedule?.message}
             />
-
-            <Input
-              label="Answer"
-              placeholder="Enter Answer"
+            {/* <Input
+              label="Start Metting"
+              placeholder="start meeting"
               className="col-span-full"
-              {...register('answer')}
+            //{...register('meetingSchedule')}
+            //error={errors.meetingSchedule?.message}
+            /> */}
+            <div className="relative max-w-sm">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                </svg>
+              </div>
+              <Datepicker
+                options={{
+                  title: 'Select Date',
+                  autoHide: true,
+                  todayBtn: true,
+                  clearBtn: true,
+                  clearBtnText: 'Clear',
+                  maxDate: new Date(),
+                  minDate: new Date(),
+                 
+                  inputDateFormatProp: {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  },
+                }} show={false} setShow={function (show: boolean): void {
+                  throw new Error('Function not implemented.');
+                } }               // onChange={handleChange}
+                //show={show}
+                //setShow={handleClose}
+              />
+            </div>
+            <Input
+              label="InterView Period Time"
+              placeholder="interview period time"
+              className="col-span-full"
+            //{...register('meetingSchedule')}
             //error={errors.meetingSchedule?.message}
             />
 
@@ -226,7 +246,7 @@ export default function CreateQuestions({ onClose }) {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-                Add Questions
+                Add Meeting
               </Button>
             </div>
           </>

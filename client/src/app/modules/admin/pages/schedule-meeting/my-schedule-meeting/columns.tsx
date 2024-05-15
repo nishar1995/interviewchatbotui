@@ -191,20 +191,50 @@ export const getColumns = ({
       ),
     },
     {
-      title: <HeaderCell title="Questions" />,
-      onHeaderCell: () => onHeaderCellClick('questions'),
-      dataIndex: 'questions',
-      key: 'questions',
+      title: <HeaderCell title="Questions Id" />,
+      onHeaderCell: () => onHeaderCellClick('questionsId'),
+      dataIndex: 'questionsId',
+      key: 'questionsId',
       width: 150,
-      render: (questions: string) => (
+      render: (questionsId: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {questions}
+            {questionsId}
           </Text>
         </div>
       ),
     },
-   
+
+    {
+      title: <HeaderCell title="Start Meeting" />,
+      onHeaderCell: () => onHeaderCellClick('startMeeting'),
+      dataIndex: 'startMeeting',
+      key: 'startMeeting',
+      width: 150,
+      render: (startMeeting: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {startMeeting}
+          </Text>
+        </div>
+      ),
+    },
+
+    {
+      title: <HeaderCell title="Interview Period Time" />,
+      onHeaderCell: () => onHeaderCellClick('interviewPeriodTime'),
+      dataIndex: 'interviewPeriodTime',
+      key: 'interviewPeriodTime',
+      width: 150,
+      render: (interviewPeriodTime: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {interviewPeriodTime}
+          </Text>
+        </div>
+      ),
+    },
+
 
     // {
     //   title: (
@@ -217,7 +247,7 @@ export const getColumns = ({
     //   width: 250,
     //   render: (dob: Date) => <DateCell date={dob} />,
     // },
-   
+
     //   render: (meetingSchedule: string | undefined)=> {
     //     // Ensure meetingSchedule is a Date object
     //     if (meetingSchedule === null || meetingSchedule === undefined) {
@@ -257,7 +287,7 @@ export const getColumns = ({
     //  },
 
 
-    
+
   ];
 
 
@@ -287,67 +317,84 @@ export const getColumnsData = () => {
           <Checkbox
             aria-label={'ID'}
             className="cursor-pointer"
-            //checked={checkedItems.includes(row.id)}
-            //{...(onChecked && { onChange: () => onChecked(row.id) })}
+          //checked={checkedItems.includes(row.id)}
+          //{...(onChecked && { onChange: () => onChecked(row.id) })}
           />
         </div>
       ),
     },
-    // {
-    //   title: <HeaderCell title="Tenant Id" />,
-    //   //onHeaderCell: () => onHeaderCellClick('tenantId'),
-    //   dataIndex: 'tenant_id',
-    //   key: 'tenant_id',
-    //   width: 130,
-    //   render: (tenant_id: string) => <Text>{tenant_id}</Text>,
-    // },
+    {
+      title: <HeaderCell title="Tenant Id" />,
+      //onHeaderCell: () => onHeaderCellClick('tenantId'),
+      dataIndex: 'tenantId',
+      key: 'tenantId',
+      width: 130,
+      render: (tenantId: string) => <Text>#{tenantId}</Text>,
+    },
     {
       title: (
         <HeaderCell
           title={<span className="whitespace-nowrap">Job Id</span>}
         />
       ),
-      dataIndex: 'job',
-      key: 'job',
+      dataIndex: 'jobId',
+      key: 'jobId',
       width: 130,
-      render: (job: string) => (
+      render: (jobId: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {job}
+            {jobId}
           </Text>
         </div>
       ),
     },
+   
+
     {
-      title: <HeaderCell title="Questions" />,
-      //onHeaderCell: () => onHeaderCellClick('questions'),
-      dataIndex: 'question',
-      key: 'question',
+      title: <HeaderCell title="Candidate Id" />,
+      //onHeaderCell: () => onHeaderCellClick('questionsId'),
+      dataIndex: 'CandidateId',
+      key: 'CandidateId',
       width: 150,
-      render: (question: string) => (
+      render: (CandidateId: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {question}
+            {CandidateId}
           </Text>
         </div>
       ),
     },
 
     {
-      title: <HeaderCell title="Answer" />,
-      //onHeaderCell: () => onHeaderCellClick('questions'),
-      dataIndex: 'answer',
-      key: 'answer',
+      title: <HeaderCell title="Start Meeting" />,
+      //onHeaderCell: () => onHeaderCellClick('startMeeting'),
+      dataIndex: 'startMeeting',
+      key: 'startMeeting',
       width: 150,
-      render: (answer: string) => (
+      render: (startMeeting: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {answer}
+            {startMeeting}
           </Text>
         </div>
       ),
     },
-   
+
+    {
+      title: <HeaderCell title="Interview Period Time" />,
+      //onHeaderCell: () => onHeaderCellClick('interviewPeriodTime'),
+      dataIndex: 'interviewPeriodTime',
+      key: 'interviewPeriodTime',
+      width: 150,
+      render: (interviewPeriodTime: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {interviewPeriodTime}
+          </Text>
+        </div>
+      ),
+    },
+
   ];
 };
 export const getColumns2 = ({

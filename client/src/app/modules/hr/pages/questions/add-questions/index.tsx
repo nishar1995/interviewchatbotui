@@ -11,6 +11,7 @@ import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
 import CreateTenant from './create-application';
 import CreateQuestions from './create-application';
+import { getQuestions } from '../../../../../../services/tenantQuestionsService'
 
 
 export const questionsQueryKey = 'questions-application-data';
@@ -21,40 +22,65 @@ export default function MyQuestionsTable({
   const columns = getColumnsData();
   const [pageSize, setPageSize] = useState(7);
   const { visibleColumns } = useColumn(columns);
+  const [data, setData] = useState<any>([]);
 
-  return (
-    <WidgetCard
-      headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
-      actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
-      title="Tenant"
-      titleClassName="whitespace-nowrap"
-      action={
-        <div className="mt-2 flex justify-end">
-          <ModalButton
-            label="Add New Questions"
-            view={<CreateQuestions />} />
+  // useEffect(() => {
+  //   const candidate = async () => {
+  //     const response = await getQuestions();
+  //     console.log("fetch data", response);
+  //     setData(response.data)
+  //   };
+  //   candidate();
+  // }, []);
 
 
+  useEffect(() => {
+    fetchQuestionsList(); // Initial fetch when the component mounts
+  }, []);
 
-        </div>
-      }
-    >
-      <ControlledTable
-        variant="modern"
-        columns={visibleColumns}
-        paginatorOptions={{
-          pageSize,
-          setPageSize,
-          // total: totalItems,
-          // current: currentPage,
-          //onChange: (page: number) => handlePaginate(page),
-        }}
+  const fetchQuestionsList = async () => {
+    const response = await getQuestions();
+    console.log("fetch data", response);
+    setData(response.data)
+
+
+  }
+  const handlePopupClose = () => {
+    fetchQuestionsList();
+
+  }
+    return (
+      <WidgetCard
+        headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
+        actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
+        title="Tenant"
+        titleClassName="whitespace-nowrap"
+        action={
+          <div className="mt-2 flex justify-end">
+            <ModalButton
+              label="Add New Questions"
+              view={<CreateQuestions onClose={handlePopupClose}/>} />
+          </div>
+        }
       >
+        <ControlledTable
+          variant="modern"
+          columns={visibleColumns}
+          data={data}
+          paginatorOptions={{
+            pageSize,
+            setPageSize,
+            // total: totalItems,
+            // current: currentPage,
+            //onChange: (page: number) => handlePaginate(page),
+          }}
+        >
 
-      </ControlledTable>
-    </WidgetCard>
-  );
-}
+        </ControlledTable>
+      </WidgetCard>
+    );
+  }
+
 // export default function MyApplicationsTable({
 //   className,
 // }: {

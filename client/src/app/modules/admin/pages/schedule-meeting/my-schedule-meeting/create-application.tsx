@@ -14,24 +14,21 @@ import {
 } from '@/utils/validators/create-application.schema';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { questionsQueryKey } from '.';
-import { tenantQuestionsSchema } from '@/utils/validators/tenantQuestions.schema'
-import { addQuestion } from '@/services/tenantQuestionsService';
+import { meetingQueryKey } from '.';
 
-export default function CreateQuestions({ onClose }) {
+export default function CreateMeeting() {
   const defaultValues: Omit<
-    tenantQuestionsSchema,
-    'questions'
+    CreateApplicationInput,
+    'meetingSchedule' | 'dob'
   > & {
-    question: string;
-    answer: string;
-    tenant_id: string;
-    job_id: string;
+    meetingSchedule: Date | undefined;
+    dob: Date | undefined;
   } = {
-    question: '',
-    answer: '',
-    tenant_id: '',
-    job_id: ''
+    candidateFiles: [],
+    candidateName: '',
+    meetingSchedule: undefined,
+    dob: undefined,
+    job: '',
   };
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
@@ -40,84 +37,71 @@ export default function CreateQuestions({ onClose }) {
 
   const imageRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit: SubmitHandler<tenantQuestionsSchema> = async (data: any) => {
+  const onSubmit: SubmitHandler<CreateApplicationInput> = (data: any) => {
     setLoading(true);
-    try {
-      const response = await addQuestion(data);
-      if (response) {
-        console.log(response);
+    // set timeout ony required to display loading state of the create category button
+    const formattedData = {
+      ...data,
+      createdAt: new Date(),
+    };
+
+    console.log(data);
+    const formData = new FormData();
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        if (key === 'candidateFiles' && data[key]) {
+          // data[key].forEach((file: any, index: any) => {
+          //   formData.append(`${key}[${index}]`, file);
+          // });
+          formData.append('candidateFiles', data.candidateFiles[0]);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+    }
+
+    let uploadedFilePath = '';
+    console.log(formData);
+    formData.append('candidateFiles', uploadedFilePath);
+    fetch('http://127.0.0.1:5000/upload_application_data', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        // 'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        queryClient.invalidateQueries({ queryKey: [meetingQueryKey] });
+        setLoading(false);
         setReset({
           ...defaultValues,
         });
         closeModal();
-        onClose();
-      }
-    } catch (error) {
-
-    }
-    // set timeout ony required to display loading state of the create category button
-    // const formattedData = {
-    //   ...data,
-    //   createdAt: new Date(),
-    // };
-
-    // console.log(data);
-    // const formData = new FormData();
-    // for (const key in data) {
-    //   if (data.hasOwnProperty(key)) {
-    //     if (key === 'candidateFiles' && data[key]) {
-    //       // data[key].forEach((file: any, index: any) => {
-    //       //   formData.append(`${key}[${index}]`, file);
-    //       // });
-    //       formData.append('candidateFiles', data.candidateFiles[0]);
-    //     } else {
-    //       formData.append(key, data[key]);
-    //     }
-    //   }
-    // }
-
-    // let uploadedFilePath = '';
-    // console.log(formData);
-    // formData.append('candidateFiles', uploadedFilePath);
-    // fetch('http://127.0.0.1:5000/upload_application_data', {
-    //   method: 'POST',
-    //   body: formData,
-    //   headers: {
-    //     // 'Content-Type': 'application/json',
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     'Access-Control-Allow-Origin': '*'
-    //   }
-    // })
-    //   .then(response => response.json())
-    //   .then(result => {
-    //     console.log(result);
-    //     queryClient.invalidateQueries({ queryKey: [questionsQueryKey] });
-    //     setLoading(false);
-    //     setReset({
-    //       ...defaultValues,
-    //     });
-    //     closeModal();
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //     setLoading(false);
-    //   });
-    // setLoading(true);
-    // setTimeout(() => {
-    //   console.log('formattedData', formattedData);
-    //   setLoading(false);
-    //   setReset({
-    //     ...defaultValues,
-    //   });
-    //   closeModal();
-    //}, 600);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setLoading(false);
+      });
+    setLoading(true);
+    setTimeout(() => {
+      console.log('formattedData', formattedData);
+      setLoading(false);
+      setReset({
+        ...defaultValues,
+      });
+      closeModal();
+    }, 600);
   };
 
   return (
-    <Form<tenantQuestionsSchema>
+    <Form<CreateApplicationInput>
       resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={tenantQuestionsSchema}
+      validationSchema={createApplicationSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
@@ -125,7 +109,7 @@ export default function CreateQuestions({ onClose }) {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Add Questions
+                Add Meeting
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
@@ -134,7 +118,7 @@ export default function CreateQuestions({ onClose }) {
             <Input
               label="Tenant Id"
               placeholder="Enter Tenant id"
-              {...register('tenant_id')}
+              // {...register('candidateName')}
               className="col-span-full"
             //error={errors.candidateName?.message}
             />
@@ -143,27 +127,33 @@ export default function CreateQuestions({ onClose }) {
               label="Job Id"
               placeholder="Job Id"
               className="col-span-full"
-              {...register('job_id')}
+            //{...register('job')}
             //error={errors.job?.message}
             />
 
             <Input
-              label="Question"
-              placeholder="Enter Question"
+              label="Candidate Id"
+              placeholder="candidate id"
               className="col-span-full"
-              {...register('question')}
+            //{...register('meetingSchedule')}
+            //error={errors.meetingSchedule?.message}
+            />
+             <Input
+              label="Start Metting"
+              placeholder="start meeting"
+              className="col-span-full"
+            //{...register('meetingSchedule')}
+            //error={errors.meetingSchedule?.message}
+            />
+             <Input
+              label="InterView Period Time"
+              placeholder="interview period time"
+              className="col-span-full"
+            //{...register('meetingSchedule')}
             //error={errors.meetingSchedule?.message}
             />
 
-            <Input
-              label="Answer"
-              placeholder="Enter Answer"
-              className="col-span-full"
-              {...register('answer')}
-            //error={errors.meetingSchedule?.message}
-            />
-
-
+          
             {/* <Controller
               name="candidateFiles"
               control={control}
@@ -226,7 +216,7 @@ export default function CreateQuestions({ onClose }) {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-                Add Questions
+                Add Meeting
               </Button>
             </div>
           </>

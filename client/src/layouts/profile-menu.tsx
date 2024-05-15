@@ -92,8 +92,10 @@ function DropdownMenu() {
     // Call signOut method and remove items from local storage
     // localStorage.removeItem('user_details');
     Cookies.remove('user_details');
+    //routes.auth.signIn;
     // localStorage.removeItem('token');
-    signOut({ callbackUrl: '/signin?callbackUrl=%2F' });
+    signOut({ callbackUrl: '/shared/auth/signin?callbackUrl=%2F' });
+    //http://localhost:3000/shared/auth/signin?callbackUrl=%2F
   };
 
   return (
