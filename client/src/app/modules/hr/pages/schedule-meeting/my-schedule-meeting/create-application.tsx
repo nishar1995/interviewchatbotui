@@ -1,10 +1,11 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PiFilePdf, PiXBold } from 'react-icons/pi';
 import { Controller, SubmitHandler } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Input, Button, ActionIcon, Title, Select, Text } from 'rizzui';
+import { DatePicker } from '@/components/ui/datepicker';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import Upload from '@/components/ui/upload';
 import SimpleBar from 'simplebar-react';
@@ -15,95 +16,165 @@ import {
 } from '@/utils/validators/create-application.schema';
 import { useQueryClient } from '@tanstack/react-query';
 
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+
+
 import { meetingQueryKey } from '.';
 
-export default function CreateMeeting() {
+import { getUsersList } from '../../../../../../services/userService';
+import { CreateMeetingInput, createMeetingSchema } from '@/utils/validators/create-meeting.schema';
+import { addMeeting } from '@/services/meetingScheduleService';
+import TimePicker from 'react-time-picker';
+
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import dayjs, { Dayjs } from 'dayjs';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+
+// import {DateRangePicker} from "@nextui-org/react";
+// import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
+// import TextField from '@mui/material/TextField';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+
+export default function CreateMeeting({onClose}) {
   const defaultValues: Omit<
-    CreateApplicationInput,
-    'meetingSchedule' | 'dob'
+    CreateMeetingInput,
+    'meetingSchedule'
   > & {
-    meetingSchedule: Date | undefined;
-    dob: Date | undefined;
+    tenant_id: string
+    candidate_id: string,
+    job_id: string,
+    start_time: Date,
+    end_time: Date,
+
   } = {
-    candidateFiles: [],
-    candidateName: '',
-    meetingSchedule: undefined,
-    dob: undefined,
-    job: '',
+    tenant_id: '',
+    candidate_id: '',
+    job_id: '',
+    start_time: new Date(),
+    end_time: new Date(),
   };
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
   const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState<any>([]);
+
+  const [endTime, setEndTime] = useState<Dayjs | null>(dayjs(defaultValues.end_time));
+
+
+  const [startTime, setStartTime] = useState<Dayjs | null>(dayjs(defaultValues.start_time));
 
   const imageRef = useRef<HTMLInputElement>(null);
 
-  
-  const onSubmit: SubmitHandler<CreateApplicationInput> = (data: any) => {
+  const onSubmit: SubmitHandler<CreateMeetingInput> = async (data: any) => {
     setLoading(true);
-    // set timeout ony required to display loading state of the create category button
-    const formattedData = {
-      ...data,
-      createdAt: new Date(),
-    };
-
-    console.log(data);
+    console.log("create meeting", data);
     const formData = new FormData();
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        if (key === 'candidateFiles' && data[key]) {
-          // data[key].forEach((file: any, index: any) => {
-          //   formData.append(`${key}[${index}]`, file);
-          // });
-          formData.append('candidateFiles', data.candidateFiles[0]);
-        } else {
-          formData.append(key, data[key]);
-        }
+    formData.append('tenant_id',data.tenant_id);
+    formData.append('candidate_id',data.candidate_id);
+    formData.append('job_id',data.job_id);
+    formData.append('start_time',data.start_time);
+    formData.append('tenant_id',data.tenant_id);
+    
+    try {
+      const response = await addMeeting(data);
+      console.log(response);
+      if (response) {
+        closeModal();
+        onClose();
       }
+    } catch (error) {
+      console.log("errorr.....", error);
+      setLoading(true);
     }
 
-    let uploadedFilePath = '';
-    console.log(formData);
-    formData.append('candidateFiles', uploadedFilePath);
-    fetch('http://127.0.0.1:5000/upload_application_data', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        // 'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        'Access-Control-Allow-Origin': '*'
-      }
-    })
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-        queryClient.invalidateQueries({ queryKey: [meetingQueryKey] });
-        setLoading(false);
-        setReset({
-          ...defaultValues,
-        });
-        closeModal();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        setLoading(false);
-      });
-    setLoading(true);
-    setTimeout(() => {
-      console.log('formattedData', formattedData);
-      setLoading(false);
-      setReset({
-        ...defaultValues,
-      });
-      closeModal();
-    }, 600);
+    // set timeout ony required to display loading state of the create category button
+    // const formattedData = {
+    //   ...data,
+    //   createdAt: new Date(),
+    // };
+
+    // console.log(data);
+    // const formData = new FormData();
+    // for (const key in data) {
+    //   if (data.hasOwnProperty(key)) {
+    //     if (key === 'candidateFiles' && data[key]) {
+    //       // data[key].forEach((file: any, index: any) => {
+    //       //   formData.append(`${key}[${index}]`, file);
+    //       // });
+    //       formData.append('candidateFiles', data.candidateFiles[0]);
+    //     } else {
+    //       formData.append(key, data[key]);
+    //     }
+    //   }
+    // }
+
+    // let uploadedFilePath = '';
+    // console.log(formData);
+    // formData.append('candidateFiles', uploadedFilePath);
+    // fetch('http://127.0.0.1:5000/upload_application_data', {
+    //   method: 'POST',
+    //   body: formData,
+    //   headers: {
+    //     // 'Content-Type': 'application/json',
+    //     // 'Content-Type': 'application/x-www-form-urlencoded',
+    //     'Access-Control-Allow-Origin': '*'
+    //   }
+    // })
+    //   .then(response => response.json())
+    //   .then(result => {
+    //     console.log(result);
+    //     queryClient.invalidateQueries({ queryKey: [meetingQueryKey] });
+    //     setLoading(false);
+    //     setReset({
+    //       ...defaultValues,
+    //     });
+    //     closeModal();
+    //   })
+    //   .catch(error => {
+    //     console.error('Error:', error);
+    //     setLoading(false);
+    //   });
+    // setLoading(true);
+    // setTimeout(() => {
+    //   console.log('formattedData', formattedData);
+    //   setLoading(false);
+    //   setReset({
+    //     ...defaultValues,
+    //   });
+    //   closeModal();
+    //}, 600);
+  };
+  const handleStartTimeChange = (newValue:any) => {
+    setStartTime(newValue);
+    data.start_time = newValue.$d
+    defaultValues.start_time =  data.start_time
+   //console.log("select meeting",startTime);
+    console.log("selec......", data.start_time);
+    console.log("defaultValues.start_time",defaultValues.start_time)
   };
 
+  const handleEndTimeChange = (newValue:any) => {
+    setEndTime(newValue);
+    data.end_time = newValue.$d
+    defaultValues.end_time =  data.end_time
+   //console.log("select meeting",startTime);
+    console.log("selec......", data.end_time);
+    console.log("defaultValues.start_time",defaultValues.end_time)
+  };
   return (
-    <Form<CreateApplicationInput>
+    <Form<CreateMeetingInput>
       resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={createApplicationSchema}
+      validationSchema={createMeetingSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
@@ -120,7 +191,7 @@ export default function CreateMeeting() {
             <Input
               label="Tenant Id"
               placeholder="Enter Tenant id"
-              // {...register('candidateName')}
+              {...register('tenant_id')}
               className="col-span-full"
             //error={errors.candidateName?.message}
             />
@@ -129,7 +200,7 @@ export default function CreateMeeting() {
               label="Job Id"
               placeholder="Job Id"
               className="col-span-full"
-            //{...register('job')}
+              {...register('job_id')}
             //error={errors.job?.message}
             />
 
@@ -137,102 +208,21 @@ export default function CreateMeeting() {
               label="Candidate Id"
               placeholder="candidate id"
               className="col-span-full"
-            //{...register('meetingSchedule')}
-            //error={errors.meetingSchedule?.message}
-            />
-            {/* <Input
-              label="Start Metting"
-              placeholder="start meeting"
-              className="col-span-full"
-            //{...register('meetingSchedule')}
-            //error={errors.meetingSchedule?.message}
-            /> */}
-            <div className="relative max-w-sm">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                </svg>
-              </div>
-              <Datepicker
-                options={{
-                  title: 'Select Date',
-                  autoHide: true,
-                  todayBtn: true,
-                  clearBtn: true,
-                  clearBtnText: 'Clear',
-                  maxDate: new Date(),
-                  minDate: new Date(),
-                 
-                  inputDateFormatProp: {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  },
-                }} show={false} setShow={function (show: boolean): void {
-                  throw new Error('Function not implemented.');
-                } }               // onChange={handleChange}
-                //show={show}
-                //setShow={handleClose}
-              />
-            </div>
-            <Input
-              label="InterView Period Time"
-              placeholder="interview period time"
-              className="col-span-full"
-            //{...register('meetingSchedule')}
+              {...register('candidate_id')}
             //error={errors.meetingSchedule?.message}
             />
 
-
-            {/* <Controller
-              name="candidateFiles"
-              control={control}
-              render={({ field: { value, onChange, onBlur } }) => (
-                <div className="col-span-full">
-                  <Upload
-                    label={'Upload Resume'}
-                    ref={imageRef}
-                    accept={'pdf'}
-                    multiple={false}
-                    onChange={(event) => {
-                      const uploadedFiles = (event.target as HTMLInputElement)
-                        .files;
-                      const newFiles = Object.entries(uploadedFiles as object)
-                        .map((file) => {
-                          if (file[1]) return file[1];
-                        })
-                        .filter((file) => file !== undefined);
-                      onChange(newFiles);
-                    }}
-                    className="mb-6 min-h-[280px] justify-center border-dashed bg-gray-50 dark:bg-transparent"
-                  />
-                  {value?.length > 1 ? (
-                    <Text className="mb-2 text-gray-500">
-                      {value?.length} files
-                    </Text>
-                  ) : null}
-
-                  {value?.length > 0 && (
-                    <SimpleBar className="max-h-[280px]">
-                      <div className="grid grid-cols-1 gap-4">
-                        {value?.map((file: File, index: number) => (
-                          <div
-                            className="flex min-h-[58px] w-full items-center rounded-xl border border-muted px-3 dark:border-gray-300"
-                            key={file.name}
-                          >
-                            <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-muted bg-gray-50 object-cover px-2 py-1.5 dark:bg-transparent">
-                              <PiFilePdf className="h-5 w-5" />
-                            </div>
-                            <div className="truncate px-2.5">{file.name}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </SimpleBar>
-                  )}
-                </div>
-              )}
-            /> */}
-
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoItem label="Start Meeting Date">
+                <MobileDateTimePicker defaultValue={startTime} onChange={handleStartTimeChange}
+                />
+              </DemoItem>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoItem label="End Meeting Date">
+                <MobileDateTimePicker defaultValue={endTime} onChange={handleEndTimeChange}/>
+              </DemoItem>
+            </LocalizationProvider>
             <div className="col-span-full flex items-center justify-end gap-4">
               <Button
                 variant="outline"

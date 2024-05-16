@@ -9,6 +9,7 @@ import { getColumns, getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
 import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
+import { getMeetingScheduleList } from '../../../../../../services/meetingScheduleService'
 
 import CreateMeeting from '../../schedule-meeting/my-schedule-meeting/create-application'
 
@@ -21,6 +22,21 @@ export default function MyMeetingTable({
   const columns = getColumnsData();
   const [pageSize, setPageSize] = useState(7);
   const { visibleColumns } = useColumn(columns);
+  const [data, setData] = useState<any>([]);
+
+
+  useEffect(() => {
+    fetchMeetingList();
+  }, []);
+
+  const fetchMeetingList = async () => {
+    const response = await getMeetingScheduleList();
+    console.log("fetch data", response);
+    setData(response.data)
+  }
+  const handlePopupClose = () => {
+    fetchMeetingList();
+  };
 
   return (
     <WidgetCard
@@ -32,16 +48,14 @@ export default function MyMeetingTable({
         <div className="mt-2 flex justify-end">
           <ModalButton
             label="Add New Meeting"
-            view={<CreateMeeting />} />
-
-
-
+            view={<CreateMeeting onClose={handlePopupClose}/>} />
         </div>
       }
     >
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
+        data={data}
         paginatorOptions={{
           pageSize,
           setPageSize,

@@ -369,20 +369,7 @@ export const getColumnsData = () => {
         </div>
       ),
     },
-    // {
-    //   title: <HeaderCell title="password" />,
-    //   //onHeaderCell: () => onHeaderCellClick('passWord'),
-    //   dataIndex: 'password',
-    //   key: 'password',
-    //   width: 150,
-    //   render: (passWord: string) => (
-    //     <div>
-    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //         {passWord}
-    //       </Text>
-    //     </div>
-    //   ),
-    // },
+
     {
       title: <HeaderCell title="Candidate Name" />,
       //onHeaderCell: () => onHeaderCellClick('candidateName'),

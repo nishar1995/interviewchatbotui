@@ -4,6 +4,7 @@ import { HeaderCell } from '@/components/ui/table';
 import { useState } from 'react';
 import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
 import { Text, Checkbox, Select } from 'rizzui';
+import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 // const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
@@ -323,27 +324,27 @@ export const getColumnsData = () => {
         </div>
       ),
     },
-    {
-      title: <HeaderCell title="Tenant Id" />,
-      //onHeaderCell: () => onHeaderCellClick('tenantId'),
-      dataIndex: 'tenantId',
-      key: 'tenantId',
-      width: 130,
-      render: (tenantId: string) => <Text>#{tenantId}</Text>,
-    },
+    // {
+    //   title: <HeaderCell title="Tenant Id" />,
+    //   //onHeaderCell: () => onHeaderCellClick('tenantId'),
+    //   dataIndex: 'tenant_id',
+    //   key: 'tenant_id',
+    //   width: 130,
+    //   render: (tenant_id: string) => <Text>#{tenant_id}</Text>,
+    // },
     {
       title: (
         <HeaderCell
           title={<span className="whitespace-nowrap">Job Id</span>}
         />
       ),
-      dataIndex: 'jobId',
-      key: 'jobId',
+      dataIndex: 'job_id',
+      key: 'job_id',
       width: 130,
-      render: (jobId: string) => (
+      render: (job_id: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {jobId}
+            {job_id}
           </Text>
         </div>
       ),
@@ -353,13 +354,13 @@ export const getColumnsData = () => {
     {
       title: <HeaderCell title="Candidate Id" />,
       //onHeaderCell: () => onHeaderCellClick('questionsId'),
-      dataIndex: 'CandidateId',
-      key: 'CandidateId',
+      dataIndex: 'candidate_id',
+      key: 'candidate_id',
       width: 150,
-      render: (CandidateId: string) => (
+      render: (candidate_id: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {CandidateId}
+            {candidate_id}
           </Text>
         </div>
       ),
@@ -368,28 +369,29 @@ export const getColumnsData = () => {
     {
       title: <HeaderCell title="Start Meeting" />,
       //onHeaderCell: () => onHeaderCellClick('startMeeting'),
-      dataIndex: 'startMeeting',
-      key: 'startMeeting',
+      dataIndex: 'start_time',
+      key: 'start_time',
       width: 150,
-      render: (startMeeting: string) => (
+      render: (start_time: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {startMeeting}
+            {moment(start_time).format('DD-MM-YYYY, h:mm a')}
           </Text>
         </div>
-      ),
+      )
     },
+   
 
     {
-      title: <HeaderCell title="Interview Period Time" />,
+      title: <HeaderCell title="End Meeting" />,
       //onHeaderCell: () => onHeaderCellClick('interviewPeriodTime'),
-      dataIndex: 'interviewPeriodTime',
-      key: 'interviewPeriodTime',
+      dataIndex: 'end_time',
+      key: 'end_time',
       width: 150,
-      render: (interviewPeriodTime: string) => (
+      render: (end_time: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {interviewPeriodTime}
+          {moment(end_time).format('DD-MM-YYYY, h:mm a')}
           </Text>
         </div>
       ),

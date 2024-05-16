@@ -1415,3 +1415,17 @@ div[style='z-index: 1000001;'],
 .react-calendar__month-view__days__day--weekend {
   @apply !text-red-dark;
 }
+
+/* .css-1anqmj6-MuiPopper-root-MuiPickersPopper-root {
+  z-index: 9999 !important;
+  
+} */
+
+.css-3dah0e-MuiModal-root-MuiDialog-root {
+  position: fixed;
+  z-index: 9999 !important;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  left: 0;
+}

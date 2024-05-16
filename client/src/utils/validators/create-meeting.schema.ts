@@ -4,9 +4,15 @@ import { validateEmail } from '@/utils/validators/common-rules';
 
 // form zod validation schema
 export const createMeetingSchema = z.object({
-    topic: z.string().min(1, { message: 'Topic is required' }),
-    agenda: z.string().min(1, { message: 'Agenda is required' }), 
-    startTime: z.date().refine((value) => value !== null, 'Please select a start time'), 
+    tenant_id:z.string(),
+    candidate_id:z.string(),
+    job_id:z.string(),
+    start_time : z.date(),
+    end_time : z.date(),
+   // start_time : z.string(),
+    // topic: z.string().min(1, { message: 'Topic is required' }),
+    // agenda: z.string().min(1, { message: 'Agenda is required' }), 
+    // startTime: z.date().refine((value) => value !== null, 'Please select a start time'), 
 });
 
 // generate form types from zod validation schema
