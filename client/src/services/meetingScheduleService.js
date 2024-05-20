@@ -29,3 +29,32 @@ export async function addMeeting(data) {
         throw new Error('Failed to add meeting');
     }
 }
+
+
+// function of update meeting 
+export async function updateMeeting(candidateId, data) {
+    try {
+        console.log(data);
+        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/schedule/${candidateId}/`, data
+        );
+        return response;
+    } catch (error) {
+        console.error('Error update meeting:', error);
+        throw new Error('Failed to update meeting');
+    }
+}
+
+// function of delete meeting
+export async function deleteMeeting(candidateId) {
+    try {
+        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/schedule/${candidateId}/`, {
+            method: 'DELETE',
+        });
+        return response;
+
+    } catch (error) {
+        console.error('error delete meeting:', error);
+        throw new Error('failed to delete meeting');
+    }
+
+}

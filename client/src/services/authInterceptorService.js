@@ -4,14 +4,15 @@ import refreshToken from '../services/authService';
 
 
 const axiosInterceptorInstance = axios.create({
-    baseURL: process.env.BASE_URL || 'http://intapp.learninginbits.com:8080/',
+    //baseURL: process.env.BASE_URL || 'http://intapp.learninginbits.com:8080/',
+    baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000/api/'
 
 });
 
 axiosInterceptorInstance.interceptors.request.use((config) => {
     console.log("interceptor file.....");
     // const token = JSON.parse(localStorage.getItem('token'));
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1ODY0MzUxLCJpYXQiOjE3MTU4NjA3NTEsImp0aSI6IjcyMDEzZGMzMDhiNTRmNjlhNzA0NDAwZDBmNzNmYjBkIiwidXNlcl9pZCI6MX0.2xJB6RRsxuMjoExltwKlzr1MImtcaIJHC-TCkwQJOBY';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2MjEwOTg4LCJpYXQiOjE3MTYyMDczODgsImp0aSI6ImNkY2FiMTBiZmJhMjRjMGE4YTAyZjliMjhjOTEwNTVmIiwidXNlcl9pZCI6MX0.anR2AW4k-HwsL7RrNRcb--AGZgWf6aWB7souV2q8O0k';
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }

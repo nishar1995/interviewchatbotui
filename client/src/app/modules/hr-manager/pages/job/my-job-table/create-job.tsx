@@ -12,27 +12,37 @@ import { CreateJobInput, createJobSchema } from '@/utils/validators/create-job.s
 import { useQueryClient } from '@tanstack/react-query';
 import { jobQueryKey } from '.';
 import { jobPostingSchema } from '@/utils/validators/job-posting.schema';
-import { addJob } from '../../../../../../services/jobPostingService'
+import { addJob, updateJob } from '../../../../../../services/jobPostingService'
 
 
-export default function CreateJob({onClose}) {
-  const defaultValues: Omit<
-    jobPostingSchema,
-    'job'
-  > & {
-    job_id: string,
-    title: string,
-    description: string,
-    company: string,
-    location: string,
-    salary: string
-  } = {
-    job_id: '',
-    title: '',
-    description: '',
-    company: '',
-    location: '',
-    salary: ''
+export default function CreateJob({ onClose, jobList }) {
+  console.log("job details", jobList)
+  // const defaultValues: Omit<
+  //   jobPostingSchema,
+  //   'job'
+  // > & {
+  //   job_id: string,
+  //   title: string,
+  //   description: string,
+  //   company: string,
+  //   location: string,
+  //   salary: string
+  // } = {
+  //   job_id: '',
+  //   title: '',
+  //   description: '',
+  //   company: '',
+  //   location: '',
+  //   salary: ''
+  // };
+
+  const defaultValues = {
+    job_id: jobList?.job_id || '',
+    title: jobList?.title || '',
+    description: jobList?.description || '',
+    company: jobList?.company || undefined,
+    location: jobList?.location || '',
+    salary: jobList?.salary || undefined,
   };
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
@@ -85,28 +95,44 @@ export default function CreateJob({onClose}) {
   const onSubmit: SubmitHandler<jobPostingSchema> = async (data: any) => {
     setLoading(true);
     console.log(data);
-    try {
-      const id = generateJobId();
-      const formData = new FormData();
-      formData.append('job_id', id);
-      formData.append('title', data.title);
-      formData.append('company', data.company);
-      formData.append('description', data.description);
-      formData.append('location', data.location);
-      formData.append('salary', data.salary);
-      const response = await addJob(formData);
-      if (response) {
+    const id = generateJobId();
+    const formData = new FormData();
+    formData.append('job_id', id);
+    formData.append('title', data.title);
+    formData.append('company', data.company);
+    formData.append('description', data.description);
+    formData.append('location', data.location);
+    formData.append('salary', data.salary);
+    if (jobList) {
+      try {
+        const response = await updateJob(jobList.id, formData);
+        if (response) {
+          setLoading(false);
+          console.log("update job", response)
+          closeModal();
+          onClose();
+        }
 
-        setLoading(false);
-        console.log("add job", response)
-        closeModal();
-        onClose();
+      } catch (error) {
+
       }
-
-    } catch (error) {
-      setLoading(false);
-      console.log("error", error)
     }
+    else {
+      try {
+        const response = await addJob(formData);
+        if (response) {
+          setLoading(false);
+          console.log("add job", response)
+          closeModal();
+          onClose();
+        }
+
+      } catch (error) {
+        setLoading(false);
+        console.log("error", error)
+      }
+    }
+
 
   };
   return (
@@ -121,7 +147,7 @@ export default function CreateJob({onClose}) {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Add Job
+                {jobList ? 'Update Job' : 'Add Job'}
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
@@ -138,6 +164,7 @@ export default function CreateJob({onClose}) {
               label="Job Title"
               placeholder="Enter Job Title"
               {...register('title')}
+              defaultValue={defaultValues.title}
               className="col-span-full"
               error={errors.title?.message}
             />
@@ -146,6 +173,7 @@ export default function CreateJob({onClose}) {
               label="Company"
               placeholder="Enter Company Name"
               {...register('company')}
+              defaultValue={defaultValues.company}
               className="col-span-full"
               error={errors.company?.message}
             />
@@ -155,6 +183,7 @@ export default function CreateJob({onClose}) {
               label="Salary"
               placeholder="Enter Company Name"
               {...register('salary')}
+              defaultValue={defaultValues.salary}
               className="col-span-full"
               error={errors.salary?.message}
             />
@@ -164,15 +193,17 @@ export default function CreateJob({onClose}) {
               placeholder="Enter Location"
               className="col-span-full"
               {...register('location')}
+              defaultValue={defaultValues.location}
               error={errors.location?.message}
             />
 
             <Input
               label="Job Description"
-              className="col-span-full"
+              className="col-span-full "
               type="text"
               id="textbox"
               {...register('description')}
+              defaultValue={defaultValues.description}
               placeholder="Description Type here..."
               style={{ height: '100px' }} // Set the height here
             />
@@ -238,7 +269,7 @@ export default function CreateJob({onClose}) {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-                Add Job
+                {jobList ? 'Update Job' : 'Add Job'}
               </Button>
             </div>
           </>

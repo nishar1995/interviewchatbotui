@@ -77,6 +77,8 @@ export default function MyJobTable({ className }: { className?: string }) {
           setPageSize,
 
         }}
+        
+        
         className="-mx-5 lg:-mx-7">
 
       </ControlledTable>

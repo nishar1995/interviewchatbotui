@@ -3,64 +3,16 @@
 import { HeaderCell } from '@/components/ui/table';
 import { useState } from 'react';
 import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
-import { Text, Checkbox, Select } from 'rizzui';
+import { Text, Checkbox, Select, Tooltip, ActionIcon } from 'rizzui';
 import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
-// const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
-//   // Check if scheduleString is null or undefined
-//   if (scheduleString === null || scheduleString === undefined) {
-//     return null;
-//   }
-
-//   // Split the string by space and comma
-//   const parts = scheduleString.split(/[\s,]+/);
-//   if (parts.length < 3) {
-//     return null; // Ensure there are enough parts to extract day, month, and time
-//   }
-//   // Extract day, month, year, and time
-//   const day = parseInt(parts[0]);
-//   const monthName = parts[1];
-//   const year = new Date().getFullYear(); // Assuming current year
-//   const time = parts[2];
-//   // Convert month name to month index (0-indexed)
-//   const monthIndex = new Date(Date.parse(monthName + ' 1, 2000')).getMonth();
-//   // Extract hour and minute from time
-//   const [hour, minute] = time.split(':').map(part => parseInt(part));
-//   // Create a new Date object
-//   return new Date(year, monthIndex, day, hour, minute);
-// };
-// const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
-//   // Check if scheduleString is null or undefined
-//   if (scheduleString === null || scheduleString === undefined) {
-//     return null;
-//   }
-
-//   // Define known date formats to try parsing
-//   const dateFormats = [
-//     // Add more formats if needed
-//     'D MMMM,YY h:mma', // e.g., "11 April,24 6:00PM"
-//     'MM/DD/YYYY h:mm A', // e.g., "04/11/2024 6:00 PM"
-//     'YYYY-MM-DDTHH:mm:ss', // e.g., "2024-04-11T18:00:00"
-//   ];
-
-//   // Attempt to parse the date using each format
-//   for (const format of dateFormats) {
-//     const parsedDate = parseDateWithFormat(scheduleString, format);
-//     if (parsedDate !== null) {
-//       return parsedDate;
-//     }
-//   }
-
-//   // If none of the formats work, return null
-//   return null;
-// };
-
-// const parseDateWithFormat = (dateString: string, format: string): Date | null => {
-//   const parsedDate = new Date(dateString.replace(/,/g, ''));
-//   return isNaN(parsedDate.getTime()) ? null : parsedDate;
-// };
-
+import EyeIcon from '@/components/icons/eye';
+import DeletePopover from '@/app/shared/delete-popover';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import CreateApplication from './create-application';
+import { deleteMeeting } from '@/services/meetingScheduleService';
+import PencilIcon from '@/components/icons/pencil';
 
 const statusOptions = [
   { label: 'Waiting', value: 'Waiting' },
@@ -209,13 +161,13 @@ export const getColumns = ({
     {
       title: <HeaderCell title="Start Meeting" />,
       onHeaderCell: () => onHeaderCellClick('startMeeting'),
-      dataIndex: 'startMeeting',
-      key: 'startMeeting',
+      dataIndex: 'start_time',
+      key: 'start_time',
       width: 150,
-      render: (startMeeting: string) => (
+      render: (start_time: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {startMeeting}
+            {start_time}
           </Text>
         </div>
       ),
@@ -349,7 +301,7 @@ export const getColumnsData = () => {
         </div>
       ),
     },
-   
+
 
     {
       title: <HeaderCell title="Candidate Id" />,
@@ -375,12 +327,13 @@ export const getColumnsData = () => {
       render: (start_time: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {moment(start_time).format('DD-MM-YYYY, h:mm a')}
+            {/* {moment(start_time).format('DD-MM-YYYY, h:mm a')} */}
+            {moment.utc(start_time).format("DD-MM-YYYY, h:mm a")}
           </Text>
         </div>
       )
     },
-   
+
 
     {
       title: <HeaderCell title="End Meeting" />,
@@ -389,16 +342,116 @@ export const getColumnsData = () => {
       key: 'end_time',
       width: 150,
       render: (end_time: string) => (
+
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-          {moment(end_time).format('DD-MM-YYYY, h:mm a')}
+            {moment.utc(end_time).format("DD-MM-YYYY, h:mm a")}
           </Text>
         </div>
       ),
     },
 
+    {
+      title: <></>,
+      dataIndex: 'action',
+      key: 'action',
+      width: 120,
+      render: (_: string, id: any) => (
+        <RenderAction row={id} onDeleteItem={onDeleteItem} />
+      ),
+    },
+
   ];
 };
+const handlePopupClose = () => {
+  console.log("close update popup");
+
+}
+
+export async function onDeleteItem(id: any) {
+  console.log("meeting id", id)
+  console.log("delete the meeting......");
+  try {
+    const response = await deleteMeeting(id);
+    if (response) {
+      console.log("delete the meeting", response);
+      setOpen()
+    }
+  } catch (error) {
+    console.log("error", error)
+  }
+
+}
+
+function setOpen() {
+  useModal().closeModal
+}
+
+
+function RenderAction({
+  row,
+  onDeleteItem,
+}: {
+  row: any;
+  onDeleteItem: (id: string) => void;
+}) {
+  const { openModal, closeModal } = useModal();
+  function handleCreateModal(row: any) {
+    console.log("row////////", row)
+    closeModal(),
+      openModal({
+        view: <CreateApplication onClose={handlePopupClose} meetingDetails={row} />,
+        //customSize: '500px',
+      });
+  }
+  // className="w-full @lg:w-auto "
+  return (
+    <div className="flex items-center justify-end gap-3 pe-3">
+      <Tooltip
+        size="sm"
+        content={'Edit Meeting'}
+        placement="top"
+        color="invert"
+      >
+        <ActionIcon
+          as="span"
+          size="sm"
+          variant="outline"
+          aria-label={'Edit Meeting'}
+          // className="hover:!border-gray-900 hover:text-gray-700"
+          onClick={() =>
+            openModal({
+              view: (
+                <CreateApplication
+                meetingDetails={row}
+                  data={row}
+                  onDelete={() => onDeleteItem(row.id)}
+                  onEdit={handleCreateModal(row)
+                  }
+                  onClose={handlePopupClose}
+                />
+              ),
+              customSize: '900px',
+            })
+          }
+        >
+          <PencilIcon className="h-4 w-4" />
+        </ActionIcon>
+      </Tooltip>
+      <DeletePopover
+        title={`Delete the Schedule Meetting`}
+        description={`Are you sure you want to delete this #${row.id} Schedule Meeting?`}
+        onDelete={() => onDeleteItem(row.id)}
+      />
+    </div>
+  );
+}
+
+
+
+
+
+
 export const getColumns2 = ({
   handleSelectAll,
   onHeaderCellClick,

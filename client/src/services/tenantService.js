@@ -24,7 +24,7 @@ export async function fetchData() {
                 'Content-Type': 'application/json',
             },
         });
-        
+
         return response;
     } catch (error) {
         console.error("error", error);
@@ -36,7 +36,7 @@ export async function fetchData() {
 export async function addTenant(data) {
     try {
         const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/tenant/', data);
-       // const responseData = await response.json();
+        // const responseData = await response.json();
         return response.data;
     } catch (error) {
         console.error('Error add tenant:', error);
@@ -44,32 +44,24 @@ export async function addTenant(data) {
     }
 }
 
-// function of update tenant 
-export async function updateData(tenantId, data) {
+// function of update the tenant 
+export async function updateTenant(tenantId, data) {
     try {
-        const response = await axiosInterceptorInstance.put(`http://intapp.learninginbits.com:8080/tenant?tenantId=${tenantId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        const responseData = await response.json();
-        return responseData;
-
+        console.log(data);
+        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/tenant/${tenantId}/`, data
+        );
+        return response;
     } catch (error) {
-        console.error('error update tenant:', error);
-        throw new Error('failed to update tenant');
+        console.error('Error update tenant:', error);
+        throw new Error('Failed to update tenant');
     }
-
 }
 
-// function of delete tenant 
-export async function deleteData(tenantId) {
+// function of delete the tenant
+export async function deleteTenant(tenantId) {
     try {
-        const response = await axiosInterceptorInstance.delete(`http://intapp.learninginbits.com:8080/tenant?tenantId=${tenantId}`, {
+        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/tenant/${tenantId}/`, {
             method: 'DELETE',
-
         });
         return response;
 

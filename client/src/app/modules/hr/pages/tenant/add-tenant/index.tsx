@@ -23,14 +23,27 @@ export default function MyTenantTable({
   const { visibleColumns } = useColumn(columns);
  const [data,setData] = useState<any>([]);
 
+  // useEffect(() => {
+  //   const tentant = async () => {
+  //     const response = await fetchData();
+  //     console.log("fetch data", response);
+  //     setData(response.data)
+  //   };
+  //   tentant();
+  // }, []);
+
   useEffect(() => {
-    const tentant = async () => {
-      const response = await fetchData();
-      console.log("fetch data", response);
-      setData(response.data)
-    };
-    tentant();
+    tentantList();
   }, []);
+
+  const tentantList = async () => {
+    const response = await fetchData();
+    console.log("fetch data", response);
+    setData(response.data)
+  }
+  const handlePopupClose = () => {
+    tentantList();
+  };
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -41,7 +54,7 @@ export default function MyTenantTable({
         <div className="mt-2 flex justify-end">
           <ModalButton
             label="Add New Tenant"
-            view={<CreateTenant />} />
+            view={<CreateTenant onClose={handlePopupClose} tenantDetails={undefined}/>} />
 
 
 

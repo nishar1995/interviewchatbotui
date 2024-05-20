@@ -9,7 +9,8 @@ import { getColumns, getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
 import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
-import { candidateList } from '../../../../../../services/candidateService'
+import { candidateList } from '../../../../../../services/candidateService';
+import { deleteCandidate } from '@/services/candidateService';
 
 
 export const applicationQueryKey = 'candidate-application-data';
@@ -44,6 +45,20 @@ export default function MyApplicationsTable({
     fetchCandidateList();
   };
 
+  const onDeleteItem = async (id: string) => {
+    console.log("candidate id", id);
+    console.log("delete the candidate......");
+    try {
+      const response = await deleteCandidate(id);
+      if (response) {
+        console.log("deleted the candidate", response);
+        handlePopupClose();
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -69,7 +84,16 @@ export default function MyApplicationsTable({
           // current: currentPage,
           //onChange: (page: number) => handlePaginate(page),
         }}
+        
       >
+        {/* {data.map((row: any) => (
+          <RenderAction
+            key={row.id}
+            row={row}
+            onDeleteItem={onDeleteItem}
+            handlePopupClose={handlePopupClose}
+          />
+        ))} */}
 
       </ControlledTable>
     </WidgetCard>

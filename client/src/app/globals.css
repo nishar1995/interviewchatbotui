@@ -1429,3 +1429,8 @@ div[style='z-index: 1000001;'],
   top: 0;
   left: 0;
 }
+
+
+.job-box{
+  height: 300px;
+}

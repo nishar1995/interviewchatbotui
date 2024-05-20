@@ -18,7 +18,7 @@ import { questionsQueryKey } from '.';
 import { tenantQuestionsSchema } from '@/utils/validators/tenantQuestions.schema'
 import { addQuestion } from '@/services/tenantQuestionsService';
 
-export default function CreateQuestions({ onClose }) {
+export default function CreateQuestions({ onClose }:any) {
   const defaultValues: Omit<
     tenantQuestionsSchema,
     'questions'

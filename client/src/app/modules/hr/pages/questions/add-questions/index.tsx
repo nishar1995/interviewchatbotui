@@ -12,6 +12,10 @@ import { useQuery } from '@tanstack/react-query';
 import CreateTenant from './create-application';
 import CreateQuestions from './create-application';
 import { getQuestions } from '../../../../../../services/tenantQuestionsService'
+import { ActionIcon } from 'rizzui';
+import { PiCaretDownBold, PiCaretUpBold } from 'react-icons/pi';
+import ExpandedOrderRow from './expanded-row';
+
 
 
 export const questionsQueryKey = 'questions-application-data';
@@ -24,23 +28,13 @@ export default function MyQuestionsTable({
   const { visibleColumns } = useColumn(columns);
   const [data, setData] = useState<any>([]);
 
-  // useEffect(() => {
-  //   const candidate = async () => {
-  //     const response = await getQuestions();
-  //     console.log("fetch data", response);
-  //     setData(response.data)
-  //   };
-  //   candidate();
-  // }, []);
-
-
   useEffect(() => {
-    fetchQuestionsList(); // Initial fetch when the component mounts
+    fetchQuestionsList(); 
   }, []);
 
   const fetchQuestionsList = async () => {
     const response = await getQuestions();
-    console.log("fetch data", response);
+    console.log("fetch data", response.data);
     setData(response.data)
 
 
@@ -49,11 +43,32 @@ export default function MyQuestionsTable({
     fetchQuestionsList();
 
   }
+
+  function CustomExpandIcon(props: any) {
+    return (
+      <ActionIcon
+        size="sm"
+        variant="outline"
+        rounded="full"
+        className="expand-row-icon ms-2"
+        onClick={(e) => {
+          props.onExpand(props.record, e);
+         
+        }}
+      >
+        {props.expanded ? (
+          <PiCaretUpBold className="h-3.5 w-3.5" />
+        ) : (
+          <PiCaretDownBold className="h-3.5 w-3.5" />
+        )}
+      </ActionIcon>
+    );
+  }
     return (
       <WidgetCard
         headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
         actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
-        title="Tenant"
+        title="Questions"
         titleClassName="whitespace-nowrap"
         action={
           <div className="mt-2 flex justify-end">
@@ -73,6 +88,10 @@ export default function MyQuestionsTable({
             // total: totalItems,
             // current: currentPage,
             //onChange: (page: number) => handlePaginate(page),
+          }}
+          expandable={{
+            expandIcon: CustomExpandIcon,
+            expandedRowRender: (data) => <ExpandedOrderRow data={data} />,
           }}
         >
 

@@ -56,38 +56,31 @@ export async function addJob(data) {
     }
 }
 
-// function of update job post
-export async function updateData(tenantId, data) {
+
+// function of update the job post
+export async function updateJob(jobId, data) {
     try {
-        const response = await fetch(` 'http://intapp.learninginbits.com:8080/jobPosting?tenantId=${tenantId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        const responseData = await response.json();
-        return responseData;
-
+        console.log(data);
+        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/job/${jobId}/`, data
+        );
+        return response;
     } catch (error) {
-        console.error('error update job posting:', error);
-        throw new Error('failed to update job posting');
+        console.error('Error update meeting:', error);
+        throw new Error('Failed to update meeting');
     }
-
 }
 
-// function of delete job post
-export async function deleteData(tenantId) {
+// function of delete the job post
+export async function deleteJob(jobId) {
     try {
-        const response = await fetch(`http://intapp.learninginbits.com:8080/jobPosting?tenantId=${tenantId}`, {
+        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/job/${jobId}/`, {
             method: 'DELETE',
-
         });
         return response;
 
     } catch (error) {
-        console.error('error delete job posting:', error);
-        throw new Error('failed to delete job posting');
+        console.error('error delete job:', error);
+        throw new Error('failed to delete job');
     }
 
 }

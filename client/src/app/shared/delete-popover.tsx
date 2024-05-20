@@ -1,6 +1,7 @@
 import { Title, Text, ActionIcon, Button, Popover } from 'rizzui';
 import TrashIcon from '@/components/icons/trash';
 import { PiTrashFill } from 'react-icons/pi';
+import { useState } from 'react';
 
 type DeletePopoverProps = {
   title: string;
@@ -13,6 +14,19 @@ export default function DeletePopover({
   description,
   onDelete,
 }: DeletePopoverProps) {
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async (setOpen: (open: boolean) => void) => {
+    setLoading(true);
+    try {
+      await onDelete();
+      setOpen(false);
+    } catch (error) {
+      console.error("Error deleting item", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Popover placement="left">
       <Popover.Trigger>
@@ -38,14 +52,20 @@ export default function DeletePopover({
               {description}
             </Text>
             <div className="flex items-center justify-end">
-              <Button size="sm" className="me-1.5 h-7" onClick={onDelete}>
-                Yes
+              <Button
+                size="sm"
+                className="me-1.5 h-7"
+                onClick={() => handleDelete(setOpen)}
+                disabled={loading}
+              >
+                {loading ? 'Deleting...' : 'Yes'}
               </Button>
               <Button
                 size="sm"
                 variant="outline"
                 className="h-7"
                 onClick={() => setOpen(false)}
+                disabled={loading}
               >
                 No
               </Button>

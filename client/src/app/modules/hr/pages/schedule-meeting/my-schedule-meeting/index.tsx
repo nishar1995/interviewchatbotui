@@ -42,7 +42,7 @@ export default function MyMeetingTable({
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
       actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
-      title="Tenant"
+      title="Meeting Schedule"
       titleClassName="whitespace-nowrap"
       action={
         <div className="mt-2 flex justify-end">

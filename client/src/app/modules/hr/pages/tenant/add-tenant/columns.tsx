@@ -3,9 +3,15 @@
 import { HeaderCell } from '@/components/ui/table';
 import { useEffect, useState } from 'react';
 import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
-import { Text, Checkbox, Select } from 'rizzui';
-import { fetchData } from '../../../../../../services/tenantService'
+import { Text, Checkbox, Select, Tooltip, ActionIcon } from 'rizzui';
+import { deleteTenant, fetchData } from '../../../../../../services/tenantService'
 import 'react-datepicker/dist/react-datepicker.css';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import EyeIcon from '@/components/icons/eye';
+import DeletePopover from '@/app/shared/delete-popover';
+import CreateApplication from '../../../../hr/pages/tenant/add-tenant/create-application';
+
+import PencilIcon from '@/components/icons/pencil';
 let getTenantData: any;
 // const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
 //   // Check if scheduleString is null or undefined
@@ -329,10 +335,10 @@ export const getColumnsData = () => {
     {
       title: <HeaderCell title="Tenant Id" />,
       //onHeaderCell: () => onHeaderCellClick('applicationId'),
-      dataIndex: 'tenantId',
-      key: 'applicatiotenantIdnId',
+      dataIndex: 'id',
+      key: 'id',
       width: 130,
-      render: (tenantId: string) => <Text>#{tenantId}</Text>,
+      render: (id: string) => <Text>{id}</Text>,
     },
     {
       title: (
@@ -441,8 +447,113 @@ export const getColumnsData = () => {
       ),
     },
 
+    {
+      title: <></>,
+      dataIndex: 'action',
+      key: 'action',
+      width: 120,
+      render: (_: string, id: any) => (
+        <RenderAction row={id} onDeleteItem={onDeleteItem} />
+      ),
+    },
+
   ];
 };
+
+
+
+const handlePopupClose = () => {
+  console.log("close update popup");
+
+}
+
+export async function onDeleteItem(id: any) {
+  console.log("tenant id", id)
+  console.log("delete the tenant......");
+  try {
+    const response = await deleteTenant(id);
+    if (response) {
+      console.log("delete the tenant", response);
+      setOpen()
+    }
+  } catch (error) {
+    console.log("error", error)
+  }
+
+}
+
+function setOpen() {
+  useModal().closeModal
+}
+
+
+function RenderAction({
+  row,
+  onDeleteItem,
+}: {
+  row: any;
+  onDeleteItem: (id: string) => void;
+}) {
+  const { openModal, closeModal } = useModal();
+  function handleCreateModal(row: any) {
+    console.log("row////////", row)
+    closeModal(),
+      openModal({
+        view: <CreateApplication onClose={handlePopupClose} tenantDetails={row} />,
+        //customSize: '500px',
+      });
+  }
+  // className="w-full @lg:w-auto "
+  return (
+    <div className="flex items-center justify-end gap-3 pe-3">
+      <Tooltip
+        size="sm"
+        content={'Edit Tenant'}
+        placement="top"
+        color="invert"
+      >
+        <ActionIcon
+          as="span"
+          size="sm"
+          variant="outline"
+          aria-label={'Edit Tenant'}
+          // className="hover:!border-gray-900 hover:text-gray-700"
+          onClick={() =>
+            openModal({
+              view: (
+                <CreateApplication
+                tenantDetails={row}
+                  data={row}
+                  onDelete={() => onDeleteItem(row.id)}
+                  onEdit={handleCreateModal(row)
+                  }
+                  onClose={handlePopupClose}
+                />
+              ),
+              customSize: '900px',
+            })
+          }
+        >
+          {/* <EyeIcon className="h-4 w-4" /> */}
+          <PencilIcon className="h-3.5 w-3.5" />
+
+        </ActionIcon>
+      </Tooltip>
+      <DeletePopover
+        title={`Delete the Tenant`}
+        description={`Are you sure you want to delete this #${row.id} tenant?`}
+        onDelete={() => onDeleteItem(row.id)}
+      />
+    </div>
+  );
+}
+
+
+
+
+
+
+
 export const getColumns2 = ({
   handleSelectAll,
   onHeaderCellClick,

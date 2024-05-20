@@ -16,30 +16,43 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { tenantQueryKey } from '../add-tenant';
 import { tenantSchema } from '@/utils/validators/tenant.schema';
-import { addTenant } from '@/services/tenantService';
+import { addTenant, updateTenant } from '@/services/tenantService';
 
-export default function CreateTenant() {
-  const defaultValues: Omit<
-    tenantSchema,
-    'tenantName'
-  > & {
-    name: string;
-    address_line1: string;
-    address_line2: string;
-    city: string;
-    state: string;
-    country: string;
-    zip_code: string; // Add 'tenantName' property
-  } = {
-    name: '', // Initialize 'tenantName' property
-    address_line1: '',
-    address_line2: '',
-    city: '',
-    state: '',
-    country: '',
-    zip_code: '',
+export default function CreateTenant({ onClose, tenantDetails }) {
+  console.log("tenant details", tenantDetails)
+  // const defaultValues: Omit<
+  //   tenantSchema,
+  //   'tenantName'
+  // > & {
+  //   name: string;
+  //   address_line1: string;
+  //   address_line2: string;
+  //   city: string;
+  //   state: string;
+  //   country: string;
+  //   zip_code: string; // Add 'tenantName' property
+  // } = {
+  //   name: '', // Initialize 'tenantName' property
+  //   address_line1: '',
+  //   address_line2: '',
+  //   city: '',
+  //   state: '',
+  //   country: '',
+  //   zip_code: '',
 
-  };
+  // };
+
+  const defaultValues = {
+    name: tenantDetails?.name || '',
+    address_line1: tenantDetails?.address_line1 || '',
+    address_line2: tenantDetails?.address_line2 || '',
+    city: tenantDetails?.city || '',
+    state: tenantDetails?.state || '',
+    country: tenantDetails?.country || '',
+    zip_code: tenantDetails?.zip_code || '',
+  }
+
+
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
@@ -49,18 +62,44 @@ export default function CreateTenant() {
 
   const onSubmit: SubmitHandler<tenantSchema> = async (data: any) => {
     console.log(data);
-    try {
-      const response = await addTenant(data);
-      if (response) {
-        console.log(response);
-        setReset({
-          ...defaultValues,
-        });
-        closeModal();
-      }
-    } catch (error) {
+    setLoading(true);
+    if (tenantDetails) {
+      try {
+        const response = await updateTenant(tenantDetails.id,data);
+        if (response) {
+          console.log(response);
+          setLoading(false);
+          setReset({
+            ...defaultValues,
+          });
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        console.log("error", error)
+        setLoading(false);
 
+      }
     }
+    else {
+      try {
+        const response = await addTenant(data);
+        if (response) {
+          console.log(response);
+          setLoading(false);
+          setReset({
+            ...defaultValues,
+          });
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        console.log("error", error)
+        setLoading(false);
+
+      }
+    }
+
 
     // setLoading(true);
     // // set timeout ony required to display loading state of the create category button
@@ -133,7 +172,7 @@ export default function CreateTenant() {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Add Tenant
+                {tenantDetails ? 'Update Tenant' : 'Add Tenant'}
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
@@ -143,6 +182,7 @@ export default function CreateTenant() {
               label="Tenant Name"
               placeholder="Enter Tenant full name"
               {...register('name')}
+              defaultValue={defaultValues.name}
               className="col-span-full"
             //error={errors.candidateName?.message}
             />
@@ -152,6 +192,7 @@ export default function CreateTenant() {
               placeholder="Address Line1"
               className="col-span-full"
               {...register('address_line1')}
+              defaultValue={defaultValues.address_line1}
             //error={errors.job?.message}
             />
 
@@ -160,6 +201,7 @@ export default function CreateTenant() {
               placeholder="Enter Address Line2"
               className="col-span-full"
               {...register('address_line2')}
+              defaultValue={defaultValues.address_line2}
             //error={errors.meetingSchedule?.message}
             />
 
@@ -168,6 +210,7 @@ export default function CreateTenant() {
               placeholder="Enter city"
               className="col-span-full"
               {...register('city')}
+              defaultValue={defaultValues.city}
             //error={errors.meetingSchedule?.message}
             />
 
@@ -181,16 +224,17 @@ export default function CreateTenant() {
 
             {/* <label htmlFor="state" className="block text-gray-700 font-bold mb-2">State</label> */}
             <select
-            aria-label='state'
+              aria-label='state'
               id="state"
               className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               {...register('state', { required: 'State is required' })}
+              defaultValue={defaultValues.state}
             >
               <option value="">Select a state</option>
               <option value="AL">Alabama</option>
               <option value="AK">Alaska</option>
               <option value="AZ">Arizona</option>
-             
+
             </select>
 
             <Input
@@ -198,6 +242,7 @@ export default function CreateTenant() {
               placeholder="Enter Country"
               className="col-span-full"
               {...register('country')}
+              defaultValue={defaultValues.country}
             //error={errors.meetingSchedule?.message}
             />
             <Input
@@ -205,6 +250,7 @@ export default function CreateTenant() {
               placeholder="Enter Zip Code"
               className="col-span-full"
               {...register('zip_code')}
+              defaultValue={defaultValues.zip_code}
             //error={errors.meetingSchedule?.message}
             />
             {/* <Controller
@@ -269,7 +315,7 @@ export default function CreateTenant() {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-                Add Tenant
+                {tenantDetails ? 'Update Tenant' : 'Add Tenant'}
               </Button>
             </div>
           </>

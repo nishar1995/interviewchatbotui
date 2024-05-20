@@ -12,36 +12,27 @@ import SimpleBar from 'simplebar-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { applicationQueryKey } from '.';
 import { candidateSchema } from '@/utils/validators/candidate.schema'
-import { addCandidate } from '@/services/candidateService';
+import { addCandidate, getCandidateById, updateCandidate } from '@/services/candidateService';
 import { CreateApplicationInput } from '@/utils/validators/create-application.schema';
 import { getJobList } from '../../../../../../services/jobPostingService'
+import { string } from 'zod';
 
 
+type CreateApplicationProps = {
+  candidateId?: string;
+};
 
-
-export default function CreateApplication({ onClose }) {
-
-  const defaultValues: Omit<
-    candidateSchema,
-    'candidate'
-  > & {
-    name: string,
-    job_id: string,
-    resume: string,
-    username: string,
-    email: string,
-    phone_number: string,
-    application_id: string
-    // role: string,
-  } = {
-    name: '',
-    job_id: '',
-    resume: '',
-    username: '',
-    email: '',
-    phone_number: '',
-    application_id: ''
-    // role: '1',
+export default function CreateApplication({ onClose, candidateList }) {
+  console.log("get candidate details ", candidateList);
+  console.log("candidate name ", candidateList?.job_id);
+  const defaultValues = {
+    name: candidateList?.name || '',
+    job_id: candidateList?.job_id || '',
+    resume: candidateList?.resume ? Array.isArray(candidateList.resume) ? candidateList.resume : [candidateList.resume] : [],
+    username: candidateList?.username || '',
+    email: candidateList?.email || '',
+    phone_number: candidateList?.phone_number || undefined,
+    application_id: candidateList?.application_id || ''
   };
   // const queryClient = useQueryClient();
   // const { closeModal } = useModal();
@@ -57,9 +48,30 @@ export default function CreateApplication({ onClose }) {
   const [data, setData] = useState<any>([]);
   const [selectedJobId, setSelectedJobId] = useState<string>('');
 
+
   useEffect(() => {
     jobList();
+    if (candidateList) {
+      candidateDetails();
+    }
   }, []);
+
+
+  const candidateDetails = () => {
+    if (candidateList) {
+      console.log("......////////");
+      setReset({
+        name: candidateList?.name,
+        job_id: Number(candidateList?.job_id),
+        resume: candidateList?.resume ? Array.isArray(candidateList.resume) ? candidateList.resume : [candidateList.resume] : [],
+        username: candidateList?.username,
+        email: candidateList?.email,
+        phone_number: String(candidateList?.phone_number),
+        application_id: candidateList?.application_id
+      });
+    }
+  };
+
 
   const jobList = async () => {
     try {
@@ -74,18 +86,28 @@ export default function CreateApplication({ onClose }) {
     }
 
   }
+
+  //   const CandidateById = async()=>{
+  //     try{
+  //       console.log("candidate id",candidateId)
+  //       const response = await getCandidateById(candidateId);
+  //       console.log("get details",response)
+  //     }catch(error){
+  // console.log("error",error)
+  //     }
+  //   }
   const generateApplicationId = () => {
-    let data = '#AiInfox' + (Math.floor(Math.random() * 10) + 1);
+    let data = '#AiInfox' + (Math.floor(Math.random() * 30) + 1);
     return data;
   }
-  const onSubmit: SubmitHandler<CreateApplicationInput> = async (data: any) => {
+  const onSubmit: SubmitHandler<candidateSchema> = async (data: any) => {
     console.log("add candidate ", data)
     setLoading(true);
     console.log(data);
     const formData = new FormData();
     let id = generateApplicationId();
     data.application_id = id;
-    console.log('aPPlication _id.....',data.application_id)
+    console.log('aPPlication _id.....', data.application_id)
     //formData.append('application_id', id);
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
@@ -97,18 +119,35 @@ export default function CreateApplication({ onClose }) {
       }
     }
     console.log(formData.get('resume'))
-    try {
-      const response = await addCandidate(formData);
-      console.log("add candidate", response);
-      if (response) {
-        queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
-        closeModal();
-        onClose();
+    if (candidateList) {
+      //formData.append('id', candidateList.id); 
+      try {
+        const response = await updateCandidate(candidateList.id, formData);
+        console.log("Update candidate response:", response);
+        if (response) {
+          queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        console.error("Error updating candidate:", error);
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error:', error);
-      setLoading(false);
-    };
+    } else {
+      try {
+        const response = await addCandidate(formData);
+        console.log("Add candidate response:", response);
+        if (response) {
+          queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        console.error('Error adding candidate:', error);
+        setLoading(false);
+      }
+    }
+
   };
 
   const onChangeJob = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -118,7 +157,7 @@ export default function CreateApplication({ onClose }) {
   };
 
   return (
-    <Form<CreateApplicationInput>
+    <Form<candidateSchema>
       resetValues={reset}
       onSubmit={onSubmit}
       validationSchema={candidateSchema}
@@ -139,6 +178,7 @@ export default function CreateApplication({ onClose }) {
               label="Candidate Name"
               placeholder="Enter Candidate's full name"
               {...register('name')}
+              defaultValue={reset.name}
               className="col-span-full"
               error={errors.name?.message}
             />
@@ -154,6 +194,7 @@ export default function CreateApplication({ onClose }) {
               id="job-select"
               className="col-span-full"
               {...register('job_id')}
+              defaultValue={reset.job_id}
               onChange={onChangeJob}
             >
               <option value="">Select a job</option>
@@ -167,6 +208,7 @@ export default function CreateApplication({ onClose }) {
               label="User Name"
               placeholder="Enter username"
               {...register('username')}
+              defaultValue={reset.username}
               className="col-span-full"
               error={errors.username?.message}
             />
@@ -176,6 +218,7 @@ export default function CreateApplication({ onClose }) {
               placeholder="Enter candidate email"
               {...register('email')}
               className="col-span-full"
+              defaultValue={reset.email}
               error={errors.email?.message}
             />
             <Input
@@ -183,19 +226,21 @@ export default function CreateApplication({ onClose }) {
               placeholder="Enter contact no."
               {...register('phone_number')}
               className="col-span-full"
+              defaultValue={reset.phone_number}
               error={errors.phone_number?.message}
             />
 
-            <Input
+            {/* <Input
               label="Meeting Schedule"
               placeholder="Enter Meeting Schedule"
               className="col-span-full"
               {...register('meetingSchedule')}
               error={errors.meetingSchedule?.message}
-            />
+            /> */}
             <Controller
               name="resume"
               control={control}
+              defaultValue={reset.resume}
               render={({ field: { value, onChange, onBlur } }) => (
                 <div className="col-span-full">
                   <Upload

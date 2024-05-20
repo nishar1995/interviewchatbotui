@@ -1,20 +1,26 @@
 import axiosInterceptorInstance from './authInterceptorService';
 
 // fuction of get candidate by id
-export async function fetchDataById(candidateId) {
+export async function getCandidateById(candidateId) {
     try {
-        const response = await fetch(`http://intapp.learninginbits.com:8080/candidate?CandidateId=${candidateId}`);
-        const data = await response.json();
-        return data;
+        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/candidate/${candidateId}/`, {
+            mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response;
     } catch (error) {
         console.error("error", error);
-        throw new error("error by candidate id");
+        throw new error("error by candidate");
     }
 }
 // fuction of get candidate list
 export async function candidateList() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/candidate`, {
+        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/candidate/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -27,14 +33,6 @@ export async function candidateList() {
         console.error("error", error);
         throw new error("error by tenant");
     }
-    // try {
-    //     const response = await fetch(`http://intapp.learninginbits.com:8080/candidate?CandidateId=${candidateId}`);
-    //     const data = await response.json();
-    //     return data;
-    // } catch (error) {
-    //     console.error("error", error);
-    //     throw new error("error by candidate id");
-    // }
 }
 // fuction of add candidate
 export async function addCandidate(data) {
@@ -55,32 +53,26 @@ export async function addCandidate(data) {
     }
 }
 
+
+
 // function of update candidate 
-export async function updateData(tenantId, data) {
+export async function updateCandidate(candidateId, data) {
     try {
-        const response = await fetch(`http://intapp.learninginbits.com:8080/candidate?tenantId=${tenantId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        const responseData = await response.json();
-        return responseData;
-
+        console.log(data);
+        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/candidate/${candidateId}/`, data
+        );
+        return response;
     } catch (error) {
-        console.error('error update candidate:', error);
-        throw new Error('failed to update candidate');
+        console.error('Error update candidate:', error);
+        throw new Error('Failed to update candidate');
     }
-
 }
 
 // function of delete candidate 
-export async function deleteData(tenantId) {
+export async function deleteCandidate(candidateId) {
     try {
-        const response = await fetch(`http://intapp.learninginbits.com:8080/candidate?tenantId=${tenantId}`, {
+        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/candidate/${candidateId}/`, {
             method: 'DELETE',
-
         });
         return response;
 

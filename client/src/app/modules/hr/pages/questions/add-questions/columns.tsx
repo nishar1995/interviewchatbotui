@@ -268,31 +268,31 @@ export function handleSelectAll() {
 }
 export const getColumnsData = () => {
   return [
-    {
-      title: (
-        <div className="ps-3.5">
-          <Checkbox
-            title={'Select All'}
-            onChange={handleSelectAll}
-            //checked={checkedItems.length === data.length}
-            className="cursor-pointer"
-          />
-        </div>
-      ),
-      dataIndex: 'checked',
-      key: 'checked',
-      width: 30,
-      render: (_: any, row: any) => (
-        <div className="inline-flex ps-3.5">
-          <Checkbox
-            aria-label={'ID'}
-            className="cursor-pointer"
-            //checked={checkedItems.includes(row.id)}
-            //{...(onChecked && { onChange: () => onChecked(row.id) })}
-          />
-        </div>
-      ),
-    },
+    // {
+    //   title: (
+    //     <div className="ps-3.5">
+    //       <Checkbox
+    //         title={'Select All'}
+    //         onChange={handleSelectAll}
+    //         //checked={checkedItems.length === data.length}
+    //         className="cursor-pointer"
+    //       />
+    //     </div>
+    //   ),
+    //   dataIndex: 'checked',
+    //   key: 'checked',
+    //   width: 30,
+    //   render: (_: any, row: any) => (
+    //     <div className="inline-flex ps-3.5">
+    //       <Checkbox
+    //         aria-label={'ID'}
+    //         className="cursor-pointer"
+    //         //checked={checkedItems.includes(row.id)}
+    //         //{...(onChecked && { onChange: () => onChecked(row.id) })}
+    //       />
+    //     </div>
+    //   ),
+    // },
     // {
     //   title: <HeaderCell title="Tenant Id" />,
     //   //onHeaderCell: () => onHeaderCellClick('tenantId'),
@@ -304,49 +304,66 @@ export const getColumnsData = () => {
     {
       title: (
         <HeaderCell
-          title={<span className="whitespace-nowrap">Job Id</span>}
+          title={<span className="whitespace-nowrap">Application Id</span>}
         />
       ),
-      dataIndex: 'job',
-      key: 'job',
+      dataIndex: 'application_id',
+      key: 'application_id',
       width: 130,
-      render: (job: string) => (
+      render: (application_id: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {job}
+            {application_id}
           </Text>
         </div>
       ),
     },
     {
-      title: <HeaderCell title="Questions" />,
-      //onHeaderCell: () => onHeaderCellClick('questions'),
-      dataIndex: 'question',
-      key: 'question',
-      width: 150,
-      render: (question: string) => (
+      title: (
+        <HeaderCell
+          title={<span className="whitespace-nowrap">Job Title</span>}
+        />
+      ),
+      dataIndex: 'job_title',
+      key: 'job_title',
+      width: 130,
+      render: (job_title: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {question}
+            {job_title}
           </Text>
         </div>
       ),
     },
+    // {
+    //   title: <HeaderCell title="Questions" />,
+    //   //onHeaderCell: () => onHeaderCellClick('questions'),
+    //   dataIndex: 'question',
+    //   key: 'question',
+    //   width: 150,
+    //   render: (question: string) => (
+    //     <div>
+    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+    //         {question}
+    //       </Text>
+    //     </div>
+    //   ),
+    // },
 
-    {
-      title: <HeaderCell title="Answer" />,
-      //onHeaderCell: () => onHeaderCellClick('questions'),
-      dataIndex: 'answer',
-      key: 'answer',
-      width: 150,
-      render: (answer: string) => (
-        <div>
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {answer}
-          </Text>
-        </div>
-      ),
-    },
+    // {
+    //   title: <HeaderCell title="Answer" />,
+    //   //onHeaderCell: () => onHeaderCellClick('questions'),
+    //   dataIndex: 'answer',
+    //   key: 'answer',
+    //   width: 150,
+    //   render: (answer: string) => (
+    //     <div>
+    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+    //         {answer}
+    //       </Text>
+    //     </div>
+    //   ),
+    // },
    
   ];
 };

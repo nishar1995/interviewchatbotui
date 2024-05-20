@@ -8,7 +8,7 @@ export const candidateSchema = z.object({
     resume: z.array(z.instanceof(File)),
     username: z.string(),
     //role: z.string(),
-    meetingSchedule: z.string(),
+    //meetingSchedule: z.string(),
     email:z.string(),
     phone_number : z.string(),
     application_id:z.string()
@@ -44,4 +44,4 @@ export const candidateSchema = z.object({
 });
 
 // generate form types from zod validation schema
-export type userEntitySchema = z.infer<typeof candidateSchema>;
+export type candidateSchema = z.infer<typeof candidateSchema>;

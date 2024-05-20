@@ -3,9 +3,17 @@
 import { HeaderCell } from '@/components/ui/table';
 import { useState } from 'react';
 import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
-import { Text, Checkbox, Select } from 'rizzui';
+import { Text, Checkbox, Select, Tooltip, ActionIcon } from 'rizzui';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import CreateApplication from '../../../../hr/pages/executive/my-applications-table/create-application';
+import { useModal } from '@/app/shared/modal-views/use-modal';
+import EyeIcon from '@/components/icons/eye';
+import DeletePopover from '@/app/shared/delete-popover';
+import AppointmentDetails from '@/app/modules/hr-manager/pages/appointment/appointment-list/list/appointment-details';
+import { deleteCandidate } from '@/services/candidateService';
+import { candidateList } from '../../../../../../services/candidateService';
+import PencilIcon from '@/components/icons/pencil';
 // const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
 //   // Check if scheduleString is null or undefined
 //   if (scheduleString === null || scheduleString === undefined) {
@@ -59,6 +67,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 //   const parsedDate = new Date(dateString.replace(/,/g, ''));
 //   return isNaN(parsedDate.getTime()) ? null : parsedDate;
 // };
+
 
 
 const statusOptions = [
@@ -223,17 +232,6 @@ export const getColumns = ({
       ),
     },
 
-    // {
-    //   title: (
-    //     <HeaderCell
-    //       title={<span className="whitespace-nowrap">Date of Birth</span>}
-    //     />
-    //   ),
-    //   dataIndex: 'dob',
-    //   key: 'dob',
-    //   width: 250,
-    //   render: (dob: Date) => <DateCell date={dob} />,
-    // },
     {
       title: (
         <HeaderCell
@@ -251,44 +249,6 @@ export const getColumns = ({
         </div>
       ),
     },
-    //   render: (meetingSchedule: string | undefined)=> {
-    //     // Ensure meetingSchedule is a Date object
-    //     if (meetingSchedule === null || meetingSchedule === undefined) {
-    //       return null;
-    //     }
-    //     const parsedMeetingSchedule = parseMeetingSchedule(meetingSchedule);
-
-    //     return (
-    //       <div>
-    //         <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //         {parsedMeetingSchedule?.toLocaleString() ?? 'Invalid Date'}
-    //         </time>
-    //       </div>
-    //     );
-    //   },
-    // },
-
-
-
-
-
-    //     render: (meetingSchedule: Date) => (
-    //       <div>
-    //         {/* <> {console.log(meetingSchedule)} </> */}
-
-    //         <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //         {meetingSchedule.toLocaleDateString()}
-    //         </time>
-    //          {/* <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //             {`${selectedDateRange[0].toLocaleDateString()} - ${selectedDateRange[1].toLocaleDateString()}`}
-    //            </time> */}
-    //           {/* <time className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //   {starRangeDate && endRangeDate && `${starRangeDate.toLocaleDateString()} - ${endRangeDate.toLocaleDateString()}`}
-    // </time> */}
-    //       </div>
-    //     ),
-    //  },
-
 
     {
       title: (
@@ -310,11 +270,23 @@ export const getColumns = ({
     },
   ];
 
-
-// const [selectAllChecked, setSelectAllChecked] = useState(true);
-// setSelectAllChecked(!selectAllChecked);
 export function handleSelectAll() {
   console.log("handle select all")
+}
+
+export async function onDeleteItem(id: any) {
+  console.log("candidate id", id)
+  console.log("delete the candidate......");
+  try {
+    const response = await deleteCandidate(id);
+    if (response) {
+      console.log("delete the candidate", response);
+      setOpen()
+    }
+  } catch (error) {
+    console.log("error", error)
+  }
+
 }
 export const getColumnsData = () => {
   return [
@@ -419,8 +391,90 @@ export const getColumnsData = () => {
         return <StatusSelect selectItem={status} />;
       },
     },
+    {
+      title: <></>,
+      dataIndex: 'action',
+      key: 'action',
+      width: 120,
+      render: (_: string, id: any) => (
+        <RenderAction row={id} onDeleteItem={onDeleteItem} />
+      ),
+    },
   ];
 };
+
+const fetchCandidateList = async () => {
+  const response = await candidateList();
+  console.log("fetch data", response);
+  
+}
+const handlePopupClose = () => {
+  console.log("close update popup");
+  fetchCandidateList();
+}
+
+function RenderAction({
+  row,
+  onDeleteItem,
+}: {
+  row: any;
+  onDeleteItem: (id: string) => void;
+}) {
+  const { openModal, closeModal } = useModal();
+  function handleCreateModal(row: any) {
+    console.log("row////////", row)
+    closeModal(),
+      openModal({
+        view: <CreateApplication onClose={handlePopupClose} candidateList={row} />,
+        //customSize: '500px',
+      });
+  }
+  // className="w-full @lg:w-auto "
+  return (
+    <div className="flex items-center justify-end gap-3 pe-3">
+      <Tooltip
+        size="sm"
+        content={'Edit Candidate'}
+        placement="top"
+        color="invert"
+      >
+        <ActionIcon
+          as="span"
+          size="sm"
+          variant="outline"
+          aria-label={'Edit Candidate'}
+          // className="hover:!border-gray-900 hover:text-gray-700"
+          onClick={() =>
+            openModal({
+              view: (
+                <CreateApplication
+                  candidateList={row}
+                  data={row}
+                  onDelete={() => onDeleteItem(row.id)}
+                  onEdit={handleCreateModal(row)
+                  }
+                  onClose={handlePopupClose}
+                />
+              ),
+              customSize: '900px',
+            })
+          }
+        >
+          <PencilIcon className="h-4 w-4" />
+        </ActionIcon>
+      </Tooltip>
+      <DeletePopover
+        title={`Delete the Candidate`}
+        description={`Are you sure you want to delete this #${row.id} candidate?`}
+        onDelete={() => onDeleteItem(row.id)}
+      />
+    </div>
+  );
+}
+
+
+
+
 export const getColumns2 = ({
   handleSelectAll,
   onHeaderCellClick,
@@ -543,3 +597,7 @@ export const getColumns2 = ({
       },
     },
   ];
+function setOpen() {
+  useModal().closeModal
+}
+
