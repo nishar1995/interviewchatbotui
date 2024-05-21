@@ -197,10 +197,8 @@ export default function CreateJob({ onClose, jobList }:any) {
               error={errors.location?.message}
             />
 
-            <Input
-              label="Job Description"
+            <textarea
               className="col-span-full "
-              type="text"
               id="textbox"
               {...register('description')}
               defaultValue={defaultValues.description}

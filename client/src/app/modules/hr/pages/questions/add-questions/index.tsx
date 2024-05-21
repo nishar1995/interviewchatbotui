@@ -11,7 +11,7 @@ import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
 import CreateTenant from './create-application';
 import CreateQuestions from './create-application';
-import { getQuestions } from '../../../../../../services/tenantQuestionsService'
+import { deleteQuestion, getQuestions } from '../../../../../../services/tenantQuestionsService'
 import { ActionIcon } from 'rizzui';
 import { PiCaretDownBold, PiCaretUpBold } from 'react-icons/pi';
 import ExpandedOrderRow from './expanded-row';
@@ -42,6 +42,20 @@ export default function MyQuestionsTable({
   const handlePopupClose = () => {
     fetchQuestionsList();
 
+  }
+
+  const  onDeleteItem = async (id: any)=> {
+    debugger
+    console.log("onclick dele")
+    try {
+      const response = await deleteQuestion(id);
+      if (response) {
+        console.log("delete the questions", response);
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+  
   }
 
   function CustomExpandIcon(props: any) {
@@ -92,7 +106,11 @@ export default function MyQuestionsTable({
           }}
           expandable={{
             expandIcon: CustomExpandIcon,
-            expandedRowRender: (data) => <ExpandedOrderRow data={data} />,
+            expandedRowRender: (data) => <ExpandedOrderRow 
+            data={data} 
+            handlePopupClose={handlePopupClose} 
+            onDeleteItem={onDeleteItem} 
+          />,
           }}
 
         //    expandable={{

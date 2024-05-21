@@ -44,19 +44,7 @@ export default function ExpandedOrderRow({ data }: any, {handlePopupClose , onDe
 
 }
 
-export async function onDeleteItem(id: any) {
-  debugger
-  console.log("onclick dele")
-  try {
-    const response = await deleteQuestion(id);
-    if (response) {
-      console.log("delete the questions", response);
-    }
-  } catch (error) {
-    console.log("error", error)
-  }
 
-}
 
 
 function RenderAction({
