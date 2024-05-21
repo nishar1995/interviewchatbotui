@@ -10,7 +10,8 @@ import ModalButton from '@/app/shared/modal-button';
 import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
 import CreateTenant from './create-application';
-import { fetchData } from '../../../../../../services/tenantService'
+import { deleteTenant, fetchData } from '../../../../../../services/tenantService'
+import { useModal } from '@/app/shared/modal-views/use-modal';
 
 
 export const tenantQueryKey = 'tenant-application-data';
@@ -18,19 +19,10 @@ export default function MyTenantTable({
 }: {
     // Add return type annotation here
   }) {
-  const columns = getColumnsData();
-  const [pageSize, setPageSize] = useState(7);
-  const { visibleColumns } = useColumn(columns);
- const [data,setData] = useState<any>([]);
 
-  // useEffect(() => {
-  //   const tentant = async () => {
-  //     const response = await fetchData();
-  //     console.log("fetch data", response);
-  //     setData(response.data)
-  //   };
-  //   tentant();
-  // }, []);
+  const [pageSize, setPageSize] = useState(7);
+
+  const [data, setData] = useState<any>([]);
 
   useEffect(() => {
     tentantList();
@@ -44,6 +36,32 @@ export default function MyTenantTable({
   const handlePopupClose = () => {
     tentantList();
   };
+
+  const onDeleteItem=(id:any)=>{
+    console.log("tenat id",id)
+    onDeleteTenant(id);
+    //tentantList();
+  }
+
+ const onDeleteTenant = async (id: any) =>{
+    console.log("tenant id", id)
+    console.log("delete the tenant......");
+    try {
+      const response = await deleteTenant(id);
+      if (response) {
+        console.log("delete the tenant", response);
+        tentantList();
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+  
+  }
+
+
+
+  const columns = getColumnsData({ handlePopupClose , onDeleteItem});
+  const { visibleColumns } = useColumn(columns);
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -54,7 +72,7 @@ export default function MyTenantTable({
         <div className="mt-2 flex justify-end">
           <ModalButton
             label="Add New Tenant"
-            view={<CreateTenant onClose={handlePopupClose} tenantDetails={undefined}/>} />
+            view={<CreateTenant onClose={handlePopupClose} tenantDetails={undefined} />} />
 
 
 

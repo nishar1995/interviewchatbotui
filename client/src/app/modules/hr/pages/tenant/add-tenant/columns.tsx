@@ -12,6 +12,7 @@ import DeletePopover from '@/app/shared/delete-popover';
 import CreateApplication from '../../../../hr/pages/tenant/add-tenant/create-application';
 
 import PencilIcon from '@/components/icons/pencil';
+import { routes } from '@/config/routes';
 let getTenantData: any;
 // const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
 //   // Check if scheduleString is null or undefined
@@ -300,10 +301,13 @@ const TenantTable = () => {
 
 export default TenantTable;
 
-// useEffect(() => {
-//   console.log('implement fetch data here');
-// })
-export const getColumnsData = () => {
+// type tenatColumns = {
+//   data: any[];
+//   onDeleteItem: (id: string) => void;
+//   //onHeaderCellClick: (value: string) => void;
+
+// };
+export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
 
   return [
     {
@@ -453,19 +457,13 @@ export const getColumnsData = () => {
       key: 'action',
       width: 120,
       render: (_: string, id: any) => (
-        <RenderAction row={id} onDeleteItem={onDeleteItem} />
+        <RenderAction row={id} onDeleteItem={onDeleteItem} onPopupClose={handlePopupClose} />
       ),
     },
 
   ];
 };
 
-
-
-const handlePopupClose = () => {
-  console.log("close update popup");
-
-}
 
 export async function onDeleteItem(id: any) {
   console.log("tenant id", id)
@@ -474,6 +472,7 @@ export async function onDeleteItem(id: any) {
     const response = await deleteTenant(id);
     if (response) {
       console.log("delete the tenant", response);
+      //window.location.reload()
       setOpen()
     }
   } catch (error) {
@@ -483,23 +482,26 @@ export async function onDeleteItem(id: any) {
 }
 
 function setOpen() {
-  useModal().closeModal
+  useModal().closeModal;
+
 }
 
 
 function RenderAction({
   row,
   onDeleteItem,
+  onPopupClose
 }: {
   row: any;
   onDeleteItem: (id: string) => void;
+  onPopupClose: () => void;
 }) {
   const { openModal, closeModal } = useModal();
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
       openModal({
-        view: <CreateApplication onClose={handlePopupClose} tenantDetails={row} />,
+        view: <CreateApplication onClose={onPopupClose} tenantDetails={row} />,
         //customSize: '500px',
       });
   }
@@ -522,12 +524,12 @@ function RenderAction({
             openModal({
               view: (
                 <CreateApplication
-                tenantDetails={row}
+                  tenantDetails={row}
                   data={row}
-                  onDelete={() => onDeleteItem(row.id)}
+                  //onDelete={() => onDeleteItem(row.id)}
                   onEdit={handleCreateModal(row)
                   }
-                  onClose={handlePopupClose}
+                  onClose={onPopupClose}
                 />
               ),
               customSize: '900px',
@@ -541,8 +543,8 @@ function RenderAction({
       </Tooltip>
       <DeletePopover
         title={`Delete the Tenant`}
-        description={`Are you sure you want to delete this #${row.id} tenant?`}
-        onDelete={() => onDeleteItem(row.id)}
+        description={`Are you sure you want to delete this tenant?`}
+        onDelete={() => onDeleteItem && onDeleteItem(row.id)}
       />
     </div>
   );

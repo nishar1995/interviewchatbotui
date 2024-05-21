@@ -9,7 +9,7 @@ import { getColumns, getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
 import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
-import { getMeetingScheduleList } from '../../../../../../services/meetingScheduleService'
+import { deleteMeeting, getMeetingScheduleList } from '../../../../../../services/meetingScheduleService'
 
 import CreateMeeting from '../../schedule-meeting/my-schedule-meeting/create-application'
 
@@ -19,9 +19,7 @@ export default function MyMeetingTable({
 }: {
     // Add return type annotation here
   }) {
-  const columns = getColumnsData();
   const [pageSize, setPageSize] = useState(7);
-  const { visibleColumns } = useColumn(columns);
   const [data, setData] = useState<any>([]);
 
 
@@ -38,6 +36,24 @@ export default function MyMeetingTable({
     fetchMeetingList();
   };
 
+
+  const onDeleteItem = async (id: any) => {
+    console.log("meeting id", id)
+    console.log("delete the meeting......");
+    try {
+      const response = await deleteMeeting(id);
+      if (response) {
+        console.log("delete the meeting", response);
+        fetchMeetingList();
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+
+  }
+
+  const columns = getColumnsData({ handlePopupClose, onDeleteItem });
+  const { visibleColumns } = useColumn(columns);
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -48,7 +64,7 @@ export default function MyMeetingTable({
         <div className="mt-2 flex justify-end">
           <ModalButton
             label="Add New Meeting"
-            view={<CreateMeeting onClose={handlePopupClose}/>} />
+            view={<CreateMeeting onClose={handlePopupClose} />} />
         </div>
       }
     >

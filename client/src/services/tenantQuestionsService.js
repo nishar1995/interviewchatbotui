@@ -39,12 +39,12 @@ export async function fetchDataById(tenantId) {
         throw new error("error by not show the all tentent questions");
     }
 }
- 
+
 // fuction of add tenant questions
 export async function addQuestion(data) {
     try {
         const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/question/', data);
-       // const responseData = await response.json();
+        // const responseData = await response.json();
         return response.data;
     } catch (error) {
         console.error('Error add Questions:', error);
@@ -53,25 +53,35 @@ export async function addQuestion(data) {
 }
 
 
-// function of update tenant questions
-export async function updateData(tenantId, data) {
+export async function deleteQuestion(questionId) {
     try {
-        const response = await fetch(`http://intapp.learninginbits.com:8080/tenantQuestion?tenantId=${tenantId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        const responseData = await response.json();
-        return responseData;
+        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/question/${questionId}/`
+       );
+        return response;
 
     } catch (error) {
-        console.error('error update tenantQuestion:', error);
-        throw new Error('failed to update tenantQuestion');
+        console.error('error delete questions:', error);
+        throw new Error('failed to delete questions');
     }
 
 }
+
+
+// function of update tenant questions
+
+export async function updateQuestions(jobId, data) {
+    try {
+        console.log(data);
+        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/question/${jobId}/`, data
+        );
+        return response;
+    } catch (error) {
+        console.error('Error update questions:', error);
+        throw new Error('Failed to update questions');
+    }
+}
+
+
 
 // function of delete tenant questions
 export async function deleteData(tenantId) {

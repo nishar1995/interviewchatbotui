@@ -11,7 +11,7 @@ import { getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
 import CreateJob from './create-job';
 import { useQuery } from '@tanstack/react-query';
-import { getJobList } from '../../../../../../services/jobPostingService'
+import { deleteJob, getJobList } from '../../../../../../services/jobPostingService'
 // export type jobData = {
 //   id: string;
 //     jdFiles: string;
@@ -23,8 +23,7 @@ export const jobQueryKey = 'candidate-job-data';
 export default function MyJobTable({ className }: { className?: string }) {
   const [pageSize, setPageSize] = useState(7);
 
-  const columns = getColumnsData();
-  const { visibleColumns } = useColumn(columns);
+
 
   const [data, setData] = useState<any>([]);
 
@@ -49,6 +48,32 @@ export default function MyJobTable({ className }: { className?: string }) {
   const handlePopupClose = () => {
     jobList();
   };
+
+  const onDeleteItem = (id: any) => {
+    console.log("tenat id", id)
+    onDeleteJob(id);
+    //tentantList();
+  }
+
+  async function onDeleteJob(id: any) {
+    console.log("candidate id", id)
+    console.log("delete the candidate......");
+    try {
+      const response = await deleteJob(id);
+      if (response) {
+        jobList();
+        console.log("delete the candidate", response);
+
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+
+  }
+
+
+  const columns = getColumnsData({ handlePopupClose, onDeleteItem });
+  const { visibleColumns } = useColumn(columns);
   return (
     <WidgetCard className={className}
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -59,8 +84,8 @@ export default function MyJobTable({ className }: { className?: string }) {
         <div className="mt-2 flex justify-end">
           <ModalButton
             label="Add New Job"
-            view={<CreateJob onClose={handlePopupClose}/>}
-           
+            view={<CreateJob onClose={handlePopupClose} />}
+
             customSize="600px"
             className="mt-0"
           />
@@ -77,8 +102,8 @@ export default function MyJobTable({ className }: { className?: string }) {
           setPageSize,
 
         }}
-        
-        
+
+
         className="-mx-5 lg:-mx-7">
 
       </ControlledTable>

@@ -4,8 +4,9 @@ import { z } from "zod"
 export const tenantQuestionsSchema = z.object({
     question: z.string(),
     answer: z.string(),
-    tenant_id: z.string(),
-    job_id: z.string()
+    candidate_id: z.string(),
+    job_id: z.string(),
+
 
     // id: z.number(),
     // active: z.string(),

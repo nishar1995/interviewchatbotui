@@ -6,8 +6,9 @@ import React from 'react';
 import { PiXBold } from 'react-icons/pi';
 import { Title, Text, Tooltip, ActionIcon } from 'rizzui';
 import CreateApplication from '../../../../hr/pages/questions/add-questions/create-application';
+import { deleteQuestion } from '@/services/tenantQuestionsService';
 
-export default function ExpandedOrderRow({ data }: any) {
+export default function ExpandedOrderRow({ data }: any, {handlePopupClose , onDeleteItem}:any) {
   console.log("data.....", data)
   if (data?.questions?.length === 0) {
     return <Text>No Questions available</Text>;
@@ -34,9 +35,8 @@ export default function ExpandedOrderRow({ data }: any) {
           </div>
 
           {/* Actions */}
-          <RenderAction row={question} onDeleteItem={function (id: string): void {
-            throw new Error('Function not implemented.');
-          }} />
+          <RenderAction key={question.id} row={question} onDeleteItem={onDeleteItem} onPopupClose={handlePopupClose}
+           />
         </article>
       ))}
     </div>
@@ -45,25 +45,16 @@ export default function ExpandedOrderRow({ data }: any) {
 }
 
 export async function onDeleteItem(id: any) {
-  // console.log("meeting id", id)
-  // console.log("delete the meeting......");
-  // try {
-  //   const response = await deleteMeeting(id);
-  //   if (response) {
-  //     console.log("delete the meeting", response);
-  //     setOpen()
-  //   }
-  // } catch (error) {
-  //   console.log("error", error)
-  // }
-
-}
-function setOpen() {
-  useModal().closeModal
-}
-
-function handlePopupClose() {
-  console.log("close update popup");
+  debugger
+  console.log("onclick dele")
+  try {
+    const response = await deleteQuestion(id);
+    if (response) {
+      console.log("delete the questions", response);
+    }
+  } catch (error) {
+    console.log("error", error)
+  }
 
 }
 
@@ -71,16 +62,18 @@ function handlePopupClose() {
 function RenderAction({
   row,
   onDeleteItem,
+  onPopupClose
 }: {
   row: any;
   onDeleteItem: (id: string) => void;
+  onPopupClose:()=>void;
 }) {
   const { openModal, closeModal } = useModal();
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
       openModal({
-        view: <CreateApplication onClose={handlePopupClose} meetingDetails={row} />,
+        view: <CreateApplication onClose={onPopupClose} questionsDetail={row} />,
         //customSize: '500px',
       });
   }
@@ -103,12 +96,12 @@ function RenderAction({
             openModal({
               view: (
                 <CreateApplication
-                  meetingDetails={row}
+                  questionsDetail={row}
                   data={row}
-                  onDelete={() => onDeleteItem(row.id)}
+                  //onDelete={() => onDeleteItem(row.id)}
                   onEdit={handleCreateModal(row)
                   }
-                //onClose={handlePopupClose}
+                  onClose={onPopupClose}
                 />
               ),
               customSize: '900px',
@@ -120,8 +113,8 @@ function RenderAction({
       </Tooltip>
       <DeletePopover
         title={`Delete the Questions`}
-        description={`Are you sure you want to delete this #${row.id} Questions?`}
-        onDelete={() => onDeleteItem(row.id)}
+        description={`Are you sure you want to delete this  questions?`}
+        onDelete={() => onDeleteItem && onDeleteItem(row.id)}
       />
     </div>
   );
@@ -142,17 +135,3 @@ function RenderAction({
 
 
 
-{/* <div className="flex w-full max-w-xs items-center justify-between gap-4">
-            <div className="flex items-center">
-              <PiXBold size={13} className="me-1 text-gray-500" />{' '}
-              <Text
-                as="span"
-                className="font-medium text-gray-900 dark:text-gray-700"
-              >
-                {product.quantity}
-              </Text>
-            </div>
-            <Text className="font-medium text-gray-900 dark:text-gray-700">
-              ${Number(product.quantity) * Number(product.price)}
-            </Text>
-          </div> */}

@@ -288,7 +288,7 @@ export async function onDeleteItem(id: any) {
   }
 
 }
-export const getColumnsData = () => {
+export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
   return [
     {
       title: (
@@ -397,7 +397,7 @@ export const getColumnsData = () => {
       key: 'action',
       width: 120,
       render: (_: string, id: any) => (
-        <RenderAction row={id} onDeleteItem={onDeleteItem} />
+        <RenderAction row={id} onDeleteItem={onDeleteItem} onPopupClose={handlePopupClose} />
       ),
     },
   ];
@@ -416,16 +416,18 @@ const handlePopupClose = () => {
 function RenderAction({
   row,
   onDeleteItem,
+  onPopupClose
 }: {
   row: any;
   onDeleteItem: (id: string) => void;
+  onPopupClose:()=>void;
 }) {
   const { openModal, closeModal } = useModal();
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
       openModal({
-        view: <CreateApplication onClose={handlePopupClose} candidateList={row} />,
+        view: <CreateApplication onClose={onPopupClose} candidateList={row} />,
         //customSize: '500px',
       });
   }
@@ -453,7 +455,7 @@ function RenderAction({
                   onDelete={() => onDeleteItem(row.id)}
                   onEdit={handleCreateModal(row)
                   }
-                  onClose={handlePopupClose}
+                  onClose={onPopupClose}
                 />
               ),
               customSize: '900px',
@@ -465,8 +467,8 @@ function RenderAction({
       </Tooltip>
       <DeletePopover
         title={`Delete the Candidate`}
-        description={`Are you sure you want to delete this #${row.id} candidate?`}
-        onDelete={() => onDeleteItem(row.id)}
+        description={`Are you sure you want to delete this  candidate?`}
+        onDelete={() => onDeleteItem && onDeleteItem(row.id)}
       />
     </div>
   );

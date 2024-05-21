@@ -12,7 +12,7 @@ const axiosInterceptorInstance = axios.create({
 axiosInterceptorInstance.interceptors.request.use((config) => {
     console.log("interceptor file.....");
     // const token = JSON.parse(localStorage.getItem('token'));
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2MjEwOTg4LCJpYXQiOjE3MTYyMDczODgsImp0aSI6ImNkY2FiMTBiZmJhMjRjMGE4YTAyZjliMjhjOTEwNTVmIiwidXNlcl9pZCI6MX0.anR2AW4k-HwsL7RrNRcb--AGZgWf6aWB7souV2q8O0k';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2Mjk3MjU4LCJpYXQiOjE3MTYyOTM2NTgsImp0aSI6Ijg4ZDcwYjEzZDE1NDRhMmI4ZDI2ZDJiYTdlZTEyMWViIiwidXNlcl9pZCI6MX0.UzfItriUcrUEDbtTrxVMBmih9Udmk0meGuMnWk_XSfc';
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }

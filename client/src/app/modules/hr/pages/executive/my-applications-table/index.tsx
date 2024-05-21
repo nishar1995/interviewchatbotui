@@ -18,9 +18,9 @@ export default function MyApplicationsTable({
 }: {
     // Add return type annotation here
   }) {
-  const columns = getColumnsData();
+
   const [pageSize, setPageSize] = useState(7);
-  const { visibleColumns } = useColumn(columns);
+
   const [data, setData] = useState<any>([]);
 
   // useEffect(() => {
@@ -52,13 +52,15 @@ export default function MyApplicationsTable({
       const response = await deleteCandidate(id);
       if (response) {
         console.log("deleted the candidate", response);
-        handlePopupClose();
+        fetchCandidateList();
       }
     } catch (error) {
       console.error("error", error);
     }
   };
 
+  const columns = getColumnsData({ handlePopupClose, onDeleteItem });
+  const { visibleColumns } = useColumn(columns);
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"

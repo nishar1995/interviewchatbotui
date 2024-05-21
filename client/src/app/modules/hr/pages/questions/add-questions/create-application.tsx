@@ -16,23 +16,33 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { questionsQueryKey } from '.';
 import { tenantQuestionsSchema } from '@/utils/validators/tenantQuestions.schema'
-import { addQuestion } from '@/services/tenantQuestionsService';
+import { addQuestion, updateQuestions } from '@/services/tenantQuestionsService';
 
-export default function CreateQuestions({ onClose }:any) {
-  const defaultValues: Omit<
-    tenantQuestionsSchema,
-    'questions'
-  > & {
-    question: string;
-    answer: string;
-    tenant_id: string;
-    job_id: string;
-  } = {
-    question: '',
-    answer: '',
-    tenant_id: '',
-    job_id: ''
-  };
+export default function CreateQuestions({ onClose, questionsDetail }: any) {
+  console.log("questions detail", questionsDetail)
+  console.log("question tenat id ", questionsDetail?.tenant_id)
+  // const defaultValues: Omit<
+  //   tenantQuestionsSchema,
+  //   'questions'
+  // > & {
+  //   question: string;
+  //   answer: string;
+  //   tenant_id: string;
+  //   job_id: string;
+  // } = {
+  //   question: '',
+  //   answer: '',
+  //   tenant_id: '',
+  //   job_id: ''
+  // };
+
+  const defaultValues: tenantQuestionsSchema = {
+    question: questionsDetail?.question || '',
+    answer: questionsDetail?.answer || '',
+    candidate_id: questionsDetail?.candidate || '',
+    job_id: questionsDetail?.job || ''
+  }
+  console.log("default...", defaultValues)
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
@@ -42,19 +52,39 @@ export default function CreateQuestions({ onClose }:any) {
 
   const onSubmit: SubmitHandler<tenantQuestionsSchema> = async (data: any) => {
     setLoading(true);
-    try {
-      const response = await addQuestion(data);
-      if (response) {
-        console.log(response);
-        setReset({
-          ...defaultValues,
-        });
-        closeModal();
-        onClose();
+    if (questionsDetail) {
+      try {
+        const response = await updateQuestions(questionsDetail.id, data);
+        if (response) {
+          console.log("update",response);
+          setReset({
+            ...defaultValues,
+          });
+          setLoading(false)
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        setLoading(false)
       }
-    } catch (error) {
-
     }
+    else {
+      try {
+        const response = await addQuestion(data);
+        if (response) {
+          console.log(response);
+          setReset({
+            ...defaultValues,
+          });
+          setLoading(false)
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        setLoading(false)
+      }
+    }
+
     // set timeout ony required to display loading state of the create category button
     // const formattedData = {
     //   ...data,
@@ -125,24 +155,26 @@ export default function CreateQuestions({ onClose }:any) {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Add Questions
+                {questionsDetail ? 'Update Questions' : 'Add Questions'}
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
               </ActionIcon>
             </div>
             <Input
-              label="Tenant Id"
-              placeholder="Enter Tenant id"
-              {...register('tenant_id')}
+              label="Candidate Id"
+              placeholder="Enter Candidate id"
+              defaultValue={defaultValues.candidate_id}
+              {...register('candidate_id')}
               className="col-span-full"
-            //error={errors.candidateName?.message}
+              error={errors.candidate_id?.message}
             />
 
             <Input
               label="Job Id"
-              placeholder="Job Id"
+              placeholder=" Enter Job id"
               className="col-span-full"
+              defaultValue={defaultValues.job_id}
               {...register('job_id')}
             //error={errors.job?.message}
             />
@@ -151,6 +183,7 @@ export default function CreateQuestions({ onClose }:any) {
               label="Question"
               placeholder="Enter Question"
               className="col-span-full"
+              defaultValue={defaultValues.question}
               {...register('question')}
             //error={errors.meetingSchedule?.message}
             />
@@ -159,6 +192,7 @@ export default function CreateQuestions({ onClose }:any) {
               label="Answer"
               placeholder="Enter Answer"
               className="col-span-full"
+              defaultValue={defaultValues.answer}
               {...register('answer')}
             //error={errors.meetingSchedule?.message}
             />
@@ -226,7 +260,7 @@ export default function CreateQuestions({ onClose }:any) {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-                Add Questions
+                {questionsDetail ? 'Update Questions' : 'Add Questions'}
               </Button>
             </div>
           </>

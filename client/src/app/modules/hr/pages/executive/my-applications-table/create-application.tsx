@@ -22,18 +22,19 @@ type CreateApplicationProps = {
   candidateId?: string;
 };
 
-export default function CreateApplication({ onClose, candidateList }) {
+export default function CreateApplication({ onClose, candidateList }:any) {
   console.log("get candidate details ", candidateList);
   console.log("candidate name ", candidateList?.job_id);
   const defaultValues = {
     name: candidateList?.name || '',
-    job_id: candidateList?.job_id || '',
+    job_id: Number(candidateList?.job_id) || '',
     resume: candidateList?.resume ? Array.isArray(candidateList.resume) ? candidateList.resume : [candidateList.resume] : [],
     username: candidateList?.username || '',
     email: candidateList?.email || '',
     phone_number: candidateList?.phone_number || undefined,
     application_id: candidateList?.application_id || ''
   };
+  console.log("candiate executive ",defaultValues)
   // const queryClient = useQueryClient();
   // const { closeModal } = useModal();
   // const [reset, setReset] = useState(defaultValues);

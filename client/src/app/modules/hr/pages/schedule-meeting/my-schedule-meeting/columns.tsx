@@ -249,7 +249,7 @@ export const getColumns = ({
 export function handleSelectAll() {
   console.log("handle select all")
 }
-export const getColumnsData = () => {
+export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
   return [
     {
       title: (
@@ -357,7 +357,7 @@ export const getColumnsData = () => {
       key: 'action',
       width: 120,
       render: (_: string, id: any) => (
-        <RenderAction row={id} onDeleteItem={onDeleteItem} />
+        <RenderAction row={id} onDeleteItem={onDeleteItem} onPopupClose={handlePopupClose} />
       ),
     },
 
@@ -368,20 +368,7 @@ const handlePopupClose = () => {
 
 }
 
-export async function onDeleteItem(id: any) {
-  console.log("meeting id", id)
-  console.log("delete the meeting......");
-  try {
-    const response = await deleteMeeting(id);
-    if (response) {
-      console.log("delete the meeting", response);
-      setOpen()
-    }
-  } catch (error) {
-    console.log("error", error)
-  }
 
-}
 
 function setOpen() {
   useModal().closeModal
@@ -391,16 +378,18 @@ function setOpen() {
 function RenderAction({
   row,
   onDeleteItem,
+  onPopupClose
 }: {
   row: any;
   onDeleteItem: (id: string) => void;
+  onPopupClose: () => void;
 }) {
   const { openModal, closeModal } = useModal();
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
       openModal({
-        view: <CreateApplication onClose={handlePopupClose} meetingDetails={row} />,
+        view: <CreateApplication onClose={onPopupClose} meetingDetails={row} />,
         //customSize: '500px',
       });
   }
@@ -423,12 +412,12 @@ function RenderAction({
             openModal({
               view: (
                 <CreateApplication
-                meetingDetails={row}
+                  meetingDetails={row}
                   data={row}
                   onDelete={() => onDeleteItem(row.id)}
                   onEdit={handleCreateModal(row)
                   }
-                  onClose={handlePopupClose}
+                  onClose={onPopupClose}
                 />
               ),
               customSize: '900px',
@@ -440,8 +429,8 @@ function RenderAction({
       </Tooltip>
       <DeletePopover
         title={`Delete the Schedule Meetting`}
-        description={`Are you sure you want to delete this #${row.id} Schedule Meeting?`}
-        onDelete={() => onDeleteItem(row.id)}
+        description={`Are you sure you want to delete this Schedule Meeting?`}
+        onDelete={() => onDeleteItem && onDeleteItem(row.id)}
       />
     </div>
   );

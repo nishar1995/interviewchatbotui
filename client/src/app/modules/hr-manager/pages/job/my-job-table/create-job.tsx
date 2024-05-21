@@ -15,7 +15,7 @@ import { jobPostingSchema } from '@/utils/validators/job-posting.schema';
 import { addJob, updateJob } from '../../../../../../services/jobPostingService'
 
 
-export default function CreateJob({ onClose, jobList }) {
+export default function CreateJob({ onClose, jobList }:any) {
   console.log("job details", jobList)
   // const defaultValues: Omit<
   //   jobPostingSchema,

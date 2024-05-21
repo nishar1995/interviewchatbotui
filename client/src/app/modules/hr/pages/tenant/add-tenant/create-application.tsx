@@ -18,7 +18,7 @@ import { tenantQueryKey } from '../add-tenant';
 import { tenantSchema } from '@/utils/validators/tenant.schema';
 import { addTenant, updateTenant } from '@/services/tenantService';
 
-export default function CreateTenant({ onClose, tenantDetails }) {
+export default function CreateTenant({ onClose, tenantDetails }:any ) {
   console.log("tenant details", tenantDetails)
   // const defaultValues: Omit<
   //   tenantSchema,

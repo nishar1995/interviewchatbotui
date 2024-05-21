@@ -45,6 +45,7 @@ export default function MyQuestionsTable({
   }
 
   function CustomExpandIcon(props: any) {
+    console.log("props.......",props)
     return (
       <ActionIcon
         size="sm"
@@ -52,7 +53,7 @@ export default function MyQuestionsTable({
         rounded="full"
         className="expand-row-icon ms-2"
         onClick={(e) => {
-          props.onExpand(props.record, e);
+          props.onExpand(props.record?.application_id, e);
          
         }}
       >
@@ -93,6 +94,13 @@ export default function MyQuestionsTable({
             expandIcon: CustomExpandIcon,
             expandedRowRender: (data) => <ExpandedOrderRow data={data} />,
           }}
+
+        //    expandable={{
+        //   expandIcon: CustomExpandIcon,
+        //   expandedRowRender: (record) => <ExpandedOrderRow data={record} />,
+        //   rowExpandable: (record) => true, // Define condition for rows that can be expanded
+        //   expandedRowKeys: [expandedRow],
+        // }}
         >
 
         </ControlledTable>

@@ -45,7 +45,7 @@ import React from 'react';
 // import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 
-export default function CreateMeeting({ onClose, meetingDetails }) {
+export default function CreateMeeting({ onClose, meetingDetails }: any) {
   console.log("meeting details", meetingDetails)
   // const defaultValues: Omit<
   //   CreateMeetingInput,
@@ -69,9 +69,11 @@ export default function CreateMeeting({ onClose, meetingDetails }) {
     tenant_id: meetingDetails?.tenant_id || '',
     candidate_id: meetingDetails?.candidate_id || '',
     job_id: meetingDetails?.job_id || '',
-    start_time: meetingDetails?.start_time ? dayjs(meetingDetails.start_time) : new Date(),
-    end_time: meetingDetails?.end_time ? dayjs(meetingDetails.end_time) : new Date(),
+    start_time: meetingDetails?.start_time ? moment(meetingDetails?.start_time).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') : new Date(),
+    end_time: meetingDetails?.end_time ? moment(meetingDetails?.end_time).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') : new Date(),
   }
+  console.log("start time", meetingDetails?.start_time)
+  //console.log("convert start time", dayjs(defaultValues.start_time));
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
@@ -103,33 +105,33 @@ export default function CreateMeeting({ onClose, meetingDetails }) {
     formData.append('start_time', data.start_time);
     formData.append('end_time', data.end_time);
     formData.append('tenant_id', data.tenant_id);
-  if(meetingDetails){
-    try {
-      const response = await updateMeeting(meetingDetails.id,formData);
-      console.log(response);
-      if (response) {
-        closeModal();
-        onClose();
+    if (meetingDetails) {
+      try {
+        const response = await updateMeeting(meetingDetails.id, formData);
+        console.log(response);
+        if (response) {
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        console.log("errorr.....", error);
+        setLoading(true);
       }
-    } catch (error) {
-      console.log("errorr.....", error);
-      setLoading(true);
     }
-  }
-  else{
-    try {
-      const response = await addMeeting(formData);
-      console.log(response);
-      if (response) {
-        closeModal();
-        onClose();
+    else {
+      try {
+        const response = await addMeeting(formData);
+        console.log(response);
+        if (response) {
+          closeModal();
+          onClose();
+        }
+      } catch (error) {
+        console.log("errorr.....", error);
+        setLoading(true);
       }
-    } catch (error) {
-      console.log("errorr.....", error);
-      setLoading(true);
     }
-  }
-   
+
 
     // set timeout ony required to display loading state of the create category button
     // const formattedData = {
@@ -221,15 +223,16 @@ export default function CreateMeeting({ onClose, meetingDetails }) {
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
               </ActionIcon>
+              
             </div>
-            <Input
+            {/* <Input
               label="Tenant Id"
               placeholder="Enter Tenant id"
               {...register('tenant_id')}
               defaultValue={defaultValues.tenant_id}
               className="col-span-full"
             //error={errors.candidateName?.message}
-            />
+            /> */}
 
             <Input
               label="Job Id"
@@ -251,16 +254,16 @@ export default function CreateMeeting({ onClose, meetingDetails }) {
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="Start Meeting Date">
-                <MobileDateTimePicker  onChange={(newValue) => handleStartTimeChange(newValue)}
-                 
+                <MobileDateTimePicker defaultValue={dayjs(defaultValues.start_time)} onChange={(newValue) => handleStartTimeChange(newValue)}
+
                 />
               </DemoItem>
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="End Meeting Date">
-                <MobileDateTimePicker 
-                  onChange={(newValue) => handleEndTimeChange(newValue)} 
-                  />
+                <MobileDateTimePicker defaultValue={dayjs(defaultValues.end_time)}
+                  onChange={(newValue) => handleEndTimeChange(newValue)}
+                />
               </DemoItem>
             </LocalizationProvider>
             <div className="col-span-full flex items-center justify-end gap-4">
@@ -276,7 +279,7 @@ export default function CreateMeeting({ onClose, meetingDetails }) {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-               {meetingDetails ? 'Update Meeting' : 'Add Meeting'}
+                {meetingDetails ? 'Update Meeting' : 'Add Meeting'}
               </Button>
             </div>
           </>
