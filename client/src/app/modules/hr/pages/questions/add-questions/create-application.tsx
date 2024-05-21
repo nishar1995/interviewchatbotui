@@ -39,8 +39,8 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
   const defaultValues: tenantQuestionsSchema = {
     question: questionsDetail?.question || '',
     answer: questionsDetail?.answer || '',
-    candidate_id: questionsDetail?.candidate || '',
-    job_id: questionsDetail?.job || ''
+    candidate_id: String(questionsDetail?.candidate) || '',
+    job_id: String(questionsDetail?.job) || ''
   }
   console.log("default...", defaultValues)
   const queryClient = useQueryClient();
