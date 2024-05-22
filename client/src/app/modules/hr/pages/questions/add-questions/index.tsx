@@ -1,65 +1,54 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import WidgetCard from '@/components/cards/widget-card';
-import { useCallback, useState, useMemo, useEffect } from 'react';
 import { useColumn } from '@/hooks/use-column';
-import { useTable } from '@/hooks/use-table';
 import ControlledTable from '@/components/controlled-table';
-import { getColumns, getColumnsData } from './columns';
+import { getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
-import CreateApplication from './create-application';
-import { useQuery } from '@tanstack/react-query';
-import CreateTenant from './create-application';
 import CreateQuestions from './create-application';
-import { deleteQuestion, getQuestions } from '../../../../../../services/tenantQuestionsService'
+import { deleteQuestion, getQuestions } from '../../../../../../services/tenantQuestionsService';
 import { ActionIcon } from 'rizzui';
 import { PiCaretDownBold, PiCaretUpBold } from 'react-icons/pi';
 import ExpandedOrderRow from './expanded-row';
 
-
-
 export const questionsQueryKey = 'questions-application-data';
-export default function MyQuestionsTable({
-}: {
-    // Add return type annotation here
-  }) {
+
+function MyQuestionsTable() {
   const columns = getColumnsData();
   const [pageSize, setPageSize] = useState(7);
   const { visibleColumns } = useColumn(columns);
   const [data, setData] = useState<any>([]);
 
   useEffect(() => {
-    fetchQuestionsList(); 
+    fetchQuestionsList();
   }, []);
 
   const fetchQuestionsList = async () => {
     const response = await getQuestions();
     console.log("fetch data", response.data);
-    setData(response.data)
+    setData(response.data);
+  };
 
-
-  }
   const handlePopupClose = () => {
     fetchQuestionsList();
+  };
 
-  }
-
-  const  onDeleteItem = async (id: any)=> {
-    debugger
-    console.log("onclick dele")
+  const onDeleteItem = async (id: any) => {
+    console.log("onclick delete");
     try {
       const response = await deleteQuestion(id);
       if (response) {
-        console.log("delete the questions", response);
+        console.log("deleted the question", response);
+        fetchQuestionsList(); // Refresh list after deletion
       }
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
     }
-  
-  }
+  };
 
   function CustomExpandIcon(props: any) {
-    console.log("props.......",props)
+    console.log("props.......", props);
     return (
       <ActionIcon
         size="sm"
@@ -68,7 +57,6 @@ export default function MyQuestionsTable({
         className="expand-row-icon ms-2"
         onClick={(e) => {
           props.onExpand(props.record?.application_id, e);
-         
         }}
       >
         {props.expanded ? (
@@ -79,52 +67,179 @@ export default function MyQuestionsTable({
       </ActionIcon>
     );
   }
-    return (
-      <WidgetCard
-        headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
-        actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
-        title="Questions"
-        titleClassName="whitespace-nowrap"
-        action={
-          <div className="mt-2 flex justify-end">
-            <ModalButton
-              label="Add New Questions"
-              view={<CreateQuestions onClose={handlePopupClose}/>} />
-          </div>
-        }
-      >
-        <ControlledTable
-          variant="modern"
-          columns={visibleColumns}
-          data={data}
-          paginatorOptions={{
-            pageSize,
-            setPageSize,
-            // total: totalItems,
-            // current: currentPage,
-            //onChange: (page: number) => handlePaginate(page),
-          }}
-          expandable={{
-            expandIcon: CustomExpandIcon,
-            expandedRowRender: (data) => <ExpandedOrderRow 
-            data={data} 
-            handlePopupClose={handlePopupClose} 
-            onDeleteItem={onDeleteItem} 
-          />,
-          }}
 
-        //    expandable={{
-        //   expandIcon: CustomExpandIcon,
-        //   expandedRowRender: (record) => <ExpandedOrderRow data={record} />,
-        //   rowExpandable: (record) => true, // Define condition for rows that can be expanded
-        //   expandedRowKeys: [expandedRow],
-        // }}
-        >
+  return (
+    <WidgetCard
+      headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
+      actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
+      title="Questions"
+      titleClassName="whitespace-nowrap"
+      action={
+        <div className="mt-2 flex justify-end">
+          <ModalButton
+            label="Add New Questions"
+            view={<CreateQuestions onClose={handlePopupClose} />}
+          />
+        </div>
+      }
+    >
+      <ControlledTable
+        variant="modern"
+        columns={visibleColumns}
+        data={data}
+        paginatorOptions={{
+          pageSize,
+          setPageSize,
+        }}
+        expandable={{
+          expandIcon: CustomExpandIcon,
+          expandedRowRender: (record) => (
+            <ExpandedOrderRow
+              data={record}
+              handlePopupClose={handlePopupClose}
+              onDeleteItem={onDeleteItem}
+            />
+          ),
+        }}
+      />
+    </WidgetCard>
+  );
+}
 
-        </ControlledTable>
-      </WidgetCard>
-    );
-  }
+export default MyQuestionsTable;
+
+
+
+
+
+
+// 'use client';
+
+// import WidgetCard from '@/components/cards/widget-card';
+// import { useCallback, useState, useMemo, useEffect } from 'react';
+// import { useColumn } from '@/hooks/use-column';
+// import { useTable } from '@/hooks/use-table';
+// import ControlledTable from '@/components/controlled-table';
+// import { getColumns, getColumnsData } from './columns';
+// import ModalButton from '@/app/shared/modal-button';
+// import CreateApplication from './create-application';
+// import { useQuery } from '@tanstack/react-query';
+// import CreateTenant from './create-application';
+// import CreateQuestions from './create-application';
+// import { deleteQuestion, getQuestions } from '../../../../../../services/tenantQuestionsService'
+// import { ActionIcon } from 'rizzui';
+// import { PiCaretDownBold, PiCaretUpBold } from 'react-icons/pi';
+// import ExpandedOrderRow from './expanded-row';
+
+
+
+// export const questionsQueryKey = 'questions-application-data';
+// export default function MyQuestionsTable({
+// }: {
+//     // Add return type annotation here
+//   }) {
+//   const columns = getColumnsData();
+//   const [pageSize, setPageSize] = useState(7);
+//   const { visibleColumns } = useColumn(columns);
+//   const [data, setData] = useState<any>([]);
+
+//   useEffect(() => {
+//     fetchQuestionsList();
+//   }, []);
+
+//   const fetchQuestionsList = async () => {
+//     const response = await getQuestions();
+//     console.log("fetch data", response.data);
+//     setData(response.data)
+
+
+//   }
+//   const handlePopupClose = () => {
+//     fetchQuestionsList();
+
+//   }
+
+//   const onDeleteItem = async (id: any) => {
+//     debugger
+//     console.log("onclick dele")
+//     try {
+//       const response = await deleteQuestion(id);
+//       if (response) {
+//         console.log("delete the questions", response);
+//       }
+//     } catch (error) {
+//       console.log("error", error)
+//     }
+
+//   }
+
+//   function CustomExpandIcon(props: any) {
+//     console.log("props.......", props)
+//     return (
+//       <ActionIcon
+//         size="sm"
+//         variant="outline"
+//         rounded="full"
+//         className="expand-row-icon ms-2"
+//         onClick={(e) => {
+//           props.onExpand(props.record?.application_id, e);
+
+//         }}
+//       >
+//         {props.expanded ? (
+//           <PiCaretUpBold className="h-3.5 w-3.5" />
+//         ) : (
+//           <PiCaretDownBold className="h-3.5 w-3.5" />
+//         )}
+//       </ActionIcon>
+//     );
+//   }
+//   return (
+//     <WidgetCard
+//       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
+//       actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
+//       title="Questions"
+//       titleClassName="whitespace-nowrap"
+//       action={
+//         <div className="mt-2 flex justify-end">
+//           <ModalButton
+//             label="Add New Questions"
+//             view={<CreateQuestions onClose={handlePopupClose} />} />
+//         </div>
+//       }
+//     >
+//       <ControlledTable
+//         variant="modern"
+//         columns={visibleColumns}
+//         data={data}
+//         paginatorOptions={{
+//           pageSize,
+//           setPageSize,
+//           // total: totalItems,
+//           // current: currentPage,
+//           //onChange: (page: number) => handlePaginate(page),
+//         }}
+//         expandable={{
+//           expandIcon: CustomExpandIcon,
+//           expandedRowRender: (data) => <ExpandedOrderRow
+//             data={data}
+//             handlePopupClose={handlePopupClose}
+//             onDeleteItem={onDeleteItem}
+//           />,
+//         }}
+
+//       //    expandable={{
+//       //   expandIcon: CustomExpandIcon,
+//       //   expandedRowRender: (record) => <ExpandedOrderRow data={record} />,
+//       //   rowExpandable: (record) => true, // Define condition for rows that can be expanded
+//       //   expandedRowKeys: [expandedRow],
+//       // }}
+//       >
+
+//       </ControlledTable>
+//     </WidgetCard>
+//   );
+// }
 
 // export default function MyApplicationsTable({
 //   className,

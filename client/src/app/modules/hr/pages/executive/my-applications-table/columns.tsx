@@ -356,6 +356,21 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         </div>
       ),
     },
+
+    {
+      title: <HeaderCell title="Job Title" />,
+      //onHeaderCell: () => onHeaderCellClick('candidateName'),
+      dataIndex: 'job_title',
+      key: 'job_title',
+      width: 150,
+      render: (job_title: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {job_title}
+          </Text>
+        </div>
+      ),
+    },
     // {
     //   title: (
     //     <HeaderCell

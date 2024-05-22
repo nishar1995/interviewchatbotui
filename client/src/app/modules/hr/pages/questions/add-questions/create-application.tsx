@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PiFilePdf, PiXBold } from 'react-icons/pi';
 import { Controller, SubmitHandler } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
@@ -17,46 +17,131 @@ import { useQueryClient } from '@tanstack/react-query';
 import { questionsQueryKey } from '.';
 import { tenantQuestionsSchema } from '@/utils/validators/tenantQuestions.schema'
 import { addQuestion, updateQuestions } from '@/services/tenantQuestionsService';
+import { getJobList } from '@/services/jobPostingService';
+import { candidateList } from '@/services/candidateService';
 
 export default function CreateQuestions({ onClose, questionsDetail }: any) {
   console.log("questions detail", questionsDetail)
   console.log("question tenat id ", questionsDetail?.tenant_id)
-  // const defaultValues: Omit<
-  //   tenantQuestionsSchema,
-  //   'questions'
-  // > & {
-  //   question: string;
-  //   answer: string;
-  //   tenant_id: string;
-  //   job_id: string;
-  // } = {
-  //   question: '',
-  //   answer: '',
-  //   tenant_id: '',
-  //   job_id: ''
-  // };
+  const defaultValues: Omit<
+    tenantQuestionsSchema,
+    'questions'
+  > & {
+    question: string;
+    answer: string;
+    candidate_id: string;
+    job_id: string;
+  } = {
+    question: '',
+    answer: '',
+    candidate_id: '',
+    job_id: ''
+  };
 
-  const defaultValues: tenantQuestionsSchema = {
-    question: questionsDetail?.question || '',
-    answer: questionsDetail?.answer || '',
-    candidate_id: String(questionsDetail?.candidate) || '',
-    job_id: String(questionsDetail?.job) || ''
-  }
+
   console.log("default...", defaultValues)
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
   const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState<any>([]);
+  const [candidatedata, setCandidateData] = useState<any>([]);
+  const [selectedJobId, setSelectedJobId] = useState<string>('');
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
+  const [selectedCandidateId, setSelectedCandidateId] = useState('');
 
   const imageRef = useRef<HTMLInputElement>(null);
 
+
+  useEffect(() => {
+    jobList();
+    fetchCandidateList();
+    if (questionsDetail) {
+      getQuestionsDetails();
+    }
+  }, []);
+
+  const getQuestionsDetails = () => {
+    setReset({
+      question: questionsDetail?.question || '',
+      answer: questionsDetail?.answer || '',
+      candidate_id: questionsDetail?.candidate || '',
+      job_id: questionsDetail?.job || ''
+    })
+    setSelectedJobId(questionsDetail?.job);
+    setSelectedCandidateId(questionsDetail?.candidate);
+    console.log("selectedCandidateId", selectedCandidateId)
+
+  }
+
+  const jobList = async () => {
+    try {
+      const response = await getJobList()
+      console.log("job lis", response.data)
+      if (response) {
+        setData(response.data)
+        console.log("data....", data)
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+
+  }
+
+
+
+  const fetchCandidateList = async () => {
+    const response = await candidateList();
+    console.log("fetch candidate list", response);
+    setCandidateData(response.data)
+    filterCandidatesByJobId(selectedJobId);
+
+  }
+
+  const onChangeJob = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log("selected job value", event.target.value);
+    setSelectedJobId(event.target.value);
+    //setSelectedCandidateId('')
+    filterCandidatesByJobId(selectedJobId);
+    console.log("selected job id", selectedJobId)
+  };
+
+  const onChangeCandidate = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const candidateId = event.target.value;
+    console.log("selected candidate value", candidateId);
+    setSelectedCandidateId(event.target.value);
+    //defaultValues.candidate = candidateId
+    //setValue('candidate', candidateId);
+
+  };
+
+  const filterCandidatesByJobId = (jobId: any) => {
+  
+      const filtered = candidatedata.filter((candidate: any) => candidate.job_id === jobId);
+      setFilteredCandidates(filtered);
+      console.log("filter data", filtered)
+    
+  };
+
+
+
+  useEffect(() => {
+    filterCandidatesByJobId(selectedJobId);
+  }, [selectedJobId, candidatedata]);
+
+  useEffect(() => {
+    if (selectedCandidateId) {
+      const filtered = filteredCandidates.filter((candidate: any) => candidate.id === selectedCandidateId);
+      setFilteredCandidates(filtered);
+    }
+  }, [selectedCandidateId]);
   const onSubmit: SubmitHandler<tenantQuestionsSchema> = async (data: any) => {
     setLoading(true);
     if (questionsDetail) {
       try {
         const response = await updateQuestions(questionsDetail.id, data);
         if (response) {
-          console.log("update",response);
+          console.log("update", response);
           setReset({
             ...defaultValues,
           });
@@ -161,30 +246,49 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
                 <PiXBold className="h-auto w-5" />
               </ActionIcon>
             </div>
-            <Input
-              label="Candidate Id"
-              placeholder="Enter Candidate id"
-              defaultValue={defaultValues.candidate_id}
-              {...register('candidate_id')}
-              className="col-span-full"
-              error={errors.candidate_id?.message}
-            />
 
-            <Input
-              label="Job Id"
-              placeholder=" Enter Job id"
+            <select
+              id="job-select"
               className="col-span-full"
-              defaultValue={defaultValues.job_id}
               {...register('job_id')}
-            //error={errors.job?.message}
-            />
+              value={selectedJobId}
+              //defaultValue={reset.job_id}
+              onChange={onChangeJob}
 
-            <Input
-              label="Question"
+            >
+              <option value="">Select a job</option>
+              {data.map((job: any) => (
+                <option key={job.id} value={job.id}>
+                  {job.title}
+                </option>
+              ))}
+
+            </select>
+
+            <select
+              id="candidate-select"
+              className="col-span-full"
+              {...register('candidate_id')}
+              value={selectedCandidateId}
+              // value={reset.candidate_id}
+              onChange={onChangeCandidate}
+            >
+              <option value="">Select a candidate</option>
+              {filteredCandidates.map((candidate: any) => (
+                <option key={candidate.id} value={candidate.id}>
+                  {candidate.name}
+                </option>
+              ))}
+
+            </select>
+
+            <textarea
+              //label="Question"
               placeholder="Enter Question"
               className="col-span-full"
               defaultValue={defaultValues.question}
               {...register('question')}
+
             //error={errors.meetingSchedule?.message}
             />
 

@@ -4,9 +4,9 @@ import { validateEmail } from '@/utils/validators/common-rules';
 
 // form zod validation schema
 export const createMeetingSchema = z.object({
-    tenant_id:z.string(),
-    candidate_id:z.string(),
-    job_id:z.string(),
+    // tenant_id:z.string(),
+    candidate:z.string(),
+    job:z.string(),
     start_time : z.date(),
     end_time : z.date(),
    // start_time : z.string(),

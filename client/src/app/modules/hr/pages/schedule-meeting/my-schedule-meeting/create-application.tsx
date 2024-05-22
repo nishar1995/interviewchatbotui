@@ -23,7 +23,7 @@ import { meetingQueryKey } from '.';
 
 import { getUsersList } from '../../../../../../services/userService';
 import { CreateMeetingInput, createMeetingSchema } from '@/utils/validators/create-meeting.schema';
-import { addMeeting, updateMeeting } from '@/services/meetingScheduleService';
+import { addMeeting, getMeetingScheduleList, updateMeeting } from '@/services/meetingScheduleService';
 import TimePicker from 'react-time-picker';
 
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -37,6 +37,8 @@ import dayjs, { Dayjs } from 'dayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import moment from 'moment';
 import React from 'react';
+import { getJobList } from '@/services/jobPostingService';
+import { candidateList } from '@/services/candidateService';
 
 // import {DateRangePicker} from "@nextui-org/react";
 // import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -45,33 +47,33 @@ import React from 'react';
 // import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 
+// const defaultValues = {
+//   //tenant_id: meetingDetails?.tenant_id || '',
+//   candidate_id: meetingDetails?.candidate_id || '',
+//   job_id: meetingDetails?.job_id || '',
+//   start_time: meetingDetails?.start_time ? moment(meetingDetails?.start_time).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') : new Date(),
+//   end_time: meetingDetails?.end_time ? moment(meetingDetails?.end_time).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') : new Date(),
+// }
 export default function CreateMeeting({ onClose, meetingDetails }: any) {
   console.log("meeting details", meetingDetails)
-  // const defaultValues: Omit<
-  //   CreateMeetingInput,
-  //   'meetingSchedule'
-  // > & {
-  //   tenant_id: string
-  //   candidate_id: string,
-  //   job_id: string,
-  //   start_time: Date,
-  //   end_time: Date,
+  const defaultValues: Omit<
+    CreateMeetingInput,
+    'meetingSchedule'
+  > & {
 
-  // } = {
-  //   tenant_id: '',
-  //   candidate_id: '',
-  //   job_id: '',
-  //   start_time: new Date(),
-  //   end_time: new Date(),
-  // };
+    candidate: string,
+    job: string,
+    start_time: Date,
+    end_time: Date,
 
-  const defaultValues = {
-    tenant_id: meetingDetails?.tenant_id || '',
-    candidate_id: meetingDetails?.candidate_id || '',
-    job_id: meetingDetails?.job_id || '',
-    start_time: meetingDetails?.start_time ? moment(meetingDetails?.start_time).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') : new Date(),
-    end_time: meetingDetails?.end_time ? moment(meetingDetails?.end_time).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]') : new Date(),
-  }
+  } = {
+
+    candidate: meetingDetails?.candidate ?? '', // Pre-fill candidate if available
+    job: meetingDetails?.job ?? '',
+    start_time: new Date(),
+    end_time: new Date(),
+  };
+
   console.log("start time", meetingDetails?.start_time)
   //console.log("convert start time", dayjs(defaultValues.start_time));
   const queryClient = useQueryClient();
@@ -79,13 +81,50 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   const [reset, setReset] = useState(defaultValues);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<any>([]);
-
-
-
-
+  const [candidatedata, setCandidateData] = useState<any>([]);
   const imageRef = useRef<HTMLInputElement>(null);
+  const [selectedJobId, setSelectedJobId] = useState<string>('');
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
+  const [selectedCandidateId, setSelectedCandidateId] = useState('');
   //const [startTime, setValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.start_time).toISOString()));
   //const [endTime, setEndValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.end_time).toISOString()));
+
+
+  useEffect(() => {
+    jobList();
+    fetchCandidateList();
+  }, []);
+
+  useEffect(() => {
+    if (meetingDetails) {
+      setSelectedJobId(meetingDetails.job); // Select job ID if available
+      setSelectedCandidateId(meetingDetails?.candidate); // Select candidate ID if available
+    }
+  }, [meetingDetails]);
+
+  const jobList = async () => {
+    try {
+      const response = await getJobList()
+      console.log("job lis", response.data)
+      if (response) {
+        setData(response.data)
+        console.log("data....", data)
+      }
+    } catch (error) {
+      console.log("error", error)
+    }
+
+  }
+
+
+
+  const fetchCandidateList = async () => {
+    const response = await candidateList();
+    console.log("fetch candidate list", response);
+    setCandidateData(response.data)
+  }
+
+
   const onSubmit: SubmitHandler<CreateMeetingInput> = async (data: any) => {
 
     setLoading(true);
@@ -99,12 +138,12 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     data.end_time = moment(endMeeting).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
     console.log("create meeting", data);
     const formData = new FormData();
-    formData.append('tenant_id', data.tenant_id);
-    formData.append('candidate_id', data.candidate_id);
-    formData.append('job_id', data.job_id);
+    //formData.append('tenant_id', data.tenant_id);
+    formData.append('candidate', data.candidate);
+    formData.append('job', data.job);
     formData.append('start_time', data.start_time);
     formData.append('end_time', data.end_time);
-    formData.append('tenant_id', data.tenant_id);
+    //formData.append('tenant_id', data.tenant_id);
     if (meetingDetails) {
       try {
         const response = await updateMeeting(meetingDetails.id, formData);
@@ -206,6 +245,35 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     console.log("default end time", defaultValues.end_time)
     console.log('end', data.end_time)
   };
+
+  const onChangeJob = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log("selected job value", event.target.value);
+    setSelectedJobId(event.target.value);
+    filterCandidatesByJobId(selectedJobId);
+    console.log("selected job id", selectedJobId)
+  };
+
+  const onChangeCandidate = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const candidateId = event.target.value;
+    console.log("selected candidate value", candidateId);
+    setSelectedCandidateId(candidateId); // Set the selected candidate ID
+  };
+
+
+  const filterCandidatesByJobId = (jobId: any) => {
+    if (jobId) {
+      const filtered = candidatedata.filter((candidate: any) => candidate.job_id === jobId);
+      setFilteredCandidates(filtered);
+      console.log("filter data", filtered)
+    } else {
+      setFilteredCandidates([]);
+    }
+  };
+
+  useEffect(() => {
+    filterCandidatesByJobId(selectedJobId);
+  }, [selectedJobId, candidatedata]);
+
   return (
     <Form<CreateMeetingInput>
       resetValues={reset}
@@ -223,45 +291,63 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
               </ActionIcon>
-              
+
             </div>
+            <select
+              id="job-select"
+              className="col-span-full"
+              {...register('job')}
+              value={selectedJobId}
+              onChange={onChangeJob}
+
+            >
+              <option value="">Select a job</option>
+              {data.map((job: any) => (
+                <option key={job.id} value={job.id}>
+                  {job.title}
+                </option>
+              ))}
+
+            </select>
+
+
+
+            <select
+              id="candidate-select"
+              className="col-span-full"
+              {...register('candidate')}
+              value={selectedCandidateId}
+              onChange={onChangeCandidate}
+
+            >
+              <option value="">Select a candidate</option>
+              {filteredCandidates.map((candidate: any) => (
+                <option key={candidate.id} value={candidate.id}>
+                  {candidate.name}
+                </option>
+              ))}
+
+            </select>
+
             {/* <Input
-              label="Tenant Id"
-              placeholder="Enter Tenant id"
-              {...register('tenant_id')}
-              defaultValue={defaultValues.tenant_id}
-              className="col-span-full"
-            //error={errors.candidateName?.message}
-            /> */}
-
-            <Input
-              label="Job Id"
-              placeholder="Job Id"
-              className="col-span-full"
-              {...register('job_id')}
-              defaultValue={defaultValues.job_id}
-            //error={errors.job?.message}
-            />
-
-            <Input
               label="Candidate Id"
               placeholder="candidate id"
               className="col-span-full"
-              {...register('candidate_id')}
-              defaultValue={defaultValues.candidate_id}
-            //error={errors.meetingSchedule?.message}
-            />
-
+              {...register('candidate')}
+              defaultValue={defaultValues.candidate}
+              error={errors.candidate?.message}
+            /> */}
+            {/* defaultValue={dayjs(defaultValues.start_time)} */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="Start Meeting Date">
-                <MobileDateTimePicker defaultValue={dayjs(defaultValues.start_time)} onChange={(newValue) => handleStartTimeChange(newValue)}
+                <MobileDateTimePicker onChange={(newValue) => handleStartTimeChange(newValue)}
 
                 />
               </DemoItem>
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="End Meeting Date">
-                <MobileDateTimePicker defaultValue={dayjs(defaultValues.end_time)}
+                <MobileDateTimePicker
                   onChange={(newValue) => handleEndTimeChange(newValue)}
                 />
               </DemoItem>

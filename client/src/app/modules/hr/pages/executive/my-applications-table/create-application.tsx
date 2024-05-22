@@ -22,7 +22,7 @@ type CreateApplicationProps = {
   candidateId?: string;
 };
 
-export default function CreateApplication({ onClose, candidateList }:any) {
+export default function CreateApplication({ onClose, candidateList }: any) {
   console.log("get candidate details ", candidateList);
   console.log("candidate name ", candidateList?.job_id);
   const defaultValues = {
@@ -34,7 +34,7 @@ export default function CreateApplication({ onClose, candidateList }:any) {
     phone_number: candidateList?.phone_number || undefined,
     application_id: candidateList?.application_id || ''
   };
-  console.log("candiate executive ",defaultValues)
+  console.log("candiate executive ", defaultValues)
   // const queryClient = useQueryClient();
   // const { closeModal } = useModal();
   // const [reset, setReset] = useState(defaultValues);
@@ -57,13 +57,18 @@ export default function CreateApplication({ onClose, candidateList }:any) {
     }
   }, []);
 
-
+  useEffect(() => {
+    if (candidateList) {
+      setSelectedJobId(candidateList.job_id); // Select job ID if available
+      // Select candidate ID if available
+    }
+  }, [candidateList]);
   const candidateDetails = () => {
     if (candidateList) {
       console.log("......////////");
       setReset({
         name: candidateList?.name,
-        job_id: Number(candidateList?.job_id),
+        job_id: (candidateList?.job_id),
         resume: candidateList?.resume ? Array.isArray(candidateList.resume) ? candidateList.resume : [candidateList.resume] : [],
         username: candidateList?.username,
         email: candidateList?.email,
@@ -191,11 +196,12 @@ export default function CreateApplication({ onClose, candidateList }:any) {
               {...register('job_id')}
               error={errors.job_id?.message}
             /> */}
+            {/* <label>Job Title</label> */}
             <select
               id="job-select"
               className="col-span-full"
               {...register('job_id')}
-              defaultValue={reset.job_id}
+              value={selectedJobId}
               onChange={onChangeJob}
             >
               <option value="">Select a job</option>
@@ -279,7 +285,7 @@ export default function CreateApplication({ onClose, candidateList }:any) {
                             <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-muted bg-gray-50 object-cover px-2 py-1.5 dark:bg-transparent">
                               <PiFilePdf className="h-5 w-5" />
                             </div>
-                            <div className="truncate px-2.5">{file.name}</div>
+                            <div className="truncate px-2.5">{reset.resume}</div>
                           </div>
                         ))}
                       </div>

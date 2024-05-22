@@ -287,16 +287,16 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
     {
       title: (
         <HeaderCell
-          title={<span className="whitespace-nowrap">Job Id</span>}
+          title={<span className="whitespace-nowrap">Application Id</span>}
         />
       ),
-      dataIndex: 'job_id',
-      key: 'job_id',
+      dataIndex: 'application_id',
+      key: 'application_id',
       width: 130,
-      render: (job_id: string) => (
+      render: (application_id: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {job_id}
+            {application_id}
           </Text>
         </div>
       ),
@@ -304,15 +304,15 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
 
 
     {
-      title: <HeaderCell title="Candidate Id" />,
+      title: <HeaderCell title="Job Title" />,
       //onHeaderCell: () => onHeaderCellClick('questionsId'),
-      dataIndex: 'candidate_id',
-      key: 'candidate_id',
+      dataIndex: 'job_title',
+      key: 'job_title',
       width: 150,
-      render: (candidate_id: string) => (
+      render: (job_title: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {candidate_id}
+            {job_title}
           </Text>
         </div>
       ),
