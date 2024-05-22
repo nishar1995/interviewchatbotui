@@ -51,8 +51,10 @@ import { hardcodedUsers } from '@/app/(hydrogen)/layout';
 export const menuItems = (userEmail: string) => {
   const cookieValue: any = Cookies.get('user_details');
   const user: any = cookieValue ? JSON.parse(cookieValue) : {};
-  if (!user.role) return [];
-  if (user.role === UserRole.HR) {
+  console.log("get role in cookies",user)
+
+  if (!Number(user.role)) return [];
+  if (Number(user.role) === UserRole.HR) {
     return [
       // label start
       {
@@ -88,7 +90,7 @@ export const menuItems = (userEmail: string) => {
     ];
   }
 
-  if (user.role === UserRole.CANDIDATE) {
+  if (Number(user.role) === UserRole.CANDIDATE) {
     return [
       {
         name: 'Overview',
@@ -103,7 +105,7 @@ export const menuItems = (userEmail: string) => {
     ];
   }
 
-  if (user.role === UserRole.HR_MANAGER) {
+  if (Number(user.role) === UserRole.HR_MANAGER) {
     return [
       // label start
       {

@@ -16,8 +16,11 @@ import Cookies from 'js-cookie';
 import { UserRole } from '@/enums/role';
 
 const initialValues: LoginSchema = {
-  email: 'admin@admin.com',
-  password: 'admin',
+  // email: 'admin@admin.com',
+  // password: 'admin',
+  // rememberMe: true,
+  username: '',
+  password: '',
   rememberMe: true,
 };
 
@@ -37,10 +40,12 @@ export default function SignInForm() {
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
       const response: any = await login(data);
+      console.log("login response",response);
       Cookies.set('user_details', JSON.stringify(response));
+      Cookies.set('token', JSON.stringify(response.access));
       console.log("sign in ", data);
-      console.log(response);
-      switch (response.role) {
+      
+      switch (Number(response.role)) {
         case UserRole.ADMIN:
           router.push("/file-manager");
           break;
@@ -82,8 +87,8 @@ export default function SignInForm() {
               placeholder="Enter your email"
               className="[&>label>span]:font-medium"
               inputClassName="text-sm"
-              {...register('email')}
-              error={errors.email?.message}
+              {...register('username')}
+              error={errors.username?.message}
             />
             <Password
               label="Password"

@@ -1,6 +1,7 @@
 
 import axios from "axios";
 import refreshToken from '../services/authService';
+import Cookies from 'js-cookie';
 
 
 const axiosInterceptorInstance = axios.create({
@@ -11,8 +12,11 @@ const axiosInterceptorInstance = axios.create({
 
 axiosInterceptorInstance.interceptors.request.use((config) => {
     console.log("interceptor file.....");
-    // const token = JSON.parse(localStorage.getItem('token'));
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2Mzc2NDc2LCJpYXQiOjE3MTYzNzI4NzYsImp0aSI6IjBkODUwZjRkMjdiMDQwNzRiNGNmOTU3YzJhZjBmMjEyIiwidXNlcl9pZCI6MX0.olgXTmYc51VK68mRCnLC0_omTDSJXBfdfSoBrvv7l1U';
+    //const token = JSON.parse(localStorage.getItem('token'));
+    const cookieValue = Cookies.get('token');
+    const token = cookieValue ? JSON.parse(cookieValue) : {};
+    console.log("get token",token)
+    //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2Mzc2NDc2LCJpYXQiOjE3MTYzNzI4NzYsImp0aSI6IjBkODUwZjRkMjdiMDQwNzRiNGNmOTU3YzJhZjBmMjEyIiwidXNlcl9pZCI6MX0.olgXTmYc51VK68mRCnLC0_omTDSJXBfdfSoBrvv7l1U';
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }

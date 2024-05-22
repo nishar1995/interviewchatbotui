@@ -32,7 +32,7 @@ export async function fetchAuthenticateUserData() {
 export async function login(data) {
     console.log("data", data)
     try {
-        const response = await fetch('http://intapp.learninginbits.com:8000/authenticate', {
+        const response = await fetch('http://127.0.0.1:8000//api/user/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,23 +43,23 @@ export async function login(data) {
         return responseData;
     } catch (error) {
         console.error('Error add user:', error);
-        if (data.email === hardcodedUsers.admin.email){
-            return  user_admin;
+        // if (data.email === hardcodedUsers.admin.email){
+        //     return  user_admin;
 
-        }
-        // throw new Error('Failed to add user');
-        if (data.email === hardcodedUsers.hr.email){
-            return user_hr;
+        // }
+        // // throw new Error('Failed to add user');
+        // if (data.email === hardcodedUsers.hr.email){
+        //     return user_hr;
 
-        }
-        if (data.email === hardcodedUsers.hrManager.email){
-            return user_hr_manager;
+        // }
+        // if (data.email === hardcodedUsers.hrManager.email){
+        //     return user_hr_manager;
 
-        }
-        if (data.email === hardcodedUsers.candidate.email){
-            return user_candidate;
+        // }
+        // if (data.email === hardcodedUsers.candidate.email){
+        //     return user_candidate;
 
-        }
+        // }
     }
 }
 
@@ -67,7 +67,7 @@ export async function login(data) {
 export async function registration(data) {
 
     try {
-        const response = await fetch('http://intapp.learninginbits.com:8000/register', {
+        const response = await fetch('http://127.0.0.1:8000//api/user/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

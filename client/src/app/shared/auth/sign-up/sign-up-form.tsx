@@ -9,19 +9,23 @@ import { Form } from '@/components/ui/form';
 import { routes } from '@/config/routes';
 import { SignUpSchema, signUpSchema } from '@/utils/validators/signup.schema';
 import { registration } from '@/services/authService';
+import { useRouter } from 'next/navigation';
 
-const initialValues = {
-  firstName: '',
-  lastName: '',
+const initialValues: SignUpSchema = {
+  first_name: '',
+  last_name: '',
   email: '',
   password: '',
   confirmPassword: '',
+  username: '',
   isAgreed: false,
+  role: ''
+
 };
 
 export default function SignUpForm() {
   const [reset, setReset] = useState({});
-
+  const router = useRouter();
   // const onSubmit: SubmitHandler<SignUpSchema> = (data) => {
   //   console.log(data);
   //   setReset({ ...initialValues, isAgreed: false });
@@ -31,7 +35,12 @@ export default function SignUpForm() {
       console.log(data);
       const response = await registration(data);
       console.log("response..", response);
-      setReset({ ...initialValues, isAgreed: false });
+      if(response){
+        setReset({ ...initialValues, isAgreed: false });
+        routes.auth.signIn
+        router.push("/shared/auth/signin");
+      }
+     
     } catch (error) {
       console.log("not register", error)
     }
@@ -55,8 +64,8 @@ export default function SignUpForm() {
               placeholder="Enter your first name"
               className="[&>label>span]:font-medium"
               inputClassName="text-sm"
-              {...register('firstName')}
-              error={errors.firstName?.message}
+              {...register('first_name')}
+              error={errors.first_name?.message}
             />
             <Input
               type="text"
@@ -65,8 +74,8 @@ export default function SignUpForm() {
               placeholder="Enter your last name"
               className="[&>label>span]:font-medium"
               inputClassName="text-sm"
-              {...register('lastName')}
-              error={errors.lastName?.message}
+              {...register('last_name')}
+              error={errors.last_name?.message}
             />
             <Input
               type="email"
@@ -78,6 +87,29 @@ export default function SignUpForm() {
               {...register('email')}
               error={errors.email?.message}
             />
+            <Input
+              type="text"
+              size="lg"
+              label="User Name"
+              className="col-span-2 [&>label>span]:font-medium"
+              inputClassName="text-sm"
+              placeholder="Enter your username"
+              {...register('username')}
+              error={errors.username?.message}
+            />
+
+            <select
+              aria-label='role'
+              id="role"
+              className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              {...register('role', { required: 'Role is required' })}>
+              <option value="">Select a role</option>
+              <option value="1">Admin</option>
+              <option value="2">Hr Manager</option>
+              <option value="3">Hr</option>
+              <option value="4">Candidate</option>
+
+            </select>
             <Password
               label="Password"
               placeholder="Enter your password"
