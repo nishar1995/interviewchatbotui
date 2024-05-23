@@ -28,13 +28,25 @@ export const ROW_PER_PAGE_OPTIONS = [
   },
 ];
 
+// export const ROLES = {
+//   Administrator: 'Administrator',
+//   Manager: 'Manager',
+//   Sales: 'Sales',
+//   Support: 'Support',
+//   Developer: 'Developer',
+//   HRD: 'HR Department',
+//   RestrictedUser: 'Restricted User',
+//   Customer: 'Customer',
+// } as const;
+
+
 export const ROLES = {
   Administrator: 'Administrator',
-  Manager: 'Manager',
-  Sales: 'Sales',
-  Support: 'Support',
-  Developer: 'Developer',
-  HRD: 'HR Department',
-  RestrictedUser: 'Restricted User',
-  Customer: 'Customer',
+ Manager: 'HR Manager',
+  // Sales: 'Sales',
+  // Support: 'Support',
+  // Developer: 'Developer',
+   HRD: 'HR Department',
+  // RestrictedUser: 'Restricted User',
+  Customer: 'Candidate',
 } as const;

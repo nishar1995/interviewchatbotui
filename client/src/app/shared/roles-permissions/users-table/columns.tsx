@@ -5,6 +5,7 @@ import { Text, Badge, Tooltip, Checkbox, ActionIcon } from 'rizzui';
 import { HeaderCell } from '@/components/ui/table';
 import EyeIcon from '@/components/icons/eye';
 import PencilIcon from '@/components/icons/pencil';
+import { UserRole } from '@/enums/role';
 import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
@@ -53,22 +54,163 @@ type Columns = {
   onChecked?: (id: string) => void;
 };
 
-export const getColumns = ({
-  data,
-  sortConfig,
-  checkedItems,
-  onDeleteItem,
-  onHeaderCellClick,
-  handleSelectAll,
-  onChecked,
-}: Columns) => [
+// export const getColumns = ({
+//   data,
+//   sortConfig,
+//   checkedItems,
+//   onDeleteItem,
+//   onHeaderCellClick,
+//   handleSelectAll,
+//   onChecked,
+// }: Columns) => [
+//   {
+//     title: (
+//       <div className="flex items-center gap-3 whitespace-nowrap ps-3">
+//         <Checkbox
+//           title={'Select All'}
+//           onChange={handleSelectAll}
+//           checked={checkedItems.length === data.length}
+//           className="cursor-pointer"
+//         />
+//         User ID
+//       </div>
+//     ),
+//     dataIndex: 'checked',
+//     key: 'checked',
+//     width: 30,
+//     render: (_: any, row: User) => (
+//       <div className="inline-flex ps-3">
+//         <Checkbox
+//           className="cursor-pointer"
+//           checked={checkedItems.includes(row.id)}
+//           {...(onChecked && { onChange: () => onChecked(row.id) })}
+//           label={`#${row.id}`}
+//         />
+//       </div>
+//     ),
+//   },
+//   {
+//     title: <HeaderCell title="Name" />,
+//     dataIndex: 'fullName',
+//     key: 'fullName',
+//     width: 250,
+//     render: (_: string, user: User) => (
+//       <AvatarCard
+//         src={user.avatar}
+//         name={user.fullName}
+//         description={user.email}
+//       />
+//     ),
+//   },
+//   {
+//     title: (
+//       <HeaderCell
+//         title="Role"
+//         sortable
+//         ascending={
+//           sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
+//         }
+//       />
+//     ),
+//     onHeaderCell: () => onHeaderCellClick('role'),
+//     dataIndex: 'role',
+//     key: 'role',
+//     width: 250,
+//     render: (role: string) => role,
+//   },
+//   {
+//     title: (
+//       <HeaderCell
+//         title="Created"
+//         sortable
+//         ascending={
+//           sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
+//         }
+//       />
+//     ),
+//     onHeaderCell: () => onHeaderCellClick('createdAt'),
+//     dataIndex: 'createdAt',
+//     key: 'createdAt',
+//     width: 200,
+//     render: (value: Date) => <DateCell date={value} />,
+//   },
+//   {
+//     title: <HeaderCell title="Permissions" />,
+//     dataIndex: 'permissions',
+//     key: 'permissions',
+//     width: 200,
+//     render: (permissions: User['permissions'][]) => (
+//       <div className="flex items-center gap-2">
+//         {permissions.map((permission) => (
+//           <Badge
+//             key={permission}
+//             rounded="lg"
+//             variant="outline"
+//             className="border-muted font-normal text-gray-500"
+//           >
+//             {permission}
+//           </Badge>
+//         ))}
+//       </div>
+//     ),
+//   },
+//   {
+//     title: <HeaderCell title="Status" />,
+//     dataIndex: 'status',
+//     key: 'status',
+//     width: 120,
+//     render: (status: User['status']) => getStatusBadge(status),
+//   },
+//   {
+//     title: <></>,
+//     dataIndex: 'action',
+//     key: 'action',
+//     width: 140,
+//     render: (_: string, user: User) => (
+//       <div className="flex items-center justify-end gap-3 pe-3">
+//         <Tooltip size="sm" content={'Edit User'} placement="top" color="invert">
+//           <ActionIcon
+//             as="span"
+//             size="sm"
+//             variant="outline"
+//             className="hover:!border-gray-900 hover:text-gray-700"
+//           >
+//             <PencilIcon className="h-4 w-4" />
+//           </ActionIcon>
+//         </Tooltip>
+//         <Tooltip size="sm" content={'View User'} placement="top" color="invert">
+//           <ActionIcon
+//             as="span"
+//             size="sm"
+//             variant="outline"
+//             className="hover:!border-gray-900 hover:text-gray-700"
+//           >
+//             <EyeIcon className="h-4 w-4" />
+//           </ActionIcon>
+//         </Tooltip>
+//         <DeletePopover
+//           title={`Delete this user`}
+//           description={`Are you sure you want to delete this #${user.id} user?`}
+//           onDelete={() => onDeleteItem(user.id)}
+//         />
+//       </div>
+//     ),
+//   },
+// ];
+
+
+
+
+
+export const getColumns = (
+) => [
   {
     title: (
       <div className="flex items-center gap-3 whitespace-nowrap ps-3">
         <Checkbox
           title={'Select All'}
-          onChange={handleSelectAll}
-          checked={checkedItems.length === data.length}
+          //onChange={handleSelectAll}
+          //checked={checkedItems.length === data.length}
           className="cursor-pointer"
         />
         User ID
@@ -81,84 +223,173 @@ export const getColumns = ({
       <div className="inline-flex ps-3">
         <Checkbox
           className="cursor-pointer"
-          checked={checkedItems.includes(row.id)}
-          {...(onChecked && { onChange: () => onChecked(row.id) })}
+          //checked={checkedItems.includes(row.id)}
+         // {...(onChecked && { onChange: () => onChecked(row.id) })}
           label={`#${row.id}`}
         />
       </div>
     ),
   },
-  {
-    title: <HeaderCell title="Name" />,
-    dataIndex: 'fullName',
-    key: 'fullName',
-    width: 250,
-    render: (_: string, user: User) => (
-      <AvatarCard
-        src={user.avatar}
-        name={user.fullName}
-        description={user.email}
-      />
-    ),
-  },
+  // {
+  //   title: <HeaderCell title="Name" />,
+  //   dataIndex: 'first_name',
+  //   key: 'first_name',
+  //   width: 250,
+  //   render: (_: string, user: User) => (
+  //     <AvatarCard
+  //       src={user.avatar}
+  //       name={user.fullName}
+  //       description={user.email}
+  //     />
+  //   ),
+  // },
+  // {
+  //   title: (
+  //     <HeaderCell
+  //       title="Role"
+  //       sortable
+  //       ascending={
+  //         sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
+  //       }
+  //     />
+  //   ),
+  //   onHeaderCell: () => onHeaderCellClick('role'),
+  //   dataIndex: 'role',
+  //   key: 'role',
+  //   width: 250,
+  //   render: (role: string) => role,
+  // },
+  // {
+  //   title: (
+  //     <HeaderCell
+  //       title="Created"
+  //       sortable
+  //       ascending={
+  //         sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
+  //       }
+  //     />
+  //   ),
+  //   onHeaderCell: () => onHeaderCellClick('createdAt'),
+  //   dataIndex: 'createdAt',
+  //   key: 'createdAt',
+  //   width: 200,
+  //   render: (value: Date) => <DateCell date={value} />,
+  // },
+  // {
+  //   title: <HeaderCell title="Permissions" />,
+  //   dataIndex: 'permissions',
+  //   key: 'permissions',
+  //   width: 200,
+  //   render: (permissions: User['permissions'][]) => (
+  //     <div className="flex items-center gap-2">
+  //       {permissions.map((permission) => (
+  //         <Badge
+  //           key={permission}
+  //           rounded="lg"
+  //           variant="outline"
+  //           className="border-muted font-normal text-gray-500"
+  //         >
+  //           {permission}
+  //         </Badge>
+  //       ))}
+  //     </div>
+  //   ),
+  // },
+  // {
+  //   title: <HeaderCell title="Status" />,
+  //   dataIndex: 'status',
+  //   key: 'status',
+  //   width: 120,
+  //   render: (status: User['status']) => getStatusBadge(status),
+  // },
   {
     title: (
       <HeaderCell
-        title="Role"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
-        }
+        title={<span className="whitespace-nowrap">First Name</span>}
       />
     ),
-    onHeaderCell: () => onHeaderCellClick('role'),
-    dataIndex: 'role',
-    key: 'role',
-    width: 250,
-    render: (role: string) => role,
-  },
-  {
-    title: (
-      <HeaderCell
-        title="Created"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick('createdAt'),
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-    width: 200,
-    render: (value: Date) => <DateCell date={value} />,
-  },
-  {
-    title: <HeaderCell title="Permissions" />,
-    dataIndex: 'permissions',
-    key: 'permissions',
-    width: 200,
-    render: (permissions: User['permissions'][]) => (
-      <div className="flex items-center gap-2">
-        {permissions.map((permission) => (
-          <Badge
-            key={permission}
-            rounded="lg"
-            variant="outline"
-            className="border-muted font-normal text-gray-500"
-          >
-            {permission}
-          </Badge>
-        ))}
+    dataIndex: 'first_name',
+    key: 'first_name',
+    width: 130,
+    render: (first_name: string) => (
+      <div>
+        <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+          {first_name}
+        </Text>
       </div>
     ),
   },
+
   {
-    title: <HeaderCell title="Status" />,
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    render: (status: User['status']) => getStatusBadge(status),
+    title: (
+      <HeaderCell
+        title={<span className="whitespace-nowrap">Last Name</span>}
+      />
+    ),
+    dataIndex: 'last_name',
+    key: 'last_name',
+    width: 130,
+    render: (last_name: string) => (
+      <div>
+        <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+          {last_name}
+        </Text>
+      </div>
+    ),
+  },
+
+  {
+    title: (
+      <HeaderCell
+        title={<span className="whitespace-nowrap">Email</span>}
+      />
+    ),
+    dataIndex: 'email',
+    key: 'email',
+    width: 130,
+    render: (email: string) => (
+      <div>
+        <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+          {email}
+        </Text>
+      </div>
+    ),
+  },
+
+  {
+    title: (
+      <HeaderCell
+        title={<span className="whitespace-nowrap">User Name</span>}
+      />
+    ),
+    dataIndex: 'username',
+    key: 'username',
+    width: 130,
+    render: (username: string) => (
+      <div>
+        <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+          {username}
+        </Text>
+      </div>
+    ),
+  },
+
+  {
+    title: (
+      <HeaderCell
+        title={<span className="whitespace-nowrap">Role</span>}
+      />
+    ),
+    dataIndex: 'role',
+    key: 'role',
+    width: 130,
+    render: (role: string) => (
+      <div>
+        <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+          {role}
+        </Text>
+      </div>
+    ),
   },
   {
     title: <></>,
@@ -187,12 +418,14 @@ export const getColumns = ({
             <EyeIcon className="h-4 w-4" />
           </ActionIcon>
         </Tooltip>
-        <DeletePopover
+        {/* <DeletePopover
           title={`Delete this user`}
           description={`Are you sure you want to delete this #${user.id} user?`}
           onDelete={() => onDeleteItem(user.id)}
-        />
+        /> */}
       </div>
     ),
   },
 ];
+
+

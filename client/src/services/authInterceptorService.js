@@ -1,40 +1,86 @@
 
+// import axios from "axios";
+// import refreshToken from '../services/authService';
+// import Cookies from 'js-cookie';
+
+
+// const axiosInterceptorInstance = axios.create({
+//     //baseURL: process.env.BASE_URL || 'http://intapp.learninginbits.com:8080/',
+//     baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000/api/'
+
+// });
+
+// axiosInterceptorInstance.interceptors.request.use((config) => {
+//     debugger
+//     console.log("interceptor file.....");
+//     const cookieValue = Cookies.get('token');
+//     const token = cookieValue ? JSON.parse(cookieValue) : {};
+//     console.log("get token",token)
+//     if (token) {
+//         config.headers['Authorization'] = `Bearer ${token}`;
+//     }
+//     console.log("comfig.....",config);
+//     return config;
+    
+// }, async (error) => {
+//     debugger
+//     console.log("interceptor errorr",error)
+//     if (error.res && error.res.status === 401) {
+//         try {
+//             const response = await refreshToken(token)
+//             if (response) {
+//                 config.headers['Authorization'] = `Bearer ${response.token}`;
+//                 return axiosInterceptorInstance(config);
+//             }
+//         } catch (error) {
+//             console.log("error occur in refresh token", error);
+//         }
+//     }
+//     return Promise.reject(error);
+// })
+
+// export default axiosInterceptorInstance;
+
+
+
 import axios from "axios";
 import refreshToken from '../services/authService';
 import Cookies from 'js-cookie';
 
-
 const axiosInterceptorInstance = axios.create({
-    //baseURL: process.env.BASE_URL || 'http://intapp.learninginbits.com:8080/',
     baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000/api/'
-
 });
 
-axiosInterceptorInstance.interceptors.request.use((config) => {
+axiosInterceptorInstance.interceptors.request.use(async (config) => {
     console.log("interceptor file.....");
-    //const token = JSON.parse(localStorage.getItem('token'));
     const cookieValue = Cookies.get('token');
-    const token = cookieValue ? JSON.parse(cookieValue) : {};
-    console.log("get token",token)
-    //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2Mzc2NDc2LCJpYXQiOjE3MTYzNzI4NzYsImp0aSI6IjBkODUwZjRkMjdiMDQwNzRiNGNmOTU3YzJhZjBmMjEyIiwidXNlcl9pZCI6MX0.olgXTmYc51VK68mRCnLC0_omTDSJXBfdfSoBrvv7l1U';
+    const token = cookieValue ? JSON.parse(cookieValue) : null;
+    console.log("get token", token);
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }
+    console.log("config.....", config);
     return config;
+    
 }, async (error) => {
-    if (error.res && error.res.status === 401) {
+    console.log("interceptor error", error)
+    if (error.response && error.response.status === 401) {
         try {
-            const response = await refreshToken(token)
-            if (response) {
-                config.headers['Authorization'] = `Bearer ${response.token}`;
-                return axiosInterceptorInstance(config);
+            const cookieValue = Cookies.get('token');
+            const token = cookieValue ? JSON.parse(cookieValue) : null;
+            if (token) {
+                const response = await refreshToken(token);
+                if (response && response.token) {
+                    error.config.headers['Authorization'] = `Bearer ${response.token}`;
+                    return axiosInterceptorInstance(error.config);
+                }
             }
         } catch (error) {
             console.log("error occur in refresh token", error);
         }
     }
     return Promise.reject(error);
-})
+});
 
 export default axiosInterceptorInstance;
 
@@ -55,18 +101,14 @@ export default axiosInterceptorInstance;
 
 
 
+// //     if (token) {
+// //         if (res.headers) {
+// //             res.headers.token = token
+// //         }
 
+// //     }
+// //     return res
+// // }, (error) => {
+// //     if (error.res && error.res.status === 401) {
 
-
-
-//     if (token) {
-//         if (res.headers) {
-//             res.headers.token = token
-//         }
-
-//     }
-//     return res
-// }, (error) => {
-//     if (error.res && error.res.status === 401) {
-
-//     }
+// //     }

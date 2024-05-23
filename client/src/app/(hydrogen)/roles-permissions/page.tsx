@@ -1,4 +1,4 @@
-import { usersData } from '@/data/users-data';
+//import { usersData } from '@/data/users-data';
 import PageHeader from '@/app/shared/page-header';
 import ModalButton from '@/app/shared/modal-button';
 import RolesGrid from '@/app/shared/roles-permissions/roles-grid';
@@ -25,7 +25,7 @@ export default function BlankPage() {
         <ModalButton label="Add New Role" view={<CreateRole />} />
       </PageHeader>
       <RolesGrid />
-      <UsersTable data={usersData} />
+      <UsersTable/>
     </>
   );
 }

@@ -87,6 +87,12 @@ export const menuItems = (userEmail: string) => {
         href: routes.questions.dashboard,
         icon: <PiBriefcaseDuotone />,
       },
+
+      {
+          name: 'Roles & Permissions',
+          href: routes.rolesPermissions,
+          icon: <PiFolderLockDuotone />,
+        },
     ];
   }
 

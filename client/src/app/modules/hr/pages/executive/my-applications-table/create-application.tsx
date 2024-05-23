@@ -129,6 +129,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
       //formData.append('id', candidateList.id); 
       try {
         const response = await updateCandidate(candidateList.id, formData);
+       
         console.log("Update candidate response:", response);
         if (response) {
           queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
