@@ -75,7 +75,7 @@ const statusOptions = [
   { label: 'Completed', value: ' Completed' },
   { label: 'Scheduled', value: 'Scheduled' },
 ];
-function StatusSelect({ selectItem }: { selectItem?: string }) {
+function StatusSelect({ selectItem = 'Waiting' }: { selectItem?: string }) {
   const selectItemValue = statusOptions.find(
     (option) => option.label === selectItem
   );

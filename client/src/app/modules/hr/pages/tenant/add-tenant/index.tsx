@@ -20,7 +20,10 @@ export default function MyTenantTable({
     // Add return type annotation here
   }) {
 
-  const [pageSize, setPageSize] = useState(7);
+  const [pageSize, setPageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1)
+  const [paginatedData, setPaginatedData] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
 
   const [data, setData] = useState<any>([]);
 
@@ -28,22 +31,29 @@ export default function MyTenantTable({
     tentantList();
   }, []);
 
+  useEffect(() => {
+    handlePagination();
+  }, [currentPage, pageSize, data]);
+
   const tentantList = async () => {
     const response = await fetchData();
     console.log("fetch data", response);
-    setData(response.data)
+    setData(response.data);
+    setTotalItems(response.data.length);
+    setCurrentPage(1);
+
   }
   const handlePopupClose = () => {
     tentantList();
   };
 
-  const onDeleteItem=(id:any)=>{
-    console.log("tenat id",id)
+  const onDeleteItem = (id: any) => {
+    console.log("tenat id", id)
     onDeleteTenant(id);
     //tentantList();
   }
 
- const onDeleteTenant = async (id: any) =>{
+  const onDeleteTenant = async (id: any) => {
     console.log("tenant id", id)
     console.log("delete the tenant......");
     try {
@@ -55,12 +65,22 @@ export default function MyTenantTable({
     } catch (error) {
       console.log("error", error)
     }
-  
+
   }
 
 
+  const handlePagination = () => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    setPaginatedData(data.slice(startIndex, endIndex));
+  };
 
-  const columns = getColumnsData({ handlePopupClose , onDeleteItem});
+  const handlePaginate = (page: any) => {
+    console.log("pagination", page);
+    setCurrentPage(page);
+  };
+
+  const columns = getColumnsData({ handlePopupClose, onDeleteItem });
   const { visibleColumns } = useColumn(columns);
   return (
     <WidgetCard
@@ -82,13 +102,13 @@ export default function MyTenantTable({
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
-        data={data}
+        data={paginatedData}
         paginatorOptions={{
           pageSize,
           setPageSize,
-          // total: totalItems,
-          // current: currentPage,
-          //onChange: (page: number) => handlePaginate(page),
+          total: totalItems,
+          current: currentPage,
+          onChange: handlePaginate,
         }}
       >
 

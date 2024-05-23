@@ -21,7 +21,10 @@ import { deleteJob, getJobList } from '../../../../../../services/jobPostingServ
 // };
 export const jobQueryKey = 'candidate-job-data';
 export default function MyJobTable({ className }: { className?: string }) {
-  const [pageSize, setPageSize] = useState(7);
+  const [pageSize, setPageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1)
+  const [paginatedData, setPaginatedData] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
 
 
 
@@ -31,13 +34,20 @@ export default function MyJobTable({ className }: { className?: string }) {
     jobList();
   }, []);
 
+  useEffect(() => {
+    handlePagination();
+  }, [currentPage, pageSize, data]);
+
+
   const jobList = async () => {
     try {
       const response = await getJobList()
       console.log("job lis", response.data)
       if (response) {
         setData(response.data)
-        console.log("data....", data)
+        console.log("data....", data);
+        setTotalItems(response.data.length);
+        setCurrentPage(1); 
       }
     } catch (error) {
       console.log("error", error)
@@ -74,6 +84,17 @@ export default function MyJobTable({ className }: { className?: string }) {
 
   const columns = getColumnsData({ handlePopupClose, onDeleteItem });
   const { visibleColumns } = useColumn(columns);
+
+  const handlePagination = () => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    setPaginatedData(data.slice(startIndex, endIndex));
+  };
+
+  const handlePaginate = (page: any) => {
+    console.log("pagination", page);
+    setCurrentPage(page);
+  };
   return (
     <WidgetCard className={className}
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -96,13 +117,14 @@ export default function MyJobTable({ className }: { className?: string }) {
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
-        data={data}
+        data={paginatedData}
         paginatorOptions={{
           pageSize,
           setPageSize,
-
+          total: totalItems,
+          current: currentPage,
+          onChange: handlePaginate,
         }}
-
 
         className="-mx-5 lg:-mx-7">
 

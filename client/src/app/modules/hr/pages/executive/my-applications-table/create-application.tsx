@@ -174,7 +174,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
           <>
             <div className="col-span-full flex items-center justify-between">
               <Title as="h4" className="font-semibold">
-                Add Candidate
+                {candidateList ? 'Update Candidate' : 'Add Candidate'}
               </Title>
               <ActionIcon size="sm" variant="text" onClick={closeModal}>
                 <PiXBold className="h-auto w-5" />
@@ -308,7 +308,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-                Add Candidate
+               {candidateList ? 'Update Candidate' : 'Add Candidate'}
               </Button>
             </div>
           </>

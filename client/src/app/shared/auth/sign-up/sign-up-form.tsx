@@ -97,7 +97,7 @@ export default function SignUpForm() {
               {...register('username')}
               error={errors.username?.message}
             />
-
+{/* 
             <select
               aria-label='role'
               id="role"
@@ -109,7 +109,7 @@ export default function SignUpForm() {
               <option value="3">Hr</option>
               <option value="4">Candidate</option>
 
-            </select>
+            </select> */}
             <Password
               label="Password"
               placeholder="Enter your password"

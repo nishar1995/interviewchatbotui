@@ -16,18 +16,30 @@ export const questionsQueryKey = 'questions-application-data';
 
 function MyQuestionsTable() {
   const columns = getColumnsData();
-  const [pageSize, setPageSize] = useState(7);
   const { visibleColumns } = useColumn(columns);
-  const [data, setData] = useState<any>([]);
+  const [pageSize, setPageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState([]);
+  const [paginatedData, setPaginatedData] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+
 
   useEffect(() => {
     fetchQuestionsList();
   }, []);
 
+
+  useEffect(() => {
+    handlePagination();
+  }, [currentPage, pageSize, data]);
+
+
   const fetchQuestionsList = async () => {
     const response = await getQuestions();
     console.log("fetch data", response.data);
     setData(response.data);
+    setTotalItems(response.data.length);
+    setCurrentPage(1);
   };
 
   const handlePopupClose = () => {
@@ -45,6 +57,17 @@ function MyQuestionsTable() {
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  const handlePagination = () => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    setPaginatedData(data.slice(startIndex, endIndex));
+  };
+
+  const handlePaginate = (page: any) => {
+    console.log("pagination", page);
+    setCurrentPage(page);
   };
 
   function CustomExpandIcon(props: any) {
@@ -86,10 +109,13 @@ function MyQuestionsTable() {
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
-        data={data}
+        data={paginatedData}
         paginatorOptions={{
           pageSize,
           setPageSize,
+          total: totalItems,
+          current: currentPage,
+          onChange: handlePaginate,
         }}
         expandable={{
           expandIcon: CustomExpandIcon,

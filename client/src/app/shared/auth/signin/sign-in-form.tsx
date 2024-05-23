@@ -81,10 +81,10 @@ export default function SignInForm() {
         {({ register, formState: { errors } }) => (
           <div className="space-y-5">
             <Input
-              type="email"
+              type="text"
               size="lg"
-              label="Email"
-              placeholder="Enter your email"
+              label="User Name"
+              placeholder="Enter your user name"
               className="[&>label>span]:font-medium"
               inputClassName="text-sm"
               {...register('username')}

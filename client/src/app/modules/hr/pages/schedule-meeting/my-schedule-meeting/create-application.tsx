@@ -86,6 +86,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   const [selectedJobId, setSelectedJobId] = useState<string>('');
   const [filteredCandidates, setFilteredCandidates] = useState([]);
   const [selectedCandidateId, setSelectedCandidateId] = useState('');
+  const today = dayjs();
   //const [startTime, setValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.start_time).toISOString()));
   //const [endTime, setEndValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.end_time).toISOString()));
 
@@ -341,7 +342,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="Start Meeting Date">
                 <MobileDateTimePicker onChange={(newValue) => handleStartTimeChange(newValue)}
-
+                  minDate={today}
                 />
               </DemoItem>
             </LocalizationProvider>
@@ -349,6 +350,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
               <DemoItem label="End Meeting Date">
                 <MobileDateTimePicker
                   onChange={(newValue) => handleEndTimeChange(newValue)}
+                  minDate={today}
                 />
               </DemoItem>
             </LocalizationProvider>

@@ -19,9 +19,13 @@ export default function MyApplicationsTable({
     // Add return type annotation here
   }) {
 
-  const [pageSize, setPageSize] = useState(7);
+
 
   const [data, setData] = useState<any>([]);
+  const [pageSize, setPageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginatedData, setPaginatedData] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
 
   // useEffect(() => {
   //   const candidate = async () => {
@@ -33,13 +37,19 @@ export default function MyApplicationsTable({
   // }, []);
 
   useEffect(() => {
-    fetchCandidateList(); 
+    fetchCandidateList();
   }, []);
+
+  useEffect(() => {
+    handlePagination();
+  }, [currentPage, pageSize, data]);
 
   const fetchCandidateList = async () => {
     const response = await candidateList();
     console.log("fetch data", response);
-    setData(response.data)
+    setData(response.data);
+    setTotalItems(response.data.length);
+    setCurrentPage(1);
   }
   const handlePopupClose = () => {
     fetchCandidateList();
@@ -61,6 +71,18 @@ export default function MyApplicationsTable({
 
   const columns = getColumnsData({ handlePopupClose, onDeleteItem });
   const { visibleColumns } = useColumn(columns);
+
+
+  const handlePagination = () => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    setPaginatedData(data.slice(startIndex, endIndex));
+  };
+
+  const handlePaginate = (page: any) => {
+    console.log("pagination", page);
+    setCurrentPage(page);
+  };
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
@@ -71,32 +93,22 @@ export default function MyApplicationsTable({
         <div className="mt-2 flex justify-end">
           <ModalButton
             label="Add New Candidate"
-            view={<CreateApplication  onClose={handlePopupClose}/>} />
+            view={<CreateApplication onClose={handlePopupClose} />} />
         </div>
       }
     >
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
-        data={data}
+        data={paginatedData}
         paginatorOptions={{
           pageSize,
           setPageSize,
-          // total: totalItems,
-          // current: currentPage,
-          //onChange: (page: number) => handlePaginate(page),
+          total: totalItems,
+          current: currentPage,
+          onChange: handlePaginate,
         }}
-        
       >
-        {/* {data.map((row: any) => (
-          <RenderAction
-            key={row.id}
-            row={row}
-            onDeleteItem={onDeleteItem}
-            handlePopupClose={handlePopupClose}
-          />
-        ))} */}
-
       </ControlledTable>
     </WidgetCard>
   );

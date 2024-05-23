@@ -18,7 +18,7 @@ import { tenantQueryKey } from '../add-tenant';
 import { tenantSchema } from '@/utils/validators/tenant.schema';
 import { addTenant, updateTenant } from '@/services/tenantService';
 
-export default function CreateTenant({ onClose, tenantDetails }:any ) {
+export default function CreateTenant({ onClose, tenantDetails }: any) {
   console.log("tenant details", tenantDetails)
   // const defaultValues: Omit<
   //   tenantSchema,
@@ -65,7 +65,7 @@ export default function CreateTenant({ onClose, tenantDetails }:any ) {
     setLoading(true);
     if (tenantDetails) {
       try {
-        const response = await updateTenant(tenantDetails.id,data);
+        const response = await updateTenant(tenantDetails.id, data);
         if (response) {
           console.log(response);
           setLoading(false);
@@ -214,15 +214,14 @@ export default function CreateTenant({ onClose, tenantDetails }:any ) {
             //error={errors.meetingSchedule?.message}
             />
 
-            {/* <Input
-              label="State"
-              placeholder="Enter State"
+            <Input
+              label="Country"
+              placeholder="Enter Country"
               className="col-span-full"
-              {...register('state')}
+              {...register('country')}
+              defaultValue={defaultValues.country}
             //error={errors.meetingSchedule?.message}
-            /> */}
-
-            {/* <label htmlFor="state" className="block text-gray-700 font-bold mb-2">State</label> */}
+            />
             <select
               aria-label='state'
               id="state"
@@ -236,15 +235,6 @@ export default function CreateTenant({ onClose, tenantDetails }:any ) {
               <option value="AZ">Arizona</option>
 
             </select>
-
-            <Input
-              label="Country"
-              placeholder="Enter Country"
-              className="col-span-full"
-              {...register('country')}
-              defaultValue={defaultValues.country}
-            //error={errors.meetingSchedule?.message}
-            />
             <Input
               label="Zip Code"
               placeholder="Enter Zip Code"

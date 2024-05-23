@@ -19,18 +19,26 @@ export default function MyMeetingTable({
 }: {
     // Add return type annotation here
   }) {
-  const [pageSize, setPageSize] = useState(7);
-  const [data, setData] = useState<any>([]);
-
+const [pageSize, setPageSize] = useState(5);
+const [currentPage, setCurrentPage] = useState(1);
+const [data, setData] = useState([]);
+const [paginatedData, setPaginatedData] = useState([]);
+const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     fetchMeetingList();
   }, []);
 
+  useEffect(() => {
+    handlePagination();
+  }, [currentPage, pageSize, data]);
+
   const fetchMeetingList = async () => {
     const response = await getMeetingScheduleList();
     console.log("fetch data", response);
-    setData(response.data)
+    setData(response.data);
+    setTotalItems(response.data.length);
+    setCurrentPage(1);
   }
   const handlePopupClose = () => {
     fetchMeetingList();
@@ -52,6 +60,17 @@ export default function MyMeetingTable({
 
   }
 
+  const handlePagination = () => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    setPaginatedData(data.slice(startIndex, endIndex));
+  };
+
+  const handlePaginate = (page:any) => {
+    console.log("pagination", page);
+    setCurrentPage(page);
+  };
+
   const columns = getColumnsData({ handlePopupClose, onDeleteItem });
   const { visibleColumns } = useColumn(columns);
   return (
@@ -71,17 +90,17 @@ export default function MyMeetingTable({
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
-        data={data}
+        data={paginatedData}
         paginatorOptions={{
           pageSize,
           setPageSize,
-          // total: totalItems,
-          // current: currentPage,
-          //onChange: (page: number) => handlePaginate(page),
+          total: totalItems,
+          current: currentPage,
+          onChange: handlePaginate,
         }}
-      >
+      />
 
-      </ControlledTable>
+     
     </WidgetCard>
   );
 }
