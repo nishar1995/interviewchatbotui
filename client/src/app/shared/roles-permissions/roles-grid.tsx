@@ -1,6 +1,11 @@
+'use client'
+
 import RoleCard from '@/app/shared/roles-permissions/role-card';
 import { rolesList } from '@/data/roles-permissions';
+import { getUsersRoleCount } from '@/services/userService';
 import cn from '@/utils/class-names';
+import { useEffect, useState } from 'react';
+
 
 interface RolesGridProps {
   className?: string;
@@ -11,6 +16,18 @@ export default function RolesGrid({
   className,
   gridClassName,
 }: RolesGridProps) {
+
+  const [roledata, setData] = useState([]);
+  useEffect(() => {
+    fetchUserList();
+  }, []);
+
+  const fetchUserList = async () => {
+    const response = await getUsersRoleCount();
+    console.log("fetch data", response.data);
+    setData(response.data);
+    console.log("data/////", roledata)
+  };
   return (
     <div className={cn('@container', className)}>
       <div
@@ -19,8 +36,8 @@ export default function RolesGrid({
           gridClassName
         )}
       >
-        {rolesList.map((role) => (
-          <RoleCard key={role.name} {...role} />
+       {roledata.map((role:any) => (
+          <RoleCard key={role.count} roledata={role} {...role} />
         ))}
       </div>
     </div>

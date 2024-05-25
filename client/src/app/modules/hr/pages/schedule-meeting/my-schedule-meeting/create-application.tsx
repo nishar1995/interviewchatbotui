@@ -70,11 +70,11 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
     candidate: meetingDetails?.candidate ?? '', // Pre-fill candidate if available
     job: meetingDetails?.job ?? '',
-    start_time: new Date(),
-    end_time: new Date(),
+    start_time: meetingDetails.start_time ? new Date(meetingDetails.start_time) : new Date(),
+    end_time: meetingDetails.end_time ? new Date(meetingDetails.end_time) : new Date(),
   };
 
-  console.log("start time", meetingDetails?.start_time)
+  console.log("start time", defaultValues)
   //console.log("convert start time", dayjs(defaultValues.start_time));
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
@@ -83,12 +83,16 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   const [data, setData] = useState<any>([]);
   const [candidatedata, setCandidateData] = useState<any>([]);
   const imageRef = useRef<HTMLInputElement>(null);
-  const [selectedJobId, setSelectedJobId] = useState<string>('');
+  const [selectedJobId, setSelectedJobId] = useState<string>('' || meetingDetails?.candidate);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
-  const [selectedCandidateId, setSelectedCandidateId] = useState('');
+  const [selectedCandidateId, setSelectedCandidateId] = useState('' || meetingDetails?.candidate);
+
   const today = dayjs();
+  const [errorMessage, setErrorMessage] = useState('');
   //const [startTime, setValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.start_time).toISOString()));
   //const [endTime, setEndValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.end_time).toISOString()));
+  const [startTime, setStartTime] = useState<any>(meetingDetails ? new Date(meetingDetails.start_time) : null);
+  const [endTime, setEndTime] = useState<any>(meetingDetails ? new Date(meetingDetails.start_time) : null);
 
 
   useEffect(() => {
@@ -98,8 +102,14 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
   useEffect(() => {
     if (meetingDetails) {
-      setSelectedJobId(meetingDetails.job); // Select job ID if available
-      setSelectedCandidateId(meetingDetails?.candidate); // Select candidate ID if available
+      debugger
+      fetchCandidateList();
+      setSelectedJobId(meetingDetails.job);
+      setSelectedCandidateId(meetingDetails?.candidate);
+      // setStartTime(new Date(meetingDetails.start_time));
+      // setEndTime(new Date(meetingDetails.end_time));
+      console.log("select candidate", selectedCandidateId);
+      console.log("select job", selectedJobId);
     }
   }, [meetingDetails]);
 
@@ -127,7 +137,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
 
   const onSubmit: SubmitHandler<CreateMeetingInput> = async (data: any) => {
-
+    debugger
     setLoading(true);
     let startMeeting = defaultValues.start_time;
     let endMeeting = defaultValues.end_time
@@ -235,17 +245,46 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     data.start_time = newValue.$d;
     console.log("start", data.start_time);
     defaultValues.start_time = newValue.$d;
-    console.log("default strat time", defaultValues.start_time)
+    const newStartTime = newValue.$d;
+    setStartTime(newStartTime);
+
 
   };
 
   const handleEndTimeChange = (newValue: any) => {
+    debugger
     console.log("new value", newValue.$d);
     data.end_time = newValue.$d;
     defaultValues.end_time = newValue.$d;
     console.log("default end time", defaultValues.end_time)
     console.log('end', data.end_time)
-  };
+    const newEndTime = newValue.$d;
+    setEndTime(newEndTime);
+
+
+  }
+
+  // const handleEndTimeAccept = (newValue: any) => {
+  //   const newEndTime = newValue.$d;
+  //   if (startTime && newEndTime < startTime) {
+  //     setErrorMessage('Please choose a correct time');
+  //   } else {
+  //     setErrorMessage('');
+  //   }
+  // };
+
+  //   const handleEndTimeAccept = (newValue: any) => {
+  //     const newEndTime = newValue.$d;
+  //     const now = dayjs();
+
+  //     if (newEndTime < now) {
+  //         setErrorMessage('End time cannot be in the past');
+  //     } else if (startTime && newEndTime < startTime) {
+  //         setErrorMessage('End time cannot be earlier than start time');
+  //     } else {
+  //         setErrorMessage('');
+  //     }
+  // };
 
   const onChangeJob = (event: React.ChangeEvent<HTMLSelectElement>) => {
     console.log("selected job value", event.target.value);
@@ -263,7 +302,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
   const filterCandidatesByJobId = (jobId: any) => {
     if (jobId) {
-      const filtered = candidatedata.filter((candidate: any) => candidate.job_id === jobId);
+      const filtered = candidatedata.filter((candidate: any) => (candidate.job_id) === String(jobId));
       setFilteredCandidates(filtered);
       console.log("filter data", filtered)
     } else {
@@ -272,6 +311,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   };
 
   useEffect(() => {
+    debugger
     filterCandidatesByJobId(selectedJobId);
   }, [selectedJobId, candidatedata]);
 
@@ -311,8 +351,6 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
             </select>
 
-
-
             <select
               id="candidate-select"
               className="col-span-full"
@@ -330,29 +368,31 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
             </select>
 
-            {/* <Input
-              label="Candidate Id"
-              placeholder="candidate id"
-              className="col-span-full"
-              {...register('candidate')}
-              defaultValue={defaultValues.candidate}
-              error={errors.candidate?.message}
-            /> */}
             {/* defaultValue={dayjs(defaultValues.start_time)} */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="Start Meeting Date">
                 <MobileDateTimePicker onChange={(newValue) => handleStartTimeChange(newValue)}
                   minDate={today}
+                  //defaultValue={dayjs(defaultValues.start_time)} 
                 />
               </DemoItem>
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="End Meeting Date">
-                <MobileDateTimePicker
-                  onChange={(newValue) => handleEndTimeChange(newValue)}
+                {/* <MobileDateTimePicker
+                  onChange={(newValue) => handleEndTimeChange(newValue)} onAccept={handleEndTimeAccept(newValue)}
                   minDate={today}
+                /> */}
+                <MobileDateTimePicker
+                  // defaultValue={defaultValues.start_time}
+                //  defaultValue={(defaultValues.end_time)} 
+                  onChange={handleEndTimeChange}
+                  // onAccept={handleEndTimeAccept}
+                  minDate={today}
+                  //value={defaultValues.end_time}
                 />
               </DemoItem>
+              {/* {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} */}
             </LocalizationProvider>
             <div className="col-span-full flex items-center justify-end gap-4">
               <Button

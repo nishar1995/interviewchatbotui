@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PiFilePdf, PiXBold } from 'react-icons/pi';
 import { Controller, SubmitHandler } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
@@ -17,9 +17,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { tenantQueryKey } from '../add-tenant';
 import { tenantSchema } from '@/utils/validators/tenant.schema';
 import { addTenant, updateTenant } from '@/services/tenantService';
+import { Country, State, City } from 'country-state-city';
+
 
 export default function CreateTenant({ onClose, tenantDetails }: any) {
   console.log("tenant details", tenantDetails)
+  console.log("country list", Country.getAllCountries())
+  console.log("country223344 list", State.getAllStates())
   // const defaultValues: Omit<
   //   tenantSchema,
   //   'tenantName'
@@ -57,9 +61,50 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
   const [isLoading, setLoading] = useState(false);
-
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedState, setSelectedState] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
   const imageRef = useRef<HTMLInputElement>(null);
 
+
+  useEffect(() => {
+    setCountries(Country.getAllCountries());
+  }, []);
+
+  useEffect(() => {
+    if (selectedCountry) {
+      setStates(State.getStatesOfCountry(selectedCountry));
+    } else {
+      setStates([]);
+    }
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    if (selectedState) {
+      setCities(City.getCitiesOfState(selectedCountry, selectedState));
+    } else {
+      setCities([]);
+    }
+  }, [selectedState]);
+
+  const handleCountryChange = (e: any) => {
+    setSelectedCountry(e.target.value);
+    setSelectedState('');
+    setCities([]);
+  };
+
+  const handleCityChange = (e: any) => {
+    debugger
+    console.log("select city", e)
+    setSelectedCity(e.target.value);
+  };
+
+  const handleStateChange = (e: any) => {
+    setSelectedState(e.target.value);
+  };
   const onSubmit: SubmitHandler<tenantSchema> = async (data: any) => {
     console.log(data);
     setLoading(true);
@@ -204,7 +249,7 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
               defaultValue={defaultValues.address_line2}
             //error={errors.meetingSchedule?.message}
             />
-
+            {/* 
             <Input
               label="City"
               placeholder="Enter city"
@@ -212,28 +257,50 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
               {...register('city')}
               defaultValue={defaultValues.city}
             //error={errors.meetingSchedule?.message}
-            />
+            /> */}
 
-            <Input
+            {/* <Input
               label="Country"
               placeholder="Enter Country"
               className="col-span-full"
               {...register('country')}
               defaultValue={defaultValues.country}
             //error={errors.meetingSchedule?.message}
-            />
-            <select
-              aria-label='state'
-              id="state"
-              className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              {...register('state', { required: 'State is required' })}
-              defaultValue={defaultValues.state}
-            >
-              <option value="">Select a state</option>
-              <option value="AL">Alabama</option>
-              <option value="AK">Alaska</option>
-              <option value="AZ">Arizona</option>
+            /> */}
 
+            <label htmlFor="country">Country</label>
+            <select id="country" className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              {...register('country', { required: 'State is required' })}
+              defaultValue={defaultValues.country} value={selectedCountry} onChange={handleCountryChange}>
+              <option value="">Select Country</option>
+              {countries.map((country: any) => (
+                <option key={country.isoCode} value={country.isoCode}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="state">State</label>
+            <select id="state" className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              {...register('state', { required: 'State is required' })}
+              defaultValue={defaultValues.state} value={selectedState} onChange={handleStateChange} disabled={!selectedCountry}>
+              <option value="">Select State</option>
+              {states.map((state: any) => (
+                <option key={state.isoCode} value={state.isoCode}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+
+            <label htmlFor="city">City</label>
+            <select id="city" className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              {...register('city', { required: 'City is required' })}
+              defaultValue={defaultValues.city} value={selectedCity} onChange={handleCityChange} disabled={!selectedState}>
+              <option value="">Select City</option>
+              {cities.map((city: any) => (
+                <option key={city.name} value={city.name}>
+                  {city.name}
+                </option>
+              ))}
             </select>
             <Input
               label="Zip Code"
@@ -243,55 +310,6 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
               defaultValue={defaultValues.zip_code}
             //error={errors.meetingSchedule?.message}
             />
-            {/* <Controller
-              name="candidateFiles"
-              control={control}
-              render={({ field: { value, onChange, onBlur } }) => (
-                <div className="col-span-full">
-                  <Upload
-                    label={'Upload Resume'}
-                    ref={imageRef}
-                    accept={'pdf'}
-                    multiple={false}
-                    onChange={(event) => {
-                      const uploadedFiles = (event.target as HTMLInputElement)
-                        .files;
-                      const newFiles = Object.entries(uploadedFiles as object)
-                        .map((file) => {
-                          if (file[1]) return file[1];
-                        })
-                        .filter((file) => file !== undefined);
-                      onChange(newFiles);
-                    }}
-                    className="mb-6 min-h-[280px] justify-center border-dashed bg-gray-50 dark:bg-transparent"
-                  />
-                  {value?.length > 1 ? (
-                    <Text className="mb-2 text-gray-500">
-                      {value?.length} files
-                    </Text>
-                  ) : null}
-
-                  {value?.length > 0 && (
-                    <SimpleBar className="max-h-[280px]">
-                      <div className="grid grid-cols-1 gap-4">
-                        {value?.map((file: File, index: number) => (
-                          <div
-                            className="flex min-h-[58px] w-full items-center rounded-xl border border-muted px-3 dark:border-gray-300"
-                            key={file.name}
-                          >
-                            <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-muted bg-gray-50 object-cover px-2 py-1.5 dark:bg-transparent">
-                              <PiFilePdf className="h-5 w-5" />
-                            </div>
-                            <div className="truncate px-2.5">{file.name}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </SimpleBar>
-                  )}
-                </div>
-              )}
-            /> */}
-
             <div className="col-span-full flex items-center justify-end gap-4">
               <Button
                 variant="outline"

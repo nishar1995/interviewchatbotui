@@ -23,7 +23,7 @@ export const signUpSchema = z.object({
   confirmPassword: validateConfirmPassword,
   username : z.string(),
   isAgreed: z.boolean(),
-  role:z.string()
+  role:z.number()
 });
 
 // generate form types from zod validation schema

@@ -37,6 +37,7 @@ const [totalItems, setTotalItems] = useState(0);
     const response = await getMeetingScheduleList();
     console.log("fetch data", response);
     setData(response.data);
+    console.log("meeting data....,",data)
     setTotalItems(response.data.length);
     setCurrentPage(1);
   }

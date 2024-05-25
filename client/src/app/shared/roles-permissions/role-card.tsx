@@ -10,6 +10,10 @@ import { useModal } from '@/app/shared/modal-views/use-modal';
 import ModalButton from '@/app/shared/modal-button';
 import EditRole from '@/app/shared/roles-permissions/edit-role';
 import CreateUser from '@/app/shared/roles-permissions/create-user';
+import { useEffect, useState } from 'react';
+import { getUsersRoleCount } from '@/services/userService';
+import { avatarIds } from '@/utils/get-avatar';
+import { getRandomArrayElement } from '@/utils/get-random-array-element';
 
 type User = {
   id: number;
@@ -23,15 +27,122 @@ interface RoleCardProps {
   className?: string;
   icon?: React.ReactNode;
   users: User[];
+  roledata: any
+
 }
+
+const users1 = [
+  {
+    id: 1,
+    role: ROLES.Administrator,
+    avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+      avatarIds
+    )}.webp`,
+  },
+  {
+    id: 2,
+    role: ROLES.Administrator,
+    avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+      avatarIds
+    )}.webp`,
+  },
+  {
+    id: 3,
+    role: ROLES.Administrator,
+    avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+      avatarIds
+    )}.webp`,
+  },
+  {
+    id: 4,
+    role: ROLES.Administrator,
+    avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+      avatarIds
+    )}.webp`,
+  },
+  {
+    id: 5,
+    role: ROLES.Administrator,
+    avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+      avatarIds
+    )}.webp`,
+  },
+  {
+    id: 6,
+    role: ROLES.Administrator,
+    avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
+      avatarIds
+    )}.webp`,
+  },
+];
+ let colorFolder = '#2465FF'
+const rolesList = [
+  {
+    name: ROLES.Administrator,
+    color: '#2465FF',
+   
+  },
+  {
+    name: ROLES.Manager,
+    color: '#F5A623',
+   
+  },
+  // {
+  //   name: ROLES.Sales,
+  //   color: '#FF1A1A',
+  //   users,
+  // },
+  // {
+  //   name: ROLES.Support,
+  //   color: '#8A63D2',
+  //   users,
+  // },
+  // {
+  //   name: ROLES.Developer,
+  //   color: '#FF1A1A',
+  //   users,
+  // },
+  {
+    name: ROLES.HRD,
+    color: '#11A849',
+  
+  },
+  // {
+  //   name: ROLES.RestrictedUser,
+  //   color: '#4E36F5',
+  //   users,
+  // },
+  {
+    name: ROLES.Customer,
+    color: '#0070F3',
+ 
+  },
+];
+
+
 
 export default function RoleCard({
   name,
   color,
   users,
   className,
+  roledata
+
 }: RoleCardProps) {
+  console.log("role data",roledata)
   const { openModal } = useModal();
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetchUserList();
+  }, []);
+
+  const fetchUserList = async () => {
+    const response = await getUsersRoleCount();
+    console.log("fetch data", response.data);
+    setData(response.data);
+    console.log("data/////", data)
+  };
   return (
     <div className={cn('rounded-lg border border-muted p-6', className)}>
       <header className="flex items-center justify-between gap-2">
@@ -39,7 +150,7 @@ export default function RoleCard({
           <span
             className="grid h-10 w-10 place-content-center rounded-lg text-white"
             style={{
-              backgroundColor: color,
+              backgroundColor: colorFolder,
             }}
           >
             <svg
@@ -67,12 +178,13 @@ export default function RoleCard({
               />
             </svg>
           </span>
+         
           <Title as="h4" className="font-medium">
-            {name}
+          {roledata.role}
           </Title>
         </div>
 
-        <Dropdown className={className} placement="bottom-end">
+        {/* <Dropdown className={className} placement="bottom-end">
           <Dropdown.Trigger>
             <ActionIcon variant="text" className="ml-auto h-auto w-auto p-1">
               <PiDotsThreeBold className="h-auto w-6" />
@@ -97,12 +209,12 @@ export default function RoleCard({
               Remove Role
             </Dropdown.Item>
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown> */}
       </header>
 
       <div className="mt-4 flex items-center gap-2">
         <div className="flex items-center">
-          {users?.slice(0, 4).map((user) => (
+        {users1?.slice(0, 4).map((user) => (
             <figure
               key={user.id}
               className="relative z-10 -ml-1.5 h-8 w-8 rounded-full border-2 border-white"
@@ -115,17 +227,45 @@ export default function RoleCard({
               />
             </figure>
           ))}
+         
+
+         
         </div>
-        <span>Total {users.length} users</span>
+        <span className="font-medium">Total {roledata.count} Users</span> 
       </div>
-      <ModalButton
+
+
+
+      {/* <div className="mt-4 flex items-center gap-2">
+        <div className="flex items-center">
+          {data?.slice(0, 4).map((user: any) => (
+            <figure
+              key={user.role}
+            className="relative z-10 -ml-1.5 h-8 w-8 rounded-full border-2 border-white"
+            >
+              <Image
+                src={user.avatar}
+                alt="user avatar"
+                fill
+                className="rounded-full"
+              />
+              <span>Total {user.count}  users</span>
+            </figure>
+
+          ))}
+        </div>
+      </div> */}
+
+
+
+      {/* <ModalButton
         customSize="700px"
         variant="outline"
         label="Edit Role"
         icon={<UserCog className="h-5 w-5" />}
         view={<EditRole />}
         className="items-center gap-1 text-gray-800 @lg:w-full lg:mt-6"
-      />
+      /> */}
     </div>
   );
 }

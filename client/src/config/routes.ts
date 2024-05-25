@@ -139,8 +139,9 @@ export const routes = {
     dashboard: '/questions',
   },
 
-  meeting : {
+  meeting: {
     dashboard: '/meeting-schedule',
+    startMeeting: '/start-meeting'
   }
 
 };

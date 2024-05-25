@@ -50,3 +50,4 @@ export const ROLES = {
   // RestrictedUser: 'Restricted User',
   Customer: 'Candidate',
 } as const;
+

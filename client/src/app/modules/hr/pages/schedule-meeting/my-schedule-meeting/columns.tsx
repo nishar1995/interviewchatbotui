@@ -11,8 +11,11 @@ import EyeIcon from '@/components/icons/eye';
 import DeletePopover from '@/app/shared/delete-popover';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import CreateApplication from './create-application';
+import StartMeeting from '../../../../hr/pages/schedule-meeting/start-meeting/zoom-meeting-sdk'
 import { deleteMeeting } from '@/services/meetingScheduleService';
 import PencilIcon from '@/components/icons/pencil';
+import VideoIcon from '@/components/icons/video-solid'
+import { routes } from '@/config/routes';
 
 const statusOptions = [
   { label: 'Waiting', value: 'Waiting' },
@@ -328,7 +331,7 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
             {/* {moment(start_time).format('DD-MM-YYYY, h:mm a')} */}
-            {moment.utc(start_time).format("DD-MM-YYYY, h:mm a")}
+            {moment(start_time).format("DD-MM-YYYY, h:mm a")}
           </Text>
         </div>
       )
@@ -345,7 +348,7 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
 
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {moment.utc(end_time).format("DD-MM-YYYY, h:mm a")}
+            {moment(end_time).format("DD-MM-YYYY, h:mm a")}
           </Text>
         </div>
       ),
@@ -368,6 +371,11 @@ const handlePopupClose = () => {
 
 }
 
+
+const onClickMeeting = () => {
+  console.log("start Meeting")
+  routes.meeting.startMeeting
+}
 
 
 function setOpen() {
@@ -425,6 +433,37 @@ function RenderAction({
           }
         >
           <PencilIcon className="h-4 w-4" />
+        </ActionIcon>
+      </Tooltip>
+
+      <Tooltip
+        size="sm"
+        content={'Start Meeting'}
+        placement="top"
+        color="invert"
+      >
+        <ActionIcon
+          as="span"
+          size="sm"
+          variant="outline"
+          aria-label={'Start Meeting'}
+          onClick={() => onClickMeeting()
+            // openModal({
+            //   view: (
+            //     <StartMeeting
+            //       // meetingDetails={row}
+            //       // data={row}
+            //       onEdit={handleCreateModal(row)
+            //       }
+            //       onClose={onPopupClose}
+            //     />
+            //   ),
+            //   customSize: '900px',
+            // })
+          }
+          className="hover:!border-gray-900 hover:text-gray-700"
+        >
+          <VideoIcon className="h-4 w-4" />
         </ActionIcon>
       </Tooltip>
       <DeletePopover

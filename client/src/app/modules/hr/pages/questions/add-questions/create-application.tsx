@@ -354,7 +354,7 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
   };
 
   const filterCandidatesByJobId = (jobId: any, candidateList: any) => {
-    const filtered = candidateList.filter((candidate: any) => candidate.job_id === jobId);
+    const filtered = candidateList.filter((candidate: any) => candidate.job_id === String(jobId));
     setFilteredCandidates(filtered);
   };
 

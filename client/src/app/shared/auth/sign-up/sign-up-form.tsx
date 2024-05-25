@@ -19,7 +19,7 @@ const initialValues: SignUpSchema = {
   confirmPassword: '',
   username: '',
   isAgreed: false,
-  role: ''
+  role: 4
 
 };
 
@@ -39,7 +39,7 @@ export default function SignUpForm() {
         setReset({ ...initialValues, isAgreed: false });
         routes.auth.signIn
         router.push("/shared/auth/signin");
-      }
+      } 
      
     } catch (error) {
       console.log("not register", error)
@@ -98,7 +98,7 @@ export default function SignUpForm() {
               error={errors.username?.message}
             />
 
-            <select
+            {/* <select
               aria-label='role'
               id="role"
               className="col-span-full border rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -109,7 +109,7 @@ export default function SignUpForm() {
               <option value="3">Hr</option>
               <option value="4">Candidate</option>
 
-            </select>
+            </select> */}
             <Password
               label="Password"
               placeholder="Enter your password"
