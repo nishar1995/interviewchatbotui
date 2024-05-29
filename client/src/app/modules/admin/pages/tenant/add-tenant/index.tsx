@@ -9,68 +9,64 @@ import { getColumns, getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
 import CreateApplication from './create-application';
 import { useQuery } from '@tanstack/react-query';
-import { candidateList } from '../../../../../../services/candidateService';
-import { deleteCandidate } from '@/services/candidateService';
+import CreateTenant from './create-application';
+import { deleteTenant, fetchData } from '../../../../../../services/tenantService'
+import { useModal } from '@/app/shared/modal-views/use-modal';
 
 
-export const applicationQueryKey = 'candidate-application-data';
-export default function MyApplicationsTable({
+export const tenantQueryKey = 'tenant-application-data';
+export default function MyTenantTable({
 }: {
     // Add return type annotation here
   }) {
 
-
-
-  const [data, setData] = useState<any>([]);
   const [pageSize, setPageSize] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1)
   const [paginatedData, setPaginatedData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
 
-  // useEffect(() => {
-  //   const candidate = async () => {
-  //     const response = await candidateList();
-  //     console.log("fetch data", response);
-  //     setData(response.data)
-  //   };
-  //   candidate();
-  // }, []);
+  const [data, setData] = useState<any>([]);
 
   useEffect(() => {
-    fetchCandidateList();
+    tentantList();
   }, []);
 
   useEffect(() => {
     handlePagination();
   }, [currentPage, pageSize, data]);
 
-  const fetchCandidateList = async () => {
-    const response = await candidateList();
+  const tentantList = async () => {
+    const response = await fetchData();
     console.log("fetch data", response);
     setData(response.data);
     setTotalItems(response.data.length);
     setCurrentPage(1);
+
   }
   const handlePopupClose = () => {
-    fetchCandidateList();
+    tentantList();
   };
 
-  const onDeleteItem = async (id: string) => {
-    console.log("candidate id", id);
-    console.log("delete the candidate......");
+  const onDeleteItem = (id: any) => {
+    console.log("tenat id", id)
+    onDeleteTenant(id);
+    //tentantList();
+  }
+
+  const onDeleteTenant = async (id: any) => {
+    console.log("tenant id", id)
+    console.log("delete the tenant......");
     try {
-      const response = await deleteCandidate(id);
+      const response = await deleteTenant(id);
       if (response) {
-        console.log("deleted the candidate", response);
-        fetchCandidateList();
+        console.log("delete the tenant", response);
+        tentantList();
       }
     } catch (error) {
-      console.error("error", error);
+      console.log("error", error)
     }
-  };
 
-  const columns = getColumnsData({ handlePopupClose, onDeleteItem });
-  const { visibleColumns } = useColumn(columns);
+  }
 
 
   const handlePagination = () => {
@@ -83,17 +79,23 @@ export default function MyApplicationsTable({
     console.log("pagination", page);
     setCurrentPage(page);
   };
+
+  const columns = getColumnsData({ handlePopupClose, onDeleteItem });
+  const { visibleColumns } = useColumn(columns);
   return (
     <WidgetCard
       headerClassName="mb-6 items-start flex-col @[57rem]:flex-row @[57rem]:items-center"
       actionClassName="grow @[57rem]:ps-11 ps-0 items-center w-full @[42rem]:w-full @[57rem]:w-auto "
-      title="Candidates"
+      title="Tenant"
       titleClassName="whitespace-nowrap"
       action={
         <div className="mt-2 flex justify-end">
           <ModalButton
-            label="Add New Candidate"
-            view={<CreateApplication onClose={handlePopupClose} />} />
+            label="Add New Tenant"
+            view={<CreateTenant onClose={handlePopupClose} tenantDetails={undefined} />} />
+
+
+
         </div>
       }
     >
@@ -109,6 +111,7 @@ export default function MyApplicationsTable({
           onChange: handlePaginate,
         }}
       >
+
       </ControlledTable>
     </WidgetCard>
   );

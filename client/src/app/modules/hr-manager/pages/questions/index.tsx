@@ -1,15 +1,12 @@
 import cn from '@/utils/class-names';
-
-
-import MyMeeting from './my-meeting';
-import InterviewMeeting from './interView-meeting';
+import MyQuestions from './my-questions';
 
 
 interface IndexProps {
   className?: string;
 }
 
-export default function ExecutiveMeetingDashboard({ className }: IndexProps) {
+export default function ExecutiveQuestionsDashboard({ className }: IndexProps) {
   return (
     <div
       className={cn(
@@ -18,8 +15,7 @@ export default function ExecutiveMeetingDashboard({ className }: IndexProps) {
       )}
     >
 
-      {/* {<InterviewMeeting/>} */}
-      {<MyMeeting/>}
+      {<MyQuestions />}
      
     </div>
   );

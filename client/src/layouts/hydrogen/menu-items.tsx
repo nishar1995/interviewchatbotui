@@ -61,11 +61,11 @@ export const menuItems = (userEmail: string) => {
         name: 'Overview',
       },
       // label end
-      {
-        name: 'File Manager',
-        href: routes.fileManager.dashboard,
-        icon: <PiFolderNotchDuotone />,
-      },
+      // {
+      //   name: 'File Manager',
+      //   href: routes.fileManager.dashboard,
+      //   icon: <PiFolderNotchDuotone />,
+      // },
       {
         name: 'Candidates List',
         href: routes.executive.dashboard,
@@ -76,11 +76,11 @@ export const menuItems = (userEmail: string) => {
         href: routes.meeting.dashboard,
         icon: <PiBriefcaseDuotone />,
       },
-      {
-        name: 'Tenant Management',
-        href: routes.tenant.dashboard,
-        icon: <PiBriefcaseDuotone />,
-      },
+      // {
+      //   name: 'Tenant Management',
+      //   href: routes.tenant.dashboard,
+      //   icon: <PiBriefcaseDuotone />,
+      // },
 
       {
         name: 'Questions Management',
@@ -88,11 +88,11 @@ export const menuItems = (userEmail: string) => {
         icon: <PiBriefcaseDuotone />,
       },
 
-      {
-          name: 'Roles & Permissions',
-          href: routes.rolesPermissions,
-          icon: <PiFolderLockDuotone />,
-        },
+      // {
+      //     name: 'Roles & Permissions',
+      //     href: routes.rolesPermissions,
+      //     icon: <PiFolderLockDuotone />,
+      //   },
     ];
   }
 
@@ -118,17 +118,34 @@ export const menuItems = (userEmail: string) => {
         name: 'Overview',
       },
       // label end
-      {
-        name: 'Interview',
-        href: routes.interview.dashboard,
-        icon: <PiCalendarDuotone />,
-        // badge: 'UPD',
-      },
+      // {
+      //   name: 'Interview',
+      //   href: routes.interview.dashboard,
+      //   icon: <PiCalendarDuotone />,
+      //   // badge: 'UPD',
+      // },
       {
         name: 'Job',
         href: routes.job.dashboard,
         icon: <PiCalendarDuotone />,
         // badge: 'UPD',
+      },
+
+      {
+        name: 'Questions Management',
+        href: routes.questions.dashboard,
+        icon: <PiBriefcaseDuotone />,
+      },
+
+      {
+        name: 'Candidates List',
+        href: routes.executive.dashboard,
+        icon: <PiBriefcaseDuotone />,
+      },
+      {
+        name: 'Meeting Schedule',
+        href: routes.meeting.dashboard,
+        icon: <PiBriefcaseDuotone />,
       },
     ];
   }
@@ -136,25 +153,21 @@ export const menuItems = (userEmail: string) => {
   return [
     // label start
     {
-      name: 'Overview',
-    },
-    // label end
-    {
-      name: 'File Manager',
-      href: routes.fileManager.dashboard,
-      icon: <PiFolderNotchDuotone />,
-    },
-    {
-      name: 'Interview',
-      href: routes.interview.dashboard,
-      icon: <PiCalendarDuotone />,
-      // badge: 'UPD',
-    },
-    {
-      name: 'Candidate',
+      name: 'Candidates List',
       href: routes.executive.dashboard,
       icon: <PiBriefcaseDuotone />,
     },
+    {
+      name: 'Meeting Schedule',
+      href: routes.meeting.dashboard,
+      icon: <PiBriefcaseDuotone />,
+    },
+    {
+      name: 'Tenant Management',
+      href: routes.tenant.dashboard,
+      icon: <PiBriefcaseDuotone />,
+    },
+
     {
       name: 'Job',
       href: routes.job.dashboard,
@@ -163,10 +176,48 @@ export const menuItems = (userEmail: string) => {
     },
 
     {
-      name: 'Meeting Schedule',
-      href: routes.ScheduleMeeting.dashboard,
+      name: 'Questions Management',
+      href: routes.questions.dashboard,
       icon: <PiBriefcaseDuotone />,
     },
+
+    {
+        name: 'Roles & Permissions',
+        href: routes.rolesPermissions,
+        icon: <PiFolderLockDuotone />,
+      },
+    // {
+    //   name: 'Overview',
+    // },
+    // // label end
+    // {
+    //   name: 'File Manager',
+    //   href: routes.fileManager.dashboard,
+    //   icon: <PiFolderNotchDuotone />,
+    // },
+    // {
+    //   name: 'Interview',
+    //   href: routes.interview.dashboard,
+    //   icon: <PiCalendarDuotone />,
+    //   // badge: 'UPD',
+    // },
+    // {
+    //   name: 'Candidate',
+    //   href: routes.executive.dashboard,
+    //   icon: <PiBriefcaseDuotone />,
+    // },
+    // {
+    //   name: 'Job',
+    //   href: routes.job.dashboard,
+    //   icon: <PiCalendarDuotone />,
+    //   // badge: 'UPD',
+    // },
+
+    // {
+    //   name: 'Meeting Schedule',
+    //   href: routes.ScheduleMeeting.dashboard,
+    //   icon: <PiBriefcaseDuotone />,
+    // },
     // {
     //   name: 'Financial',
     //   href: routes.financial.dashboard,

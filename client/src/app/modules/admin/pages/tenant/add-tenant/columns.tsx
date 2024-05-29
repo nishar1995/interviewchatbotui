@@ -1,19 +1,19 @@
 'use client';
 
 import { HeaderCell } from '@/components/ui/table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
 import { Text, Checkbox, Select, Tooltip, ActionIcon } from 'rizzui';
-
+import { deleteTenant, fetchData } from '../../../../../../services/tenantService'
 import 'react-datepicker/dist/react-datepicker.css';
-import CreateApplication from '../../../../hr/pages/executive/my-applications-table/create-application';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import EyeIcon from '@/components/icons/eye';
 import DeletePopover from '@/app/shared/delete-popover';
-import AppointmentDetails from '@/app/modules/hr-manager/pages/appointment/appointment-list/list/appointment-details';
-import { deleteCandidate } from '@/services/candidateService';
-import { candidateList } from '../../../../../../services/candidateService';
+import CreateApplication from '../../../../hr/pages/tenant/add-tenant/create-application';
+
 import PencilIcon from '@/components/icons/pencil';
+import { routes } from '@/config/routes';
+let getTenantData: any;
 // const parseMeetingSchedule = (scheduleString: string | undefined): Date | null => {
 //   // Check if scheduleString is null or undefined
 //   if (scheduleString === null || scheduleString === undefined) {
@@ -69,13 +69,12 @@ import PencilIcon from '@/components/icons/pencil';
 // };
 
 
-
 const statusOptions = [
   { label: 'Waiting', value: 'Waiting' },
   { label: 'Completed', value: ' Completed' },
   { label: 'Scheduled', value: 'Scheduled' },
 ];
-function StatusSelect({ selectItem = 'Waiting' }: { selectItem?: string }) {
+function StatusSelect({ selectItem }: { selectItem?: string }) {
   const selectItemValue = statusOptions.find(
     (option) => option.label === selectItem
   );
@@ -132,11 +131,7 @@ type Columns = {
 
 };
 
-const generateApplicationId = (id: string) => {
-  let data = `AiInfox-${id.padStart(5, '0')}`;
-  console.log("Generated Application ID:", data);
-  return data;
-};
+
 export const getColumns = ({
   handleSelectAll,
   sortConfig,
@@ -181,10 +176,10 @@ export const getColumns = ({
     {
       title: <HeaderCell title="Application Id" />,
       onHeaderCell: () => onHeaderCellClick('applicationId'),
-      dataIndex: 'applicationId', // Make sure this matches your data structure
+      dataIndex: 'applicationId',
       key: 'applicationId',
       width: 130,
-      render: (id: string) => <Text># {generateApplicationId(id)}</Text>
+      render: (applicationId: string) => <Text>#{applicationId}</Text>,
     },
     {
       title: (
@@ -250,6 +245,7 @@ export const getColumns = ({
       ),
     },
 
+
     {
       title: (
         <HeaderCell
@@ -270,25 +266,49 @@ export const getColumns = ({
     },
   ];
 
-export function handleSelectAll() {
-  console.log("handle select all")
+
+// const [selectAllChecked, setSelectAllChecked] = useState(true);
+// setSelectAllChecked(!selectAllChecked);
+export async function handleSelectAll() {
+  console.log("handle select all");
+  // const data = await fetchData();
+  // getTenantData = data.data
+  // console.log("fetch data",getTenantData)
 }
 
-export async function onDeleteItem(id: any) {
-  console.log("candidate id", id)
-  console.log("delete the candidate......");
-  try {
-    const response = await deleteCandidate(id);
-    if (response) {
-      console.log("delete the candidate", response);
-      setOpen()
-    }
-  } catch (error) {
-    console.log("error", error)
-  }
+const TenantTable = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-}
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const fetchedData = await fetchData();
+        console.log(fetchedData)
+      } catch (error) {
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+
+};
+
+export default TenantTable;
+
+// type tenatColumns = {
+//   data: any[];
+//   onDeleteItem: (id: string) => void;
+//   //onHeaderCellClick: (value: string) => void;
+
+// };
 export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
+
   return [
     {
       title: (
@@ -317,37 +337,22 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
       ),
     },
     {
-      title: <HeaderCell title="Application Id" />,
+      title: <HeaderCell title="Tenant Id" />,
       //onHeaderCell: () => onHeaderCellClick('applicationId'),
-      dataIndex: 'application_id',
-      key: 'application_id',
+      dataIndex: 'id',
+      key: 'id',
       width: 130,
-      render: (application_id: string) => <Text>{application_id}</Text>,
+      render: (id: string) => <Text>{id}</Text>,
     },
     {
       title: (
         <HeaderCell
-          title={<span className="whitespace-nowrap">username</span>}
+          title={<span className="whitespace-nowrap">Tenant Name</span>}
         />
       ),
-      dataIndex: 'username',
-      key: 'username',
-      width: 130,
-      render: (username: string) => (
-        <div>
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {username}
-          </Text>
-        </div>
-      ),
-    },
-
-    {
-      title: <HeaderCell title="Candidate Name" />,
-      //onHeaderCell: () => onHeaderCellClick('candidateName'),
       dataIndex: 'name',
       key: 'name',
-      width: 150,
+      width: 130,
       render: (name: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
@@ -356,56 +361,96 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         </div>
       ),
     },
-
     {
-      title: <HeaderCell title="Job Title" />,
-      //onHeaderCell: () => onHeaderCellClick('candidateName'),
-      dataIndex: 'job_title',
-      key: 'job_title',
+      title: <HeaderCell title="Address Line1" />,
+      //onHeaderCell: () => onHeaderCellClick('passWord'),
+      dataIndex: 'address_line1',
+      key: 'address_line1',
       width: 150,
-      render: (job_title: string) => (
+      render: (address_line1: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {job_title}
+            {address_line1}
           </Text>
         </div>
       ),
     },
-    // {
-    //   title: (
-    //     <HeaderCell
-    //       title={<span className="whitespace-nowrap">Meeting Schedule</span>}
-    //     />
-    //   ),
-    //   dataIndex: 'meetingSchedule',
-    //   key: 'meetingSchedule',
-    //   width: 130,
-    //   render: (meetingSchedule: string) => (
-    //     <div>
-    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //         {meetingSchedule}
-    //       </Text>
-    //     </div>
-    //   ),
-    // },
+    {
+      title: <HeaderCell title="Address Line2" />,
+      //onHeaderCell: () => onHeaderCellClick('passWord'),
+      dataIndex: 'address_line2',
+      key: 'address_line2',
+      width: 150,
+      render: (
+        address_line2: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {address_line2}
+          </Text>
+        </div>
+      ),
+    },
+    {
+      title: <HeaderCell title="City" />,
+      //onHeaderCell: () => onHeaderCellClick('candidateName'),
+      dataIndex: 'city',
+      key: 'city',
+      width: 150,
+      render: (city: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {city}
+          </Text>
+        </div>
+      ),
+    },
+    {
+      title: <HeaderCell title="State" />,
+      //onHeaderCell: () => onHeaderCellClick('candidateName'),
+      dataIndex: 'state',
+      key: 'state',
+      width: 150,
+      render: (state: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {state}
+          </Text>
+        </div>
+      ),
+    },
+    {
+      title: <HeaderCell title="Country" />,
+      //onHeaderCell: () => onHeaderCellClick('candidateName'),
+      dataIndex: 'country',
+      key: 'country',
+      width: 150,
+      render: (country: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {country}
+          </Text>
+        </div>
+      ),
+    },
     {
       title: (
         <HeaderCell
-          title="Status"
-          sortable
-        // ascending={
-        //   sortConfig?.direction === 'asc' && sortConfig?.key === 'status'
-        // }
+          title={<span className="whitespace-nowrap">Zip Code</span>}
         />
       ),
-      dataIndex: 'status',
-      key: 'status',
-      width: 260,
-      //onHeaderCell: () => onHeaderCellClick('status'),
-      render: (status: string) => {
-        return <StatusSelect selectItem={status} />;
-      },
+      dataIndex: 'zip_code',
+      key: 'zip_code',
+      width: 130,
+      render: (
+        zip_code: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {zip_code}
+          </Text>
+        </div>
+      ),
     },
+
     {
       title: <></>,
       dataIndex: 'action',
@@ -415,18 +460,32 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         <RenderAction row={id} onDeleteItem={onDeleteItem} onPopupClose={handlePopupClose} />
       ),
     },
+
   ];
 };
 
-const fetchCandidateList = async () => {
-  const response = await candidateList();
-  console.log("fetch data", response);
-  
+
+export async function onDeleteItem(id: any) {
+  console.log("tenant id", id)
+  console.log("delete the tenant......");
+  try {
+    const response = await deleteTenant(id);
+    if (response) {
+      console.log("delete the tenant", response);
+      //window.location.reload()
+      setOpen()
+    }
+  } catch (error) {
+    console.log("error", error)
+  }
+
 }
-const handlePopupClose = () => {
-  console.log("close update popup");
-  fetchCandidateList();
+
+function setOpen() {
+  useModal().closeModal;
+
 }
+
 
 function RenderAction({
   row,
@@ -435,14 +494,14 @@ function RenderAction({
 }: {
   row: any;
   onDeleteItem: (id: string) => void;
-  onPopupClose:()=>void;
+  onPopupClose: () => void;
 }) {
   const { openModal, closeModal } = useModal();
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
       openModal({
-        view: <CreateApplication onClose={onPopupClose} candidateList={row} />,
+        view: <CreateApplication onClose={onPopupClose} tenantDetails={row} />,
         //customSize: '500px',
       });
   }
@@ -451,7 +510,7 @@ function RenderAction({
     <div className="flex items-center justify-end gap-3 pe-3">
       <Tooltip
         size="sm"
-        content={'Edit Candidate'}
+        content={'Edit Tenant'}
         placement="top"
         color="invert"
       >
@@ -459,15 +518,15 @@ function RenderAction({
           as="span"
           size="sm"
           variant="outline"
-          aria-label={'Edit Candidate'}
+          aria-label={'Edit Tenant'}
           // className="hover:!border-gray-900 hover:text-gray-700"
           onClick={() =>
             openModal({
               view: (
                 <CreateApplication
-                  candidateList={row}
+                  tenantDetails={row}
                   data={row}
-                  onDelete={() => onDeleteItem(row.id)}
+                  //onDelete={() => onDeleteItem(row.id)}
                   onEdit={handleCreateModal(row)
                   }
                   onClose={onPopupClose}
@@ -477,17 +536,22 @@ function RenderAction({
             })
           }
         >
-          <PencilIcon className="h-4 w-4" />
+          {/* <EyeIcon className="h-4 w-4" /> */}
+          <PencilIcon className="h-3.5 w-3.5" />
+
         </ActionIcon>
       </Tooltip>
       <DeletePopover
-        title={`Delete the Candidate`}
-        description={`Are you sure you want to delete this  candidate?`}
+        title={`Delete the Tenant`}
+        description={`Are you sure you want to delete this tenant?`}
         onDelete={() => onDeleteItem && onDeleteItem(row.id)}
       />
     </div>
   );
 }
+
+
+
 
 
 
@@ -614,7 +678,3 @@ export const getColumns2 = ({
       },
     },
   ];
-function setOpen() {
-  useModal().closeModal
-}
-

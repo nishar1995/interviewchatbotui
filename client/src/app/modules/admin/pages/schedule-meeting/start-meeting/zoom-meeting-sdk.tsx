@@ -71,7 +71,7 @@ const MeetingComponent = ({ id }: any) => {
     const getSignature = async (meetingDetails: any) => {
         let data = {
             meeting_no: meetingDetails.meeting_id,
-            role: 0,
+            role: 1,
             password: meetingDetails.password
         }
 
@@ -97,7 +97,7 @@ const MeetingComponent = ({ id }: any) => {
                     sdkKey: data.sdkKey,
                     meetingNumber: data.meeting_no,
                     password: data.password,
-                    userName: 'demo',
+                    userName: meetingUserDetails.username,
                     userEmail: userEmail,
                     tk: registrantToken,
                     zak: zakToken
