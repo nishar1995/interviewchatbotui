@@ -141,7 +141,9 @@ export const routes = {
 
   meeting: {
     dashboard: '/meeting-schedule',
-    startMeeting: '/start-meeting'
+     startMeeting: '/start-meeting',
+    //startMeeting:(id:string)=> `/meeting/start-meeting/${id}`,
+    //orderDetails: (id: string) => `/ecommerce/orders/${id}`,
   }
 
 };

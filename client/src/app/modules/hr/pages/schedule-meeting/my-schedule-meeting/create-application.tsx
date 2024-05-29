@@ -65,13 +65,19 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     job: string,
     start_time: Date,
     end_time: Date,
+    agenda: string,
+    topic: string
 
   } = {
 
     candidate: meetingDetails?.candidate ?? '', // Pre-fill candidate if available
     job: meetingDetails?.job ?? '',
-    start_time: meetingDetails.start_time ? new Date(meetingDetails.start_time) : new Date(),
-    end_time: meetingDetails.end_time ? new Date(meetingDetails.end_time) : new Date(),
+    start_time: new Date(),
+    end_time: new Date(),
+    // start_time: meetingDetails?.start_time ? new Date(meetingDetails.start_time) : new Date(),
+    // end_time: meetingDetails?.end_time ? new Date(meetingDetails.end_time) : new Date(),
+    agenda: meetingDetails?.agenda ?? '',
+    topic: meetingDetails?.topic ?? ''
   };
 
   console.log("start time", defaultValues)
@@ -86,13 +92,16 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   const [selectedJobId, setSelectedJobId] = useState<string>('' || meetingDetails?.candidate);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
   const [selectedCandidateId, setSelectedCandidateId] = useState('' || meetingDetails?.candidate);
+  const [shouldShowPicker, setShouldShowPicker] = useState(true);
 
   const today = dayjs();
   const [errorMessage, setErrorMessage] = useState('');
+  var newStartTime: any;
+  const [isShowPicker, setIsShowPicker] = useState(true);
   //const [startTime, setValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.start_time).toISOString()));
   //const [endTime, setEndValue] = React.useState<Dayjs | null>(dayjs(moment(defaultValues.end_time).toISOString()));
-  const [startTime, setStartTime] = useState<any>(meetingDetails ? new Date(meetingDetails.start_time) : null);
-  const [endTime, setEndTime] = useState<any>(meetingDetails ? new Date(meetingDetails.start_time) : null);
+  // const [startTime, setStartTime] = useState<any>(meetingDetails ? new Date(meetingDetails.start_time) : null);
+  // const [endTime, setEndTime] = useState<any>(meetingDetails ? new Date(meetingDetails.start_time) : null);
 
 
   useEffect(() => {
@@ -102,7 +111,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
   useEffect(() => {
     if (meetingDetails) {
-      debugger
+      setIsShowPicker(false);
       fetchCandidateList();
       setSelectedJobId(meetingDetails.job);
       setSelectedCandidateId(meetingDetails?.candidate);
@@ -137,23 +146,27 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
 
   const onSubmit: SubmitHandler<CreateMeetingInput> = async (data: any) => {
-    debugger
     setLoading(true);
-    let startMeeting = defaultValues.start_time;
-    let endMeeting = defaultValues.end_time
-    console.log("default1.........", defaultValues.start_time)
-    console.log("default2.........", defaultValues.end_time)
-    console.log("strat meeting.........", startMeeting)
-    console.log("strat meeting.........", endMeeting)
-    data.start_time = moment(startMeeting).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-    data.end_time = moment(endMeeting).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-    console.log("create meeting", data);
+    console.log("data////,data", data);
+    console.log("data////,data.........", data)
+    // let startMeeting = defaultValues.start_time;
+    // let endMeeting = defaultValues.end_time;
+
+    // console.log("default1.........", defaultValues.start_time)
+    // console.log("default2.........", defaultValues.end_time)
+    // console.log("strat meeting.........", startMeeting)
+    // console.log("strat meeting.........", endMeeting)
+    data.start_time = moment(newStartTime).format('YYYY-MM-DDTHH:mm');
+    //data.end_time = moment(endMeeting).format('YYYY-MM-DDTHH:mm')
+    console.log("create meeting", data.start_time);
     const formData = new FormData();
     //formData.append('tenant_id', data.tenant_id);
     formData.append('candidate', data.candidate);
     formData.append('job', data.job);
     formData.append('start_time', data.start_time);
-    formData.append('end_time', data.end_time);
+    //formData.append('end_time', data.end_time);
+    formData.append('agenda', data.agenda);
+    formData.append('topic', data.topic);
     //formData.append('tenant_id', data.tenant_id);
     if (meetingDetails) {
       try {
@@ -245,21 +258,21 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     data.start_time = newValue.$d;
     console.log("start", data.start_time);
     defaultValues.start_time = newValue.$d;
-    const newStartTime = newValue.$d;
-    setStartTime(newStartTime);
+    newStartTime = newValue.$d;
+    console.log("newStartTime.......", newStartTime)
+    //setStartTime(newStartTime);
 
 
   };
 
   const handleEndTimeChange = (newValue: any) => {
-    debugger
     console.log("new value", newValue.$d);
     data.end_time = newValue.$d;
     defaultValues.end_time = newValue.$d;
     console.log("default end time", defaultValues.end_time)
     console.log('end', data.end_time)
     const newEndTime = newValue.$d;
-    setEndTime(newEndTime);
+    //setEndTime(newEndTime);
 
 
   }
@@ -311,7 +324,6 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   };
 
   useEffect(() => {
-    debugger
     filterCandidatesByJobId(selectedJobId);
   }, [selectedJobId, candidatedata]);
 
@@ -368,32 +380,45 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
 
             </select>
 
+
+            <Input
+              label="Topic"
+              placeholder="Enter topic"
+              {...register('topic')}
+              defaultValue={defaultValues.topic}
+              className="col-span-full"
+              error={errors.topic?.message}
+            />
+            <Input
+              label="Agenda"
+              placeholder="Enter agenda"
+              {...register('agenda')}
+              defaultValue={defaultValues.agenda}
+              className="col-span-full"
+              error={errors.agenda?.message}
+            />
             {/* defaultValue={dayjs(defaultValues.start_time)} */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoItem label="Start Meeting Date">
-                <MobileDateTimePicker onChange={(newValue) => handleStartTimeChange(newValue)}
-                  minDate={today}
-                  //defaultValue={dayjs(defaultValues.start_time)} 
-                />
-              </DemoItem>
+              {isShowPicker && (
+                <DemoItem label="Start Meeting Date">
+                  <MobileDateTimePicker
+                    className="col-span-full"
+                    onChange={(newValue) => handleStartTimeChange(newValue)}
+                    minDate={today}
+                  //defaultValue={dayjs(defaultValues?.start_time)}
+                  //defaultValue={defaultValues.end_time ? dayjs(defaultValues.end_time) : undefined} 
+                  />
+                </DemoItem>
+              )}
             </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="End Meeting Date">
-                {/* <MobileDateTimePicker
-                  onChange={(newValue) => handleEndTimeChange(newValue)} onAccept={handleEndTimeAccept(newValue)}
-                  minDate={today}
-                /> */}
                 <MobileDateTimePicker
-                  // defaultValue={defaultValues.start_time}
-                //  defaultValue={(defaultValues.end_time)} 
                   onChange={handleEndTimeChange}
-                  // onAccept={handleEndTimeAccept}
                   minDate={today}
-                  //value={defaultValues.end_time}
                 />
               </DemoItem>
-              {/* {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} */}
-            </LocalizationProvider>
+            </LocalizationProvider> */}
             <div className="col-span-full flex items-center justify-end gap-4">
               <Button
                 variant="outline"

@@ -9,6 +9,8 @@ export const createMeetingSchema = z.object({
     job:z.string(),
     start_time : z.date(),
     end_time : z.date(),
+    agenda : z.string(),
+    topic : z.string()
    // start_time : z.string(),
     // topic: z.string().min(1, { message: 'Topic is required' }),
     // agenda: z.string().min(1, { message: 'Agenda is required' }), 

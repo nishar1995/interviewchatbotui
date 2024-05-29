@@ -19,7 +19,7 @@ const initialValues: SignUpSchema = {
   confirmPassword: '',
   username: '',
   isAgreed: false,
-  role: 4
+  role: 3
 
 };
 

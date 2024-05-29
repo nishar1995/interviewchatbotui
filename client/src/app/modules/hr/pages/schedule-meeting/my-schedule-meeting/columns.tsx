@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
 import { Text, Checkbox, Select, Tooltip, ActionIcon } from 'rizzui';
 import moment from 'moment';
-
+import { useRouter } from 'next/navigation';
 import 'react-datepicker/dist/react-datepicker.css';
 import EyeIcon from '@/components/icons/eye';
 import DeletePopover from '@/app/shared/delete-popover';
@@ -16,6 +16,8 @@ import { deleteMeeting } from '@/services/meetingScheduleService';
 import PencilIcon from '@/components/icons/pencil';
 import VideoIcon from '@/components/icons/video-solid'
 import { routes } from '@/config/routes';
+
+
 
 const statusOptions = [
   { label: 'Waiting', value: 'Waiting' },
@@ -322,6 +324,36 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
     },
 
     {
+      title: <HeaderCell title="Meeting Id" />,
+      //onHeaderCell: () => onHeaderCellClick('questionsId'),
+      dataIndex: 'meeting_id',
+      key: 'meeting_id',
+      width: 150,
+      render: (meeting_id: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {meeting_id}
+          </Text>
+        </div>
+      ),
+    },
+
+    {
+      title: <HeaderCell title="Password" />,
+      //onHeaderCell: () => onHeaderCellClick('questionsId'),
+      dataIndex: 'password',
+      key: 'password',
+      width: 150,
+      render: (password: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {password}
+          </Text>
+        </div>
+      ),
+    },
+
+    {
       title: <HeaderCell title="Start Meeting" />,
       //onHeaderCell: () => onHeaderCellClick('startMeeting'),
       dataIndex: 'start_time',
@@ -331,28 +363,29 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
             {/* {moment(start_time).format('DD-MM-YYYY, h:mm a')} */}
-            {moment(start_time).format("DD-MM-YYYY, h:mm a")}
+            {moment.utc(start_time).format("DD-MM-YYYY, h:mm a")}
+            
           </Text>
         </div>
       )
     },
 
 
-    {
-      title: <HeaderCell title="End Meeting" />,
-      //onHeaderCell: () => onHeaderCellClick('interviewPeriodTime'),
-      dataIndex: 'end_time',
-      key: 'end_time',
-      width: 150,
-      render: (end_time: string) => (
+    // {
+    //   title: <HeaderCell title="End Meeting" />,
+    //   //onHeaderCell: () => onHeaderCellClick('interviewPeriodTime'),
+    //   dataIndex: 'end_time',
+    //   key: 'end_time',
+    //   width: 150,
+    //   render: (end_time: string) => (
 
-        <div>
-          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {moment(end_time).format("DD-MM-YYYY, h:mm a")}
-          </Text>
-        </div>
-      ),
-    },
+    //     <div>
+    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+    //         {moment.utc(end_time).format("DD-MM-YYYY, h:mm a")}
+    //       </Text>
+    //     </div>
+    //   ),
+    // },
 
     {
       title: <></>,
@@ -372,15 +405,11 @@ const handlePopupClose = () => {
 }
 
 
-const onClickMeeting = () => {
-  console.log("start Meeting")
-  routes.meeting.startMeeting
-}
 
 
-function setOpen() {
-  useModal().closeModal
-}
+// function setOpen() {
+//   useModal().closeModal
+// }
 
 
 function RenderAction({
@@ -392,7 +421,12 @@ function RenderAction({
   onDeleteItem: (id: string) => void;
   onPopupClose: () => void;
 }) {
+  const router = useRouter();
   const { openModal, closeModal } = useModal();
+  const onClickMeeting = (id:any) => {
+    console.log("start Meeting");
+    router.push("/start-meeting");
+  }
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
@@ -447,19 +481,7 @@ function RenderAction({
           size="sm"
           variant="outline"
           aria-label={'Start Meeting'}
-          onClick={() => onClickMeeting()
-            // openModal({
-            //   view: (
-            //     <StartMeeting
-            //       // meetingDetails={row}
-            //       // data={row}
-            //       onEdit={handleCreateModal(row)
-            //       }
-            //       onClose={onPopupClose}
-            //     />
-            //   ),
-            //   customSize: '900px',
-            // })
+          onClick={() => onClickMeeting(row.id)
           }
           className="hover:!border-gray-900 hover:text-gray-700"
         >

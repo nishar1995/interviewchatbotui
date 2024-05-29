@@ -9,3 +9,15 @@ export const metadata = {
 export default function StartMeetingPage() {
   return <ExecutiveMeetingDashboard />;
 }
+
+
+// type Props = {
+//   params: { id: string };
+// };
+
+// export async function generateMetadata({ params }: Props): Promise<Metadata> {
+//   // read route params
+//   const id = params.id;
+
+//   return metaObject(`${id}`);
+// }

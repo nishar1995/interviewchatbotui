@@ -97,7 +97,6 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
   };
 
   const handleCityChange = (e: any) => {
-    debugger
     console.log("select city", e)
     setSelectedCity(e.target.value);
   };

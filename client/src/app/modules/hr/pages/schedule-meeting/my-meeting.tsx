@@ -1,13 +1,13 @@
 'use client';
 
 import MyMeetingTable from "./my-schedule-meeting";
+import StartMeeting from "./start-meeting/zoom-meeting-sdk";
 
-
-
-export default function MyMeeting({ className }: { className?: string }) {
+export default function StartZoomMeeting({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <MyMeetingTable />
+      {/* <StartMeeting /> */}
+      <MyMeetingTable/>
     </div>
   );
 }

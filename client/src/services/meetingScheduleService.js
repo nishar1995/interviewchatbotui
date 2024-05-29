@@ -19,15 +19,13 @@ export async function getMeetingScheduleList() {
 
 }
 
-
-
 // fuction of add meeting
 export async function addMeeting(data) {
     try {
         const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/schedule/', data);
         return response.data;
     } catch (error) {
-        console.error('Error add tenant:', error);
+        console.error('Error add meeting:', error);
         throw new Error('Failed to add meeting');
     }
 }
@@ -60,3 +58,18 @@ export async function deleteMeeting(candidateId) {
     }
 
 }
+
+// function of start meeting 
+export async function startMeeting(data) {
+    try {
+        const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/zoomsdk/', data);
+        return response.data;
+    } catch (error) {
+        console.error('Error start meeting:', error);
+        throw new Error('Failed to start meeting');
+    }
+}
+
+
+
+
