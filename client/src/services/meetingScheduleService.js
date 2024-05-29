@@ -71,5 +71,39 @@ export async function startMeeting(data) {
 }
 
 
+// function of get meeting by id
+export async function getMeetingById(meetingId) {
+    try {
+        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/schedule/${meetingId}/`, {
+            mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response;
+    } catch (error) {
+        console.error("error", error);
+        throw new error("error by meeting schedule");
+    }
+}
+
+
+// fuction of add host 
+export async function addHostJoin(data) {
+    try {
+        const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/hostjoin/', data);
+        return response.data;
+    } catch (error) {
+        console.error('Error add meeting:', error);
+        throw new Error('Failed to add meeting');
+    }
+}
+
+
+
+
+
 
 

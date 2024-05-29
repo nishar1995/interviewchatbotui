@@ -307,7 +307,23 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
       ),
     },
 
-
+    {
+      title: (
+        <HeaderCell
+          title={<span className="whitespace-nowrap">Candidate Name</span>}
+        />
+      ),
+      dataIndex: 'username',
+      key: 'username',
+      width: 130,
+      render: (username: string) => (
+        <div>
+          <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
+            {username}
+          </Text>
+        </div>
+      ),
+    },
     {
       title: <HeaderCell title="Job Title" />,
       //onHeaderCell: () => onHeaderCellClick('questionsId'),
@@ -424,8 +440,8 @@ function RenderAction({
   const router = useRouter();
   const { openModal, closeModal } = useModal();
   const onClickMeeting = (id:any) => {
-    console.log("start Meeting");
-    router.push("/start-meeting");
+    console.log("start Meeting",id);
+    router.push(`/start-meeting/${id}`);
   }
   function handleCreateModal(row: any) {
     console.log("row////////", row)

@@ -1,5 +1,7 @@
 import { metaObject } from "@/config/site.config";
 import { Metadata } from "next";
+import ExecutiveMeetingDashboard from '@/app/modules/hr/pages/schedule-meeting/meeting-index'
+
 
 type Props = {
   params: { id: string };
@@ -12,7 +14,25 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // read route params
+  debugger
   const id = params.id;
 
   return metaObject(`Message ${id}`);
+  // return metaObject(`Edit ${id}`);
+}
+
+// export default function StartMeetingPage({ params }: any) {
+//   return (
+//     <>
+//       <CreateOrder id={params.id} order={orderData} />
+//     </>
+//   );
+// }
+export default function StartMeetingPage({params} :any) {
+  return (
+    <>
+    <ExecutiveMeetingDashboard id={params.id}/>
+    </>
+
+  )
 }

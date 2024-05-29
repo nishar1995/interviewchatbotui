@@ -3,9 +3,9 @@
 import MyMeetingTable from "./my-schedule-meeting";
 import StartMeeting from "./start-meeting/zoom-meeting-sdk";
 
-export default function StartZoomMeeting({ className }: { className?: string }) {
+export default function StartZoomMeeting() {
   return (
-    <div className={className}>
+    <div>
       {/* <StartMeeting /> */}
       <MyMeetingTable/>
     </div>

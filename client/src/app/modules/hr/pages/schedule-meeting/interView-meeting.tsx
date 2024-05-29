@@ -6,10 +6,10 @@ import MeetingComponent from "./start-meeting/zoom-meeting-sdk";
 
 
 
-export default function InterviewMeeting({ className }: { className?: string }) {
+export default function InterviewMeeting({id}:any) {
   return (
-    <div className={className}>
-      <MeetingComponent/>
+    <div>
+      <MeetingComponent id={id}/>
     </div>
   );
 }

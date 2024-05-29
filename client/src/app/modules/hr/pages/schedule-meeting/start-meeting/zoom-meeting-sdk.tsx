@@ -1,9 +1,12 @@
+'use client'
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import { LoadingOutlined } from '@ant-design/icons';
 import { ZoomMtg } from '@zoomus/websdk';
-import { startMeeting } from "@/services/meetingScheduleService";
+import { getMeetingById, startMeeting, addHostJoin } from "@/services/meetingScheduleService";
 import ZoomMtgEmbedded from '@zoom/meetingsdk/embedded';
+import { useRouter } from "next/router";
+import { routes } from '@/config/routes';
 
 // ZoomMtg.preLoadWasm();
 // ZoomMtg.prepareWebSDK();
@@ -14,19 +17,64 @@ var registrantToken = ''
 var zakToken = ''
 var leaveUrl = `http://localhost:3000`
 const antIcon = <LoadingOutlined />;
+var meetingUserDetails: any
 
-const MeetingComponent = () => {
+const MeetingComponent = ({ id }: any) => {
+    console.log("meeting id", id)
     const client = ZoomMtgEmbedded.createClient();
     useEffect(() => {
-        const fetchSignatureAndStartMeeting = async () => {
-            await getSignature();
-        };
-        fetchSignatureAndStartMeeting();
-    }, []);
-    const getSignature = async () => {
-        let data = {
-            meeting_no: 85367702858, role: 1, password: 'ReU3rN'
+        if (id) {
+            getMeetingDetailsId();
         }
+        // const fetchSignatureAndStartMeeting = async () => {
+        //     await getSignature();
+        // };
+        // fetchSignatureAndStartMeeting();
+    });
+
+    const getMeetingDetailsId = async () => {
+        try {
+            const response = await getMeetingById(id)
+            console.log("response//////", response.data)
+            if (response.data) {
+                //let meetingDetails = response.data;
+                meetingUserDetails = response.data;
+                getSignature(meetingUserDetails);
+            }
+        }
+        catch (error) {
+            console.log("errror", error)
+        }
+    }
+
+    const hostJoin = async (meetingDetails: any) => {
+        debugger
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const router = useRouter();
+        let data = {
+            meeting_no: meetingDetails.meeting_id,
+            role: 1,
+            password: meetingDetails.password
+        }
+        try {
+            const response = await addHostJoin(data);
+            console.log("host join.......", response);
+            const hostJoinUrl = `/host-meeting?meeting_no=${meetingDetails.meeting_id}&password=${meetingDetails.password}`;
+
+            // Open the host join URL in a new window/tab
+            window.open(hostJoinUrl, '_blank');
+
+        } catch (error) {
+            console.log("error", error)
+        }
+    }
+    const getSignature = async (meetingDetails: any) => {
+        let data = {
+            meeting_no: meetingDetails.meeting_id,
+            role: 1,
+            password: meetingDetails.password
+        }
+
         try {
             const response = await startMeeting(data);
             if (response) {
@@ -38,44 +86,33 @@ const MeetingComponent = () => {
         } catch (error) {
             console.log(error)
         }
-
-        //  const ZoomMtgEmbedded =   await axios({
-        //         method: 'post',
-        //         url: `http://127.0.0.1:8000/api/meeting/authorize`,
-        //         data: { meeting_no: 85656328923, role: 1 ,password:'Sz0X0r'}, // 0 = participant, 1 = host.
-        //         headers: {
-        //             Authorization: `Bearer ${authToken}` // Include the token in the Authorization header
-        //           }
-        //     }).then(res => {
-        //         console.log(res)
-        //         const data = res.data;
-        //         initMeeting(data);
-        //     }).catch((err) => {
-        //         console.log(err)
-        //     })
     }
-    // 
     const initMeeting = async (data: any) => {
-        console.log("data......",data)
+        console.log("data......", data)
         let meetingSDKElement = document.getElementById('meetingSDKElement');
-        client.init({zoomAppRoot: meetingSDKElement, language: 'en-US', patchJsMedia: true, leaveOnPageUnload: true}).then(() => {
-            client.join({
-              signature: data.token,
-              sdkKey: data.sdkKey,
-              meetingNumber: data.meeting_no,
-              password: data.password,
-              userName: 'jatinder',
-              userEmail: userEmail,
-              tk: registrantToken,
-              zak: zakToken
-            }).then(() => {
-              console.log('joined successfully')
+        if (meetingSDKElement) {
+            client.init({ zoomAppRoot: meetingSDKElement, language: 'en-US', patchJsMedia: true, leaveOnPageUnload: true }).then(() => {
+                client.join({
+                    signature: data.token,
+                    sdkKey: data.sdkKey,
+                    meetingNumber: data.meeting_no,
+                    password: data.password,
+                    userName: meetingUserDetails.username,
+                    userEmail: userEmail,
+                    tk: registrantToken,
+                    zak: zakToken
+                }).then(() => {
+                    console.log('joined successfully');
+                    //hostJoin(meetingUserDetails)
+
+                }).catch((error) => {
+                    console.log(error)
+                })
             }).catch((error) => {
-              console.log(error)
+                console.log(error)
             })
-          }).catch((error) => {
-            console.log(error)
-          })
+        }
+
         // const zmmtgRoot = document.getElementById('zmmtg-root');
         // if (zmmtgRoot) {
         //     zmmtgRoot.style.display = 'block';

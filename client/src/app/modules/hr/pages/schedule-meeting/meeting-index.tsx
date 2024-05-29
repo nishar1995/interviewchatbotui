@@ -10,15 +10,17 @@ interface IndexProps {
   className?: string;
 }
 
-export default function ExecutiveStartMeetingDashboard({ className }: IndexProps) {
+export default function ExecutiveStartMeetingDashboard({id}:any) {
+  debugger
+  console.log("metting id//////",id)
   return (
     <div
       className={cn(
         'flex flex-col gap-5 @container 2xl:gap-x-6 2xl:gap-y-7',
-        className
+        
       )}
     >
-      {<InterviewMeeting/>}
+      {<InterviewMeeting id={id}/>}
       {/* {<MyMeeting/>} */}
     </div>
   );
