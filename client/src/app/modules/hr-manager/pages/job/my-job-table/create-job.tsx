@@ -16,6 +16,7 @@ import { addJob, updateJob } from '../../../../../../services/jobPostingService'
 
 
 export default function CreateJob({ onClose, jobList }:any) {
+  let counter = 0;
   console.log("job details", jobList)
   // const defaultValues: Omit<
   //   jobPostingSchema,
@@ -88,10 +89,22 @@ export default function CreateJob({ onClose, jobList }:any) {
     uploadJobData();
   };
 
+  // const generateJobId = () => {
+  //   const timestamp = Date.now(); // Current timestamp
+  //   const randomComponent = Math.floor(Math.random() * 100000); // Random number between 0 and 99999
+  //   const uniqueId = `JobId-${timestamp.toString().padStart(2, '0')}${randomComponent.toString().padStart(3, '0')}`;
+
+  //   return uniqueId;
+  // }
   const generateJobId = () => {
-    let data = '#jobId' + (Math.floor(Math.random() * 10) + 1);
-    return data;
-  }
+    counter += 1;
+    if (counter >= 10000) {
+      counter = 0;
+    }
+    const randomComponent = Math.floor(Math.random() * 1000);
+    const uniqueId = `#JobId${counter.toString().padStart(2, '0')}${randomComponent.toString().padStart(3, '0')}`;
+    return uniqueId;
+  };
   const onSubmit: SubmitHandler<jobPostingSchema> = async (data: any) => {
     setLoading(true);
     console.log(data);

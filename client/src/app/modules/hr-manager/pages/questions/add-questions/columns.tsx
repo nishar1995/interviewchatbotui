@@ -374,7 +374,7 @@ export const getColumns2 = ({
       dataIndex: 'applicationId',
       key: 'applicationId',
       width: 130,
-      render: (applicationId: string) => <Text>#{applicationId}</Text>,
+      render: (applicationId: string) => <Text>{applicationId}</Text>,
     },
     {
       title: (

@@ -114,6 +114,7 @@ export const routes = {
   comingSoon: '/coming-soon',
   accessDenied: '/access-denied',
   notFound: '/not-found',
+  meetingPage : '/meeting-page',
   maintenance: '/maintenance',
   blank: '/blank',
   auth: {

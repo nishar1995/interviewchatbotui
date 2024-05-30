@@ -132,11 +132,11 @@ type Columns = {
 
 };
 
-const generateApplicationId = (id: string) => {
-  let data = `AiInfox-${id.padStart(5, '0')}`;
-  console.log("Generated Application ID:", data);
-  return data;
-};
+// const generateApplicationId = (id: string) => {
+//   let data = `AiInfox-${id.padStart(5, '0')}`;
+//   console.log("Generated Application ID:", data);
+//   return data;
+// };
 export const getColumns = ({
   handleSelectAll,
   sortConfig,
@@ -184,7 +184,7 @@ export const getColumns = ({
       dataIndex: 'applicationId', // Make sure this matches your data structure
       key: 'applicationId',
       width: 130,
-      render: (id: string) => <Text># {generateApplicationId(id)}</Text>
+      render: (applicationId: string) => <Text>{applicationId}</Text>
     },
     {
       title: (
@@ -281,7 +281,7 @@ export async function onDeleteItem(id: any) {
     const response = await deleteCandidate(id);
     if (response) {
       console.log("delete the candidate", response);
-      setOpen()
+      SetOpen()
     }
   } catch (error) {
     console.log("error", error)
@@ -421,7 +421,7 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
 const fetchCandidateList = async () => {
   const response = await candidateList();
   console.log("fetch data", response);
-  
+
 }
 const handlePopupClose = () => {
   console.log("close update popup");
@@ -435,7 +435,7 @@ function RenderAction({
 }: {
   row: any;
   onDeleteItem: (id: string) => void;
-  onPopupClose:()=>void;
+  onPopupClose: () => void;
 }) {
   const { openModal, closeModal } = useModal();
   function handleCreateModal(row: any) {
@@ -614,7 +614,7 @@ export const getColumns2 = ({
       },
     },
   ];
-function setOpen() {
+function SetOpen() {
   useModal().closeModal
 }
 

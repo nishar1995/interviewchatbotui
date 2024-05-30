@@ -380,7 +380,7 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
             {/* {moment(start_time).format('DD-MM-YYYY, h:mm a')} */}
             {moment.utc(start_time).format("DD-MM-YYYY, h:mm a")}
-            
+
           </Text>
         </div>
       )
@@ -439,9 +439,11 @@ function RenderAction({
 }) {
   const router = useRouter();
   const { openModal, closeModal } = useModal();
-  const onClickMeeting = (id:any) => {
-    console.log("start Meeting",id);
-    router.push(`/start-meeting/${id}`);
+  const onClickMeeting = (id: any) => {
+    console.log("start Meeting", id);
+    //router.push(`/start-meeting/${id}`);
+        window.open(`/start-meeting/${id}`, '_blank');
+
   }
   function handleCreateModal(row: any) {
     console.log("row////////", row)
@@ -454,7 +456,7 @@ function RenderAction({
   // className="w-full @lg:w-auto "
   return (
     <div className="flex items-center justify-end gap-3 pe-3">
-      <Tooltip
+      {/* <Tooltip
         size="sm"
         content={'Edit Meeting'}
         placement="top"
@@ -484,7 +486,7 @@ function RenderAction({
         >
           <PencilIcon className="h-4 w-4" />
         </ActionIcon>
-      </Tooltip>
+      </Tooltip> */}
 
       <Tooltip
         size="sm"

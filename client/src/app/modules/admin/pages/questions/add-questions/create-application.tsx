@@ -349,6 +349,8 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     filterCandidatesByJobId(jobId, candidatedata);
   };
 
+  
+
   const onChangeCandidate = (event: any) => {
     setSelectedCandidateId(event.target.value);
   };

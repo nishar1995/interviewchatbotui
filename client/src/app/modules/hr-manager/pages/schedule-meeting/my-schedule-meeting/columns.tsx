@@ -441,7 +441,8 @@ function RenderAction({
   const { openModal, closeModal } = useModal();
   const onClickMeeting = (id:any) => {
     console.log("start Meeting",id);
-    router.push(`/start-meeting/${id}`);
+    //router.push(`/start-meeting/${id}`);
+    window.open(`/start-meeting/${id}`, '_blank');
   }
   function handleCreateModal(row: any) {
     console.log("row////////", row)

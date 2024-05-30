@@ -140,7 +140,6 @@ axiosInterceptorInstance.interceptors.response.use(
         return response;
     },
     async (error) => {
-        debugger
         console.log("interceptor error", error)
         const originalRequest = error.config;
 

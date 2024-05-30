@@ -48,12 +48,11 @@ const MeetingComponent = ({ id }: any) => {
     }
 
     const hostJoin = async (meetingDetails: any) => {
-        debugger
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const router = useRouter();
         let data = {
             meeting_no: meetingDetails.meeting_id,
-            role: 1,
+            role: meetingDetails.role,
             password: meetingDetails.password
         }
         try {
@@ -71,7 +70,7 @@ const MeetingComponent = ({ id }: any) => {
     const getSignature = async (meetingDetails: any) => {
         let data = {
             meeting_no: meetingDetails.meeting_id,
-            role: 1,
+            role: meetingDetails.role,
             password: meetingDetails.password
         }
 

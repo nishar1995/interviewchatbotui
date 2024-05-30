@@ -441,7 +441,8 @@ function RenderAction({
   const { openModal, closeModal } = useModal();
   const onClickMeeting = (id:any) => {
     console.log("start Meeting",id);
-    router.push(`/start-meeting/${id}`);
+    //router.push(`/start-meeting/${id}`);
+    window.open(`/start-meeting/${id}`, '_blank');
   }
   function handleCreateModal(row: any) {
     console.log("row////////", row)
@@ -454,7 +455,7 @@ function RenderAction({
   // className="w-full @lg:w-auto "
   return (
     <div className="flex items-center justify-end gap-3 pe-3">
-      <Tooltip
+      {/* <Tooltip
         size="sm"
         content={'Edit Meeting'}
         placement="top"
@@ -484,7 +485,7 @@ function RenderAction({
         >
           <PencilIcon className="h-4 w-4" />
         </ActionIcon>
-      </Tooltip>
+      </Tooltip> */}
 
       <Tooltip
         size="sm"
@@ -557,7 +558,7 @@ export const getColumns2 = ({
       dataIndex: 'applicationId',
       key: 'applicationId',
       width: 130,
-      render: (applicationId: string) => <Text>#{applicationId}</Text>,
+      render: (applicationId: string) => <Text>{applicationId}</Text>,
     },
     {
       title: (

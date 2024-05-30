@@ -21,30 +21,12 @@ import { Country, State, City } from 'country-state-city';
 
 
 export default function CreateTenant({ onClose, tenantDetails }: any) {
+  debugger
   console.log("tenant details", tenantDetails)
-  console.log("country list", Country.getAllCountries())
-  console.log("country223344 list", State.getAllStates())
-  // const defaultValues: Omit<
-  //   tenantSchema,
-  //   'tenantName'
-  // > & {
-  //   name: string;
-  //   address_line1: string;
-  //   address_line2: string;
-  //   city: string;
-  //   state: string;
-  //   country: string;
-  //   zip_code: string; // Add 'tenantName' property
-  // } = {
-  //   name: '', // Initialize 'tenantName' property
-  //   address_line1: '',
-  //   address_line2: '',
-  //   city: '',
-  //   state: '',
-  //   country: '',
-  //   zip_code: '',
+  // console.log("country list", Country.getAllCountries())
+  // console.log("country223344 list", State.getAllStates())
 
-  // };
+
 
   const defaultValues = {
     name: tenantDetails?.name || '',
@@ -68,10 +50,47 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const imageRef = useRef<HTMLInputElement>(null);
+  console.log("defautl value of tenant.....", defaultValues);
 
+  // useEffect(() => {
+
+  //   if(tenantDetails?.city){
+
+  //     console.log('city/////',tenantDetails?.city)
+  //     setSelectedCountry(defaultValues.city)
+  //   }
+  //   else{
+  //     setCountries(Country.getAllCountries());
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   debugger
+  //   if (selectedCountry) {
+  //     setStates(State.getStatesOfCountry(selectedCountry));
+  //   } else {
+  //     setStates([]);
+  //   }
+  // }, [selectedCountry]);
+
+  // useEffect(() => {
+  //   debugger
+  //   if (selectedState) {
+  //     setCities(City.getCitiesOfState(selectedCountry, selectedState));
+  //   } else {
+  //     setCities([]);
+  //   }
+  // }, [selectedState]);
 
   useEffect(() => {
+    console.log("call useEffect method")
     setCountries(Country.getAllCountries());
+    if (defaultValues.country) {
+      setStates(State.getStatesOfCountry(defaultValues.country));
+    }
+    if (defaultValues.state) {
+      setCities(City.getCitiesOfState(defaultValues.country, defaultValues.state));
+    }
   }, []);
 
   useEffect(() => {
@@ -301,6 +320,7 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
                 </option>
               ))}
             </select>
+
             <Input
               label="Zip Code"
               placeholder="Enter Zip Code"

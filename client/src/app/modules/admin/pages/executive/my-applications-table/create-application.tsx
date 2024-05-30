@@ -23,6 +23,7 @@ type CreateApplicationProps = {
 };
 
 export default function CreateApplication({ onClose, candidateList }: any) {
+  let counter = 0;
   console.log("get candidate details ", candidateList);
   console.log("candidate name ", candidateList?.job_id);
   const defaultValues = {
@@ -102,10 +103,23 @@ export default function CreateApplication({ onClose, candidateList }: any) {
   // console.log("error",error)
   //     }
   //   }
+  // const generateApplicationId = () => {
+  //   let data = '#AiInfox' + (Math.floor(Math.random() * 30) + 1);
+  //   return data;
+  // }
   const generateApplicationId = () => {
-    let data = '#AiInfox' + (Math.floor(Math.random() * 30) + 1);
-    return data;
-  }
+    // const timestamp = Date.now(); // Current timestamp
+    // const randomComponent = Math.floor(Math.random() * 100000); // Random number between 0 and 99999
+    // const uniqueId = `#AiInfox${timestamp}${randomComponent}`;
+    // return uniqueId;
+    counter += 1;
+    if (counter >= 10000) {
+      counter = 0;
+    }
+    const randomComponent = Math.floor(Math.random() * 1000);
+    const uniqueId = `#AiInfox${counter.toString().padStart(2, '0')}${randomComponent.toString().padStart(3, '0')}`;
+    return uniqueId;
+  };
   const onSubmit: SubmitHandler<candidateSchema> = async (data: any) => {
     console.log("add candidate ", data)
     setLoading(true);

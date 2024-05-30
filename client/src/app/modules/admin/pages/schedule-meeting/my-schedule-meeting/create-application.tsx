@@ -95,6 +95,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   const [shouldShowPicker, setShouldShowPicker] = useState(true);
 
   const today = dayjs();
+  const todayTime = new Date().toLocaleTimeString();
   const [errorMessage, setErrorMessage] = useState('');
   var newStartTime: any;
   const [isShowPicker, setIsShowPicker] = useState(true);
@@ -254,12 +255,17 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     //}, 600);
   };
   const handleStartTimeChange = (newValue: any) => {
-    console.log("new value", newValue.$d);
-    data.start_time = newValue.$d;
-    console.log("start", data.start_time);
-    defaultValues.start_time = newValue.$d;
-    newStartTime = newValue.$d;
-    console.log("newStartTime.......", newStartTime)
+    const selectedDate = newValue.$d;
+    console.log("current time", new Date().toLocaleTimeString())
+    console.log("new value", selectedDate);
+      console.log("time picker validation")
+      console.log("new value", newValue.$d);
+      data.start_time = newValue.$d;
+      console.log("start", data.start_time);
+      defaultValues.start_time = newValue.$d;
+      newStartTime = newValue.$d;
+      console.log("newStartTime.......", newStartTime)
+
     //setStartTime(newStartTime);
 
 
@@ -405,6 +411,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
                     className="col-span-full"
                     onChange={(newValue) => handleStartTimeChange(newValue)}
                     minDate={today}
+                    minTime={dayjs(todayTime)}
                   //defaultValue={dayjs(defaultValues?.start_time)}
                   //defaultValue={defaultValues.end_time ? dayjs(defaultValues.end_time) : undefined} 
                   />

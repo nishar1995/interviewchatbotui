@@ -39,6 +39,7 @@ import moment from 'moment';
 import React from 'react';
 import { getJobList } from '@/services/jobPostingService';
 import { candidateList } from '@/services/candidateService';
+import { faIR } from '@mui/x-date-pickers/locales';
 
 // import {DateRangePicker} from "@nextui-org/react";
 // import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -95,6 +96,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   const [shouldShowPicker, setShouldShowPicker] = useState(true);
 
   const today = dayjs();
+  const todayTime = new Date().toLocaleTimeString();
   const [errorMessage, setErrorMessage] = useState('');
   var newStartTime: any;
   const [isShowPicker, setIsShowPicker] = useState(true);
@@ -254,14 +256,17 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     //}, 600);
   };
   const handleStartTimeChange = (newValue: any) => {
-    console.log("new value", newValue.$d);
-    data.start_time = newValue.$d;
-    console.log("start", data.start_time);
-    defaultValues.start_time = newValue.$d;
-    newStartTime = newValue.$d;
-    console.log("newStartTime.......", newStartTime)
-    //setStartTime(newStartTime);
-
+    console.log("time picker validation")
+    const selectedDate = newValue.$d;
+    console.log("current time", new Date().toLocaleTimeString())
+    console.log("new value", selectedDate);
+      console.log("new value", newValue.$d);
+      data.start_time = newValue.$d;
+      console.log("start", data.start_time);
+      defaultValues.start_time = newValue.$d;
+      newStartTime = newValue.$d;
+      console.log("newStartTime.......", newStartTime)
+   
 
   };
 
@@ -405,12 +410,15 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
                     className="col-span-full"
                     onChange={(newValue) => handleStartTimeChange(newValue)}
                     minDate={today}
-                  //defaultValue={dayjs(defaultValues?.start_time)}
-                  //defaultValue={defaultValues.end_time ? dayjs(defaultValues.end_time) : undefined} 
+                    minTime={dayjs(todayTime)}
                   />
+                  {/* {errorMessage && (
+                    <div className="error-message">{errorMessage}</div>
+                  )} */}
                 </DemoItem>
               )}
             </LocalizationProvider>
+
             {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoItem label="End Meeting Date">
                 <MobileDateTimePicker

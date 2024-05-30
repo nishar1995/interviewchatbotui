@@ -192,9 +192,9 @@ const handlePopupClose = () => {
 
 
 
-function setOpen() {
-  useModal().closeModal
-}
+// function setOpen() {
+//   useModal().closeModal
+// }
 function RenderAction({
   row,
   onDeleteItem,

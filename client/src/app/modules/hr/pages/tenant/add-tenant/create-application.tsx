@@ -22,8 +22,8 @@ import { Country, State, City } from 'country-state-city';
 
 export default function CreateTenant({ onClose, tenantDetails }: any) {
   console.log("tenant details", tenantDetails)
-  console.log("country list", Country.getAllCountries())
-  console.log("country223344 list", State.getAllStates())
+  // console.log("country list", Country.getAllCountries())
+  // console.log("country223344 list", State.getAllStates())
   // const defaultValues: Omit<
   //   tenantSchema,
   //   'tenantName'
@@ -55,6 +55,7 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
     country: tenantDetails?.country || '',
     zip_code: tenantDetails?.zip_code || '',
   }
+  console.log("defulat value....",defaultValues)
 
 
   const queryClient = useQueryClient();

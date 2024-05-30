@@ -53,7 +53,7 @@ const MeetingComponent = ({ id }: any) => {
         const router = useRouter();
         let data = {
             meeting_no: meetingDetails.meeting_id,
-            role: 1,
+            role: meetingDetails.role,
             password: meetingDetails.password
         }
         try {
@@ -71,7 +71,7 @@ const MeetingComponent = ({ id }: any) => {
     const getSignature = async (meetingDetails: any) => {
         let data = {
             meeting_no: meetingDetails.meeting_id,
-            role: 0,
+            role: meetingDetails.role,
             password: meetingDetails.password
         }
 
