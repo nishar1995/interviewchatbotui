@@ -61,11 +61,11 @@ export const menuItems = (userEmail: string) => {
         name: 'Overview',
       },
       // label end
-      // {
-      //   name: 'File Manager',
-      //   href: routes.fileManager.dashboard,
-      //   icon: <PiFolderNotchDuotone />,
-      // },
+      {
+        name: 'File Manager',
+        href: routes.fileManager.dashboard,
+        icon: <PiFolderNotchDuotone />,
+      },
       {
         name: 'Candidates List',
         href: routes.executive.dashboard,
@@ -153,6 +153,9 @@ export const menuItems = (userEmail: string) => {
   return [
     // label start
     {
+      name: 'Overview',
+    },
+    {
       name: 'Candidates List',
       href: routes.executive.dashboard,
       icon: <PiBriefcaseDuotone />,
@@ -190,11 +193,11 @@ export const menuItems = (userEmail: string) => {
     //   name: 'Overview',
     // },
     // // label end
-    // {
-    //   name: 'File Manager',
-    //   href: routes.fileManager.dashboard,
-    //   icon: <PiFolderNotchDuotone />,
-    // },
+    {
+      name: 'File Manager',
+      href: routes.fileManager.dashboard,
+      icon: <PiFolderNotchDuotone />,
+    },
     // {
     //   name: 'Interview',
     //   href: routes.interview.dashboard,
