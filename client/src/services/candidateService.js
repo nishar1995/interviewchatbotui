@@ -34,6 +34,23 @@ export async function candidateList() {
         throw new error("error by tenant");
     }
 }
+// function get Candidate username
+export async function getCandidateUsername() {
+    try {
+        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/candidate/usernames/`, {
+            mode: 'no-cors',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response;
+    } catch (error) {
+        console.error("error", error);
+        throw new error("error by tenant");
+    }
+}
 // fuction of add candidate
 export async function addCandidate(data) {
     try {

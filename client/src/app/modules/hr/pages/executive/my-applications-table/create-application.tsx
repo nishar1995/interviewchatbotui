@@ -12,7 +12,7 @@ import SimpleBar from 'simplebar-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { applicationQueryKey } from '.';
 import { candidateSchema } from '@/utils/validators/candidate.schema'
-import { addCandidate, getCandidateById, updateCandidate } from '@/services/candidateService';
+import { addCandidate, getCandidateById, getCandidateUsername, updateCandidate } from '@/services/candidateService';
 import { CreateApplicationInput } from '@/utils/validators/create-application.schema';
 import { getJobList } from '../../../../../../services/jobPostingService'
 import { string } from 'zod';
@@ -48,11 +48,14 @@ export default function CreateApplication({ onClose, candidateList }: any) {
   const [isLoading, setLoading] = useState(false);
   const imageRef = useRef<HTMLInputElement>(null);
   const [data, setData] = useState<any>([]);
+  const [candidateUsernameList, setUsername] = useState<any>([]);
   const [selectedJobId, setSelectedJobId] = useState<string>('');
+  const [selectedUsername, setSelectedUsername] = useState<string>('');
 
 
   useEffect(() => {
     jobList();
+    CandidateUsernameList();
     if (candidateList) {
       candidateDetails();
     }
@@ -61,6 +64,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
   useEffect(() => {
     if (candidateList) {
       setSelectedJobId(candidateList.job_id); // Select job ID if available
+      setSelectedUsername(candidateList.username)
       // Select candidate ID if available
     }
   }, [candidateList]);
@@ -94,6 +98,20 @@ export default function CreateApplication({ onClose, candidateList }: any) {
 
   }
 
+  const CandidateUsernameList = async () => {
+    try {
+      const response = await getCandidateUsername();
+      console.log("username......", response);
+      if (response) {
+
+        setUsername(response.data.usernames)
+      }
+
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+
   //   const CandidateById = async()=>{
   //     try{
   //       console.log("candidate id",candidateId)
@@ -117,7 +135,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
     const randomComponent = Math.floor(Math.random() * 1000);
     const uniqueId = `#AiInfox${counter.toString().padStart(2, '0')}${randomComponent.toString().padStart(3, '0')}`;
     return uniqueId;
-    
+
   }
   const onSubmit: SubmitHandler<candidateSchema> = async (data: any) => {
     console.log("add candidate ", data)
@@ -142,7 +160,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
       //formData.append('id', candidateList.id); 
       try {
         const response = await updateCandidate(candidateList.id, formData);
-       
+
         console.log("Update candidate response:", response);
         if (response) {
           queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
@@ -175,7 +193,11 @@ export default function CreateApplication({ onClose, candidateList }: any) {
     setSelectedJobId(event.target.value);
     console.log("selected job id", selectedJobId)
   };
-
+  const onChangeUsername = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log("selected job value", event.target.value);
+    setSelectedUsername(event.target.value);
+    console.log("selected job id", selectedUsername)
+  };
   return (
     <Form<candidateSchema>
       resetValues={reset}
@@ -211,6 +233,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
               error={errors.job_id?.message}
             /> */}
             {/* <label>Job Title</label> */}
+            <label htmlFor="job">Job</label>
             <select
               id="job-select"
               className="col-span-full"
@@ -225,14 +248,29 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 </option>
               ))}
             </select>
-            <Input
+            {/* <Input
               label="User Name"
               placeholder="Enter username"
               {...register('username')}
               defaultValue={reset.username}
               className="col-span-full"
               error={errors.username?.message}
-            />
+            /> */}
+            <label htmlFor="username">Candidate Username</label>
+            <select
+              id="username-select"
+              className="col-span-full"
+              {...register('username')}
+              value={selectedUsername}
+              onChange={onChangeUsername}
+            >
+              <option value="">Select a Candidate Username</option>
+              {candidateUsernameList.map((username: string, index: number) => (
+                <option key={index} value={username}>
+                  {username}
+                </option>
+              ))}
+            </select>
 
             <Input
               label="Email"
@@ -322,7 +360,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 isLoading={isLoading}
                 className="w-full @xl:w-auto"
               >
-               {candidateList ? 'Update Candidate' : 'Add Candidate'}
+                {candidateList ? 'Update Candidate' : 'Add Candidate'}
               </Button>
             </div>
           </>
