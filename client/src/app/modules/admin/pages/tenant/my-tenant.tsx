@@ -1,6 +1,6 @@
 'use client';
 
-import MyTenantTable from "./add-tenant";
+import MyTenantTable from "../../pages/tenant/add-tenant";
 
 
 export default function MyTenant({ className }: { className?: string }) {

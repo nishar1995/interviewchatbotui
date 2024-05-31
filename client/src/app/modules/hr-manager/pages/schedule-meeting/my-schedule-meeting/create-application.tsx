@@ -409,8 +409,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
                   <MobileDateTimePicker
                     className="col-span-full"
                     onChange={(newValue) => handleStartTimeChange(newValue)}
-                    minDate={today}
-                    minTime={dayjs(todayTime)}
+                    minDateTime={today}
                   />
                   {/* {errorMessage && (
                     <div className="error-message">{errorMessage}</div>

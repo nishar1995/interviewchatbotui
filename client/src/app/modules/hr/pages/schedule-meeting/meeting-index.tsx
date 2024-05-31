@@ -11,7 +11,6 @@ interface IndexProps {
 }
 
 export default function ExecutiveStartMeetingDashboard({id}:any) {
-  debugger
   console.log("metting id//////",id)
   return (
     <div

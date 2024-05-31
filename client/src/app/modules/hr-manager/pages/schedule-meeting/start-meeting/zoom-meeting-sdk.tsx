@@ -48,7 +48,6 @@ const MeetingComponent = ({ id }: any) => {
     }
 
     const hostJoin = async (meetingDetails: any) => {
-        debugger
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const router = useRouter();
         let data = {

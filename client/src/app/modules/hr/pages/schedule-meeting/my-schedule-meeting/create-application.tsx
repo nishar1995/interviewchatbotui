@@ -81,6 +81,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
   };
 
   console.log("start time", defaultValues)
+  console.log("hr.............", defaultValues)
   //console.log("convert start time", dayjs(defaultValues.start_time));
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
@@ -258,7 +259,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     const selectedDate = newValue.$d;
     console.log("new value", selectedDate);
     console.log("current time", new Date().toLocaleTimeString())
-  
+
     console.log("time picker validation");
     console.log("new value", newValue.$d);
     data.start_time = newValue.$d;
@@ -267,7 +268,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     newStartTime = newValue.$d;
     console.log("newStartTime.......", newStartTime)
     //setStartTime(newStartTime);
-    
+
 
   };
 
@@ -410,10 +411,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
                   <MobileDateTimePicker
                     className="col-span-full"
                     onChange={(newValue) => handleStartTimeChange(newValue)}
-                    minDate={today}
-                    minTime={dayjs(todayTime)}
-                  //defaultValue={dayjs(defaultValues?.start_time)}
-                  //defaultValue={defaultValues.end_time ? dayjs(defaultValues.end_time) : undefined} 
+                    minDateTime={today}
                   />
                 </DemoItem>
               )}

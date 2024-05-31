@@ -27,7 +27,8 @@ export default function CreateUser({ onClose, userDetails }: any) {
     role: userDetails?.role || '',
   }
 
-  console.log("usrDetails......", userDetails)
+  console.log("usrDetails......", userDetails);
+  console.log("usrDetails......", defaultValues.role)
   const { closeModal } = useModal();
   const [reset, setReset] = useState({});
   const [isLoading, setLoading] = useState(false);
@@ -35,26 +36,6 @@ export default function CreateUser({ onClose, userDetails }: any) {
 
 
   const onSubmit: SubmitHandler<CreateUserInput> = async (data) => {
-    // set timeout ony required to display loading state of the create category button
-    // const formattedData = {
-    //   ...data,
-    //   createdAt: new Date(),
-    // };
-    // setLoading(true);
-    // setTimeout(() => {
-    //   console.log('formattedData', formattedData);
-    //   setLoading(false);
-    //   setReset({
-    //     fullName: '',
-    //     email: '',
-    //     role: '',
-    //     permissions: '',
-    //     status: '',
-    //   });
-    //   closeModal();
-    // }, 600);
-
-
     setLoading(true);
     if (userDetails) {
       try {
@@ -80,6 +61,7 @@ export default function CreateUser({ onClose, userDetails }: any) {
     label: value,
     value: key,
   }));
+
 
   return (
     <Form<CreateUserInput>
@@ -159,7 +141,7 @@ export default function CreateUser({ onClose, userDetails }: any) {
 
             )}
           /> */}
-
+            <label htmlFor="role">Role</label>
             <select
               // label="Role"
               className="col-span-full"
@@ -172,6 +154,46 @@ export default function CreateUser({ onClose, userDetails }: any) {
               <option value="3">HR</option>
               <option value="4">CANDIDATE</option>
             </select>
+
+            {/* <Controller
+              name="role"
+              control={control}
+              render={({ field: { name, onChange, value } }) => (
+                <Select
+                  options={roles}
+                  value={value}
+                  defaultValue={defaultValues.role}
+                  onChange={onChange}
+                  name={name}
+                  label="Role"
+                  className="col-span-full"
+                  getOptionValue={(option) => option.value}
+                  displayValue={(selected: string) =>
+                    roles.find((option: any) => option.value === selected)?.label ??
+                    selected
+                  }
+                  dropdownClassName="!z-[1]"
+                  inPortal={false}
+                />
+              )}
+
+            >
+
+            </Controller> */}
+
+
+            {/* <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+            <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option selected>Choose a country</option>
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="FR">France</option>
+              <option value="DE">Germany</option>
+            </select> */}
+
+
+
+
 
 
             <div className="col-span-full flex items-center justify-end gap-4">

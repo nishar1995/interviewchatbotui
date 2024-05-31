@@ -298,15 +298,15 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     }
   }, [questionsDetail]);
 
-  useEffect(() => {
-    if (selectedJobId) {
-      let candidateId = questionsDetail?.candidate
-      console.log("candidate list.....",data)
-      const candidate = candidatedata.find((c:any) => c.selectedJobId === candidateId);
-      console.log("candidate........",candidate)
-      setFilteredCandidates(candidate ? [candidate] : []);
-    }
-  }, [selectedCandidateId]);
+  // useEffect(() => {
+  //   if (selectedJobId) {
+  //     let candidateId = questionsDetail?.candidate
+  //     console.log("candidate list.....",data)
+  //     const candidate = candidatedata.find((c:any) => c.selectedJobId === candidateId);
+  //     console.log("candidate........",candidate)
+  //     setFilteredCandidates(candidate ? [candidate] : []);
+  //   }
+  // }, [selectedCandidateId]);
 
   const getQuestionsDetails = () => {
     setReset({

@@ -9,7 +9,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import EyeIcon from '@/components/icons/eye';
 import DeletePopover from '@/app/shared/delete-popover';
-import CreateApplication from '../../../../hr/pages/tenant/add-tenant/create-application';
+import CreateApplication from '../../../../admin/pages/tenant/add-tenant/create-application'
 
 import PencilIcon from '@/components/icons/pencil';
 import { routes } from '@/config/routes';
@@ -473,7 +473,7 @@ export async function onDeleteItem(id: any) {
     if (response) {
       console.log("delete the tenant", response);
       //window.location.reload()
-      setOpen()
+      SetOpen()
     }
   } catch (error) {
     console.log("error", error)
@@ -481,7 +481,7 @@ export async function onDeleteItem(id: any) {
 
 }
 
-function setOpen() {
+function SetOpen() {
   useModal().closeModal;
 
 }

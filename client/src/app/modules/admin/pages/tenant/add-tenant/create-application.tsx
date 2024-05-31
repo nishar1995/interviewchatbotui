@@ -21,7 +21,6 @@ import { Country, State, City } from 'country-state-city';
 
 
 export default function CreateTenant({ onClose, tenantDetails }: any) {
-  debugger
   console.log("tenant details", tenantDetails)
   // console.log("country list", Country.getAllCountries())
   // console.log("country223344 list", State.getAllStates())
@@ -46,9 +45,9 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [selectedState, setSelectedState] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('' || tenantDetails?.country);
+  const [selectedState, setSelectedState] = useState('' || tenantDetails?.state);
+  const [selectedCity, setSelectedCity] = useState('' || tenantDetails?.city);
   const imageRef = useRef<HTMLInputElement>(null);
   console.log("defautl value of tenant.....", defaultValues);
 
@@ -81,6 +80,7 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
   //     setCities([]);
   //   }
   // }, [selectedState]);
+
 
   useEffect(() => {
     console.log("call useEffect method")
@@ -162,65 +162,6 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
 
       }
     }
-
-
-    // setLoading(true);
-    // // set timeout ony required to display loading state of the create category button
-    // const formattedData = {
-    //   ...data,
-    //   createdAt: new Date(),
-    // };
-
-    // console.log(data);
-    // const formData = new FormData();
-    // for (const key in data) {
-    //   if (data.hasOwnProperty(key)) {
-    //     if (key === 'candidateFiles' && data[key]) {
-    //       // data[key].forEach((file: any, index: any) => {
-    //       //   formData.append(`${key}[${index}]`, file);
-    //       // });
-    //       formData.append('candidateFiles', data.candidateFiles[0]);
-    //     } else {
-    //       formData.append(key, data[key]);
-    //     }
-    //   }
-    // }
-
-    // let uploadedFilePath = '';
-    // console.log(formData);
-    // formData.append('candidateFiles', uploadedFilePath);
-    // fetch('http://127.0.0.1:5000/upload_application_data', {
-    //   method: 'POST',
-    //   body: formData,
-    //   headers: {
-    //     // 'Content-Type': 'application/json',
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     'Access-Control-Allow-Origin': '*'
-    //   }
-    // })
-    //   .then(response => response.json())
-    //   .then(result => {
-    //     console.log(result);
-    //     queryClient.invalidateQueries({ queryKey: [tenantQueryKey] });
-    //     setLoading(false);
-    //     setReset({
-    //       ...defaultValues,
-    //     });
-    //     closeModal();
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //     setLoading(false);
-    //   });
-    // setLoading(true);
-    // setTimeout(() => {
-    //   console.log('formattedData', formattedData);
-    //   setLoading(false);
-    //   setReset({
-    //     ...defaultValues,
-    //   });
-    //   closeModal();
-    // }, 600);
   };
 
   return (

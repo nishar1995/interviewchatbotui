@@ -298,15 +298,15 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     }
   }, [questionsDetail]);
 
-  useEffect(() => {
-    if (selectedJobId) {
-      let candidateId = questionsDetail?.candidate
-      console.log("candidate list.....",data)
-      const candidate = candidatedata.find((c:any) => c.selectedJobId === candidateId);
-      console.log("candidate........",candidate)
-      setFilteredCandidates(candidate ? [candidate] : []);
-    }
-  }, [selectedCandidateId]);
+  // useEffect(() => {
+  //   if (selectedJobId) {
+  //     let candidateId = questionsDetail?.candidate
+  //     console.log("candidate list.....",data)
+  //     const candidate = candidatedata.find((c:any) => c.selectedJobId === candidateId);
+  //     console.log("candidate........",candidate)
+  //     setFilteredCandidates(candidate ? [candidate] : []);
+  //   }
+  // }, [selectedCandidateId]);
 
   const getQuestionsDetails = () => {
     setReset({
@@ -337,7 +337,7 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     try {
       const response = await candidateList();
       setCandidateData(response.data);
-      filterCandidatesByJobId(selectedJobId, response.data);
+      //filterCandidatesByJobId(selectedJobId, response.data);
     } catch (error) {
       console.log('error', error);
     }
@@ -360,16 +360,16 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     setFilteredCandidates(filtered);
   };
 
-  useEffect(() => {
-    if (questionsDetail?.job) {
-      setSelectedCandidateId(questionsDetail?.candidate);
-      console.log("candidate data",candidatedata)
-    }
-    else{
-      filterCandidatesByJobId(selectedJobId, candidatedata);
-    }
+  // useEffect(() => {
+  //   if (questionsDetail?.job) {
+  //     setSelectedCandidateId(questionsDetail?.candidate);
+  //     console.log("candidate data",candidatedata)
+  //   }
+  //   else{
+  //     filterCandidatesByJobId(selectedJobId, candidatedata);
+  //   }
     
-  }, [selectedJobId, candidatedata]);
+  // }, [selectedJobId, candidatedata]);
 
   const onSubmit = async (data: any) => {
     setLoading(true);

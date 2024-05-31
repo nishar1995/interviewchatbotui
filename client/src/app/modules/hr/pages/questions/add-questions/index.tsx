@@ -70,6 +70,8 @@ function MyQuestionsTable() {
     setCurrentPage(page);
   };
 
+
+
   function CustomExpandIcon(props: any) {
     console.log("props.......", props);
     return (
@@ -79,9 +81,10 @@ function MyQuestionsTable() {
         rounded="full"
         className="expand-row-icon ms-2"
         onClick={(e) => {
-          props.onExpand(props.record?.application_id, e);
+          props.onExpand(props.record, e);
         }}
       >
+        
         {props.expanded ? (
           <PiCaretUpBold className="h-3.5 w-3.5" />
         ) : (
