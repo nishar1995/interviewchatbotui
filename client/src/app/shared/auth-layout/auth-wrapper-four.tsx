@@ -64,7 +64,7 @@ export default function AuthWrapperFour({
           )}
         >
           <div className="flex flex-col items-center">
-            <Link href={'/'} className="mb-7 inline-block max-w-[64px] lg:mb-9">
+            <Link href={'#'} className="mb-7 inline-block max-w-[64px] lg:mb-9">
               <Image src={siteConfig.icon} alt={siteConfig.title} />
             </Link>
             <Title

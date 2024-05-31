@@ -180,7 +180,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
         }
       } catch (error) {
         console.log("errorr.....", error);
-        setLoading(true);
+        setLoading(false);
       }
     }
     else {

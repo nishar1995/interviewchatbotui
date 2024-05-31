@@ -94,7 +94,7 @@ export default function ProfileSettingsView() {
                   />
                 </FormGroup>
 
-                <FormGroup
+                {/* <FormGroup
                   title="Your Photo"
                   description="This will be displayed on your profile."
                   className="pt-7 @2xl:pt-9 @3xl:grid-cols-12 @3xl:pt-11"
@@ -175,13 +175,13 @@ export default function ProfileSettingsView() {
                     {...register('email')}
                     error={errors.email?.message}
                   />
-                </FormGroup>
+                </FormGroup> */}
               </div>
-              <FormFooter
+              {/* <FormFooter
                 // isLoading={isLoading}
                 altBtnText="Cancel"
                 submitBtnText="Save"
-              />
+              /> */}
             </>
           );
         }}

@@ -96,7 +96,7 @@ function AuthNavLink({
 function AuthNavBar() {
   return (
     <div className="flex shrink-0 justify-between rounded-bl-xl rounded-tl-xl bg-white px-4 py-4 xl:sticky xl:top-0 xl:w-36 xl:flex-col xl:items-center xl:justify-start xl:px-0 xl:py-14 2xl:w-[184px] dark:bg-transparent">
-      <Link href="/" className="mb-1 inline-block max-w-[64px]">
+      <Link href="#" className="mb-1 inline-block max-w-[64px]">
         <Image src={logoImg} alt="Isomorphic" className="dark:invert" />
       </Link>
       <div className="flex space-x-6 xl:w-full xl:flex-col xl:space-x-0 xl:space-y-6 xl:pt-9 2xl:space-y-7 2xl:pt-12 3xl:pt-14">

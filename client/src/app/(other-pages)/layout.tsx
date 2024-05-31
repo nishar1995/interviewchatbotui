@@ -29,7 +29,7 @@ export default function OtherPagesLayout({
             notIn ? 'justify-between' : 'justify-center'
           )}
         >
-          <Link href={'/'}>
+          <Link href={'#'}>
             <Image
               src={siteConfig.logo}
               alt={siteConfig.title}

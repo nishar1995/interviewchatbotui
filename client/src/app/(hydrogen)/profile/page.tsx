@@ -10,7 +10,7 @@ export default function ProfilePage() {
   return (
     <div className="@container">
       <ProfileHeader />
-      <ProfileDetails />
+      {/* <ProfileDetails /> */}
     </div>
   );
 }

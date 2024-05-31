@@ -32,7 +32,7 @@ export default function AccessDeniedPage() {
           <br className="hidden xs:inline-block" />
           Please contact your site administrator to request access.
         </p>
-        <Link href={'/'}>
+        {/* <Link href={'/'}>
           <Button
             size="xl"
             as="span"
@@ -41,7 +41,7 @@ export default function AccessDeniedPage() {
             <PiHouseLineBold className="mr-1.5 text-lg" />
             Back to home
           </Button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

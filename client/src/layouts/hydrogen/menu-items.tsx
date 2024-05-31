@@ -125,12 +125,12 @@ export const menuItems = (userEmail: string) => {
         name: 'Overview',
       },
       // label end
-      // {
-      //   name: 'Interview',
-      //   href: routes.interview.dashboard,
-      //   icon: <PiCalendarDuotone />,
-      //   // badge: 'UPD',
-      // },
+      {
+        name: 'Interview',
+        href: routes.interview.dashboard,
+        icon: <PiCalendarDuotone />,
+        // badge: 'UPD',
+      },
       {
         name: 'Job',
         href: routes.job.dashboard,
