@@ -336,14 +336,14 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         </div>
       ),
     },
-    {
-      title: <HeaderCell title="Tenant Id" />,
-      //onHeaderCell: () => onHeaderCellClick('applicationId'),
-      dataIndex: 'id',
-      key: 'id',
-      width: 130,
-      render: (id: string) => <Text>{id}</Text>,
-    },
+    // {
+    //   title: <HeaderCell title="Tenant Id" />,
+    //   //onHeaderCell: () => onHeaderCellClick('applicationId'),
+    //   dataIndex: 'id',
+    //   key: 'id',
+    //   width: 130,
+    //   render: (id: string) => <Text>{id}</Text>,
+    // },
     {
       title: (
         <HeaderCell

@@ -48,6 +48,7 @@ export const routes = {
   },
   candidate: {
     dashboard: '/candidate-dashboard',
+    meeting: '/candidate-interview'
   },
   interview: {
     dashboard: '/interview',
@@ -114,7 +115,7 @@ export const routes = {
   comingSoon: '/coming-soon',
   accessDenied: '/access-denied',
   notFound: '/not-found',
-  meetingPage : '/meeting-page',
+  meetingPage: '/meeting-page',
   maintenance: '/maintenance',
   blank: '/blank',
   auth: {
@@ -142,14 +143,14 @@ export const routes = {
 
   meeting: {
     dashboard: '/meeting-schedule',
-     //startMeeting: '/start-meeting',
+    //startMeeting: '/start-meeting',
     //orderDetails: (id: string) => `/ecommerce/orders/${id}`,
     //editOrder: (id: string) => `/ecommerce/orders/${id}/edit`,
-    host : '/host-meeting'
+    host: '/host-meeting'
 
   },
 
-  startMeeting:(id:string)=> `/start-meeting/${id}`,
+  startMeeting: (id: string) => `/start-meeting/${id}`,
 
 
 };

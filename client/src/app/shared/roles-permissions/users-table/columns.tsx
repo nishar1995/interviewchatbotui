@@ -223,32 +223,32 @@ const roleNames = {
 
 export const getColumns = ({ handlePopupClose, onDeleteItem }: any
 ) => [
-    {
-      title: (
-        <div className="flex items-center gap-3 whitespace-nowrap ps-3">
-          <Checkbox
-            title={'Select All'}
-            //onChange={handleSelectAll}
-            //checked={checkedItems.length === data.length}
-            className="cursor-pointer"
-          />
-          User ID
-        </div>
-      ),
-      dataIndex: 'checked',
-      key: 'checked',
-      width: 30,
-      render: (_: any, row: User) => (
-        <div className="inline-flex ps-3">
-          <Checkbox
-            className="cursor-pointer"
-            //checked={checkedItems.includes(row.id)}
-            // {...(onChecked && { onChange: () => onChecked(row.id) })}
-            label={row.id}
-          />
-        </div>
-      )
-    },
+    // {
+    //   title: (
+    //     <div className="flex items-center gap-3 whitespace-nowrap ps-3">
+    //       <Checkbox
+    //         title={'Select All'}
+    //         //onChange={handleSelectAll}
+    //         //checked={checkedItems.length === data.length}
+    //         className="cursor-pointer"
+    //       />
+    //       User ID
+    //     </div>
+    //   ),
+    //   dataIndex: 'checked',
+    //   key: 'checked',
+    //   width: 30,
+    //   render: (_: any, row: User) => (
+    //     <div className="inline-flex ps-3">
+    //       <Checkbox
+    //         className="cursor-pointer"
+    //         //checked={checkedItems.includes(row.id)}
+    //         // {...(onChecked && { onChange: () => onChecked(row.id) })}
+    //         label={row.id}
+    //       />
+    //     </div>
+    //   )
+    // },
     // {
     //   title: <HeaderCell title="Name" />,
     //   dataIndex: 'first_name',

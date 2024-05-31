@@ -51,7 +51,7 @@ import { hardcodedUsers } from '@/app/(hydrogen)/layout';
 export const menuItems = (userEmail: string) => {
   const cookieValue: any = Cookies.get('user_details');
   const user: any = cookieValue ? JSON.parse(cookieValue) : {};
-  console.log("get role in cookies",user)
+  console.log("get role in cookies", user)
 
   if (!Number(user.role)) return [];
   if (Number(user.role) === UserRole.HR) {
@@ -82,11 +82,11 @@ export const menuItems = (userEmail: string) => {
       //   icon: <PiBriefcaseDuotone />,
       // },
 
-      {
-        name: 'Questions Management',
-        href: routes.questions.dashboard,
-        icon: <PiBriefcaseDuotone />,
-      },
+      // {
+      //   name: 'Questions Management',
+      //   href: routes.questions.dashboard,
+      //   icon: <PiBriefcaseDuotone />,
+      // },
 
       // {
       //     name: 'Roles & Permissions',
@@ -105,6 +105,13 @@ export const menuItems = (userEmail: string) => {
       {
         name: 'Candidate Dashboard',
         href: routes.candidate.dashboard,
+        icon: <PiCalendarDuotone />,
+        // badge: 'UPD',
+      },
+
+      {
+        name: 'My Interview',
+        href: routes.candidate.meeting,
         icon: <PiCalendarDuotone />,
         // badge: 'UPD',
       },
@@ -156,19 +163,21 @@ export const menuItems = (userEmail: string) => {
       name: 'Overview',
     },
     {
-      name: 'Candidates List',
-      href: routes.executive.dashboard,
-      icon: <PiBriefcaseDuotone />,
+      name: 'File Manager',
+      href: routes.fileManager.dashboard,
+      icon: <PiFolderNotchDuotone />,
     },
-    {
-      name: 'Meeting Schedule',
-      href: routes.meeting.dashboard,
-      icon: <PiBriefcaseDuotone />,
-    },
+
     {
       name: 'Tenant Management',
       href: routes.tenant.dashboard,
       icon: <PiBriefcaseDuotone />,
+    },
+
+    {
+      name: 'Roles & Permissions',
+      href: routes.rolesPermissions,
+      icon: <PiFolderLockDuotone />,
     },
 
     {
@@ -179,25 +188,32 @@ export const menuItems = (userEmail: string) => {
     },
 
     {
+      name: 'Candidates List',
+      href: routes.executive.dashboard,
+      icon: <PiBriefcaseDuotone />,
+    },
+
+    {
       name: 'Questions Management',
       href: routes.questions.dashboard,
       icon: <PiBriefcaseDuotone />,
     },
 
     {
-        name: 'Roles & Permissions',
-        href: routes.rolesPermissions,
-        icon: <PiFolderLockDuotone />,
-      },
+      name: 'Meeting Schedule',
+      href: routes.meeting.dashboard,
+      icon: <PiBriefcaseDuotone />,
+    },
+
+
+
+
+
     // {
     //   name: 'Overview',
     // },
     // // label end
-    {
-      name: 'File Manager',
-      href: routes.fileManager.dashboard,
-      icon: <PiFolderNotchDuotone />,
-    },
+
     // {
     //   name: 'Interview',
     //   href: routes.interview.dashboard,

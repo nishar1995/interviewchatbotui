@@ -40,11 +40,14 @@ export default function SignInForm() {
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
       const response: any = await login(data);
-      console.log("login response",response);
+      console.log("login response", response);
       Cookies.set('user_details', JSON.stringify(response));
       Cookies.set('token', JSON.stringify(response.access));
+      if (response.role == '4') {
+        Cookies.set('candidate_details', JSON.stringify(response.candidate_details));
+      }
       console.log("sign in ", data);
-      
+
       switch (Number(response.role)) {
         case UserRole.ADMIN:
           router.push("/file-manager");

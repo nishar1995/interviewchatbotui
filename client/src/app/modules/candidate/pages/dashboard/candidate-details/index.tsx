@@ -1,15 +1,16 @@
 import React from 'react';
-import MyInterviews from './my-interviews';
+import MyDetails from './my-details';
 
-function CandidateDashboard() {
+
+function CandidateDashboardDetailsPage() {
   return (
     <div className="@container">
       <div className="col-span-full flex flex-col gap-6  2xl:gap-8 ">
-        <MyInterviews />
+        <MyDetails />
         
       </div>
     </div>
   );
 }
 
-export default CandidateDashboard;
+export default CandidateDashboardDetailsPage;

@@ -358,16 +358,22 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     setFilteredCandidates(filtered);
   };
 
-  // useEffect(() => {
-  //   if (questionsDetail?.job) {
-  //     setSelectedCandidateId(questionsDetail?.candidate);
-  //     console.log("candidate data",candidatedata)
-  //   }
-  //   else{
-  //     filterCandidatesByJobId(selectedJobId, candidatedata);
-  //   }
+  useEffect(() => {
+    debugger
+    console.log("hr page...")
+    if (questionsDetail?.job) {
+      setSelectedCandidateId(questionsDetail?.candidate);
+      console.log("candidate data",candidatedata)
+      if(candidatedata){
+        filterCandidatesByJobId(selectedJobId, candidatedata)
+
+      }
+    }
+    else{
+      filterCandidatesByJobId(selectedJobId, candidatedata);
+    }
     
-  // }, [selectedJobId, candidatedata]);
+  }, [selectedJobId, candidatedata]);
 
   const onSubmit = async (data: any) => {
     setLoading(true);
