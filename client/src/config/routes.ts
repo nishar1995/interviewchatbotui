@@ -53,6 +53,7 @@ export const routes = {
   interview: {
     dashboard: '/interview',
     appointmentList: '/interview/list',
+    startInterview :'/start-interview'
   },
   executive: {
     dashboard: '/executive',
@@ -143,9 +144,6 @@ export const routes = {
 
   meeting: {
     dashboard: '/meeting-schedule',
-    //startMeeting: '/start-meeting',
-    //orderDetails: (id: string) => `/ecommerce/orders/${id}`,
-    //editOrder: (id: string) => `/ecommerce/orders/${id}/edit`,
     host: '/host-meeting'
 
   },

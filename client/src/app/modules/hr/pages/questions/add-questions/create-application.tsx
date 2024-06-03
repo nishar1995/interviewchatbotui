@@ -359,7 +359,6 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
   };
 
   useEffect(() => {
-    debugger
     console.log("hr page...")
     if (questionsDetail?.job) {
       setSelectedCandidateId(questionsDetail?.candidate);

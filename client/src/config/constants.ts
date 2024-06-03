@@ -42,11 +42,11 @@ export const ROW_PER_PAGE_OPTIONS = [
 
 export const ROLES = {
   1: 'Administrator',
- 2: 'HR Manager',
+  2: 'HR Manager',
   // Sales: 'Sales',
   // Support: 'Support',
   // Developer: 'Developer',
-   3: 'HR Department',
+  3: 'HR Department',
   // RestrictedUser: 'Restricted User',
   4: 'Candidate',
 } as const;

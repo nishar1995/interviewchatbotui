@@ -75,49 +75,49 @@ const users1 = [
     )}.webp`,
   },
 ];
- let colorFolder = '#2465FF'
-const rolesList = [
-  {
-    name: ROLES.Administrator,
-    color: '#2465FF',
-   
-  },
-  {
-    name: ROLES.Manager,
-    color: '#F5A623',
-   
-  },
-  // {
-  //   name: ROLES.Sales,
-  //   color: '#FF1A1A',
-  //   users,
-  // },
-  // {
-  //   name: ROLES.Support,
-  //   color: '#8A63D2',
-  //   users,
-  // },
-  // {
-  //   name: ROLES.Developer,
-  //   color: '#FF1A1A',
-  //   users,
-  // },
-  {
-    name: ROLES.HRD,
-    color: '#11A849',
-  
-  },
-  // {
-  //   name: ROLES.RestrictedUser,
-  //   color: '#4E36F5',
-  //   users,
-  // },
-  {
-    name: ROLES.Customer,
-    color: '#0070F3',
- 
-  },
-];
+let colorFolder = '#2465FF'
+// const rolesList = [
+//   {
+//     name: ROLES.Administrator,
+//     color: '#2465FF',
+
+//   },
+//   {
+//     name: ROLES.Manager,
+//     color: '#F5A623',
+
+//   },
+//   // {
+//   //   name: ROLES.Sales,
+//   //   color: '#FF1A1A',
+//   //   users,
+//   // },
+//   // {
+//   //   name: ROLES.Support,
+//   //   color: '#8A63D2',
+//   //   users,
+//   // },
+//   // {
+//   //   name: ROLES.Developer,
+//   //   color: '#FF1A1A',
+//   //   users,
+//   // },
+//   {
+//     name: ROLES.HRD,
+//     color: '#11A849',
+
+//   },
+//   // {
+//   //   name: ROLES.RestrictedUser,
+//   //   color: '#4E36F5',
+//   //   users,
+//   // },
+//   {
+//     name: ROLES.Customer,
+//     color: '#0070F3',
+
+//   },
+// ];
 
 
 
@@ -129,7 +129,7 @@ export default function RoleCard({
   roledata
 
 }: RoleCardProps) {
-  console.log("role data",roledata)
+  console.log("role data", roledata)
   const { openModal } = useModal();
 
   const [data, setData] = useState([]);
@@ -178,9 +178,9 @@ export default function RoleCard({
               />
             </svg>
           </span>
-         
+
           <Title as="h4" className="font-medium">
-          {roledata.role}
+            {roledata.role}
           </Title>
         </div>
 
@@ -214,7 +214,7 @@ export default function RoleCard({
 
       <div className="mt-4 flex items-center gap-2">
         <div className="flex items-center">
-        {users1?.slice(0, 4).map((user) => (
+          {users1?.slice(0, 4).map((user) => (
             <figure
               key={user.id}
               className="relative z-10 -ml-1.5 h-8 w-8 rounded-full border-2 border-white"
@@ -227,11 +227,11 @@ export default function RoleCard({
               />
             </figure>
           ))}
-         
 
-         
+
+
         </div>
-        <span className="font-medium">Total {roledata.count} Users</span> 
+        <span className="font-medium">Total {roledata.count} Users</span>
       </div>
 
 
