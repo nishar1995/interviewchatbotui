@@ -10,12 +10,13 @@ export default function StartInterviewDashboard() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [isRecording, setIsRecording] = useState(false);
-
+    const [showAnswerList, setShowAnswerList] = useState([]);
     let recognition: any;
     let silenceDetectionTimeout: any;
-    let interViewQuestions: any;
+    let interViewQuestions: any[] = [];
     let nextIndex: any = 0;
     let totalAnswer: any;
+    //let showAnswerList: any[] = []
 
     const speakQuestion = (question: any) => {
         const utterance = new SpeechSynthesisUtterance(question);
@@ -36,7 +37,10 @@ export default function StartInterviewDashboard() {
 
         recognition.onstart = () => {
             setIsRecording(true);
-            document.getElementById('recording-indicator').style.display = 'block';
+            const recordingIndicator = document.getElementById('recording-indicator');
+            if (recordingIndicator) {
+                recordingIndicator.style.display = 'block';
+            }
         };
 
         recognition.onresult = (event: any) => {
@@ -50,20 +54,19 @@ export default function StartInterviewDashboard() {
             }
         };
 
-        recognition.onerror = (event: any) => {
-            console.error('Speech recognition error occurred:', event.error);
-        };
-
         recognition.onend = () => {
             setIsRecording(false);
-            document.getElementById('recording-indicator').style.display = 'none';
-        };
 
+            const recordingIndicator = document.getElementById('recording-indicator');
+            if (recordingIndicator) {
+                recordingIndicator.style.display = 'none';
+            }
+        };
         recognition.start();
 
         silenceDetectionTimeout = setTimeout(() => {
             speakQuestion(questions);
-            recognition.stop(); // Stop the recognition if there's silence
+            //recognition.stop(); // Stop the recognition if there's silence
         }, 5000); // Adjust the timeout duration to suit your needs
     };
 
@@ -92,16 +95,24 @@ export default function StartInterviewDashboard() {
             const newAnswers = [...prevAnswers];
             interViewQuestions[nextIndex].answer = answer;
             //newAnswers[currentQuestionIndex] = interViewQuestions[currentQuestionIndex];
-            console.log("new answer", interViewQuestions);
+            console.log("interview questions//////////", interViewQuestions);
+            setShowAnswerList(prevList => [...prevList, {
+                question: interViewQuestions[nextIndex].question,
+                answer: interViewQuestions[nextIndex].answer,
+            }]);
+
+
+            console.log("answer list", showAnswerList)
             if (interViewQuestions[nextIndex].answer) {
                 moveToNextQuestion();
-            }
+             }
+            // setTimeout(() => {
+            //     moveToNextQuestion();
+            // }, 5000);
             return interViewQuestions;
         });
 
-        // setTimeout(() => {
-        //     moveToNextQuestion();
-        // }, 10000); // 10 seconds delay before asking the next question
+        // 10 seconds delay before asking the next question
     };
 
     const moveToNextQuestion = () => {
@@ -139,7 +150,7 @@ export default function StartInterviewDashboard() {
 
     async function captureAnswer(answer: any) {
         let body = {
-            candidate_id: 2,
+            candidate_id: 1,
             job_id: 1,
             answers: answer,
         }
@@ -188,13 +199,78 @@ export default function StartInterviewDashboard() {
                             readOnly
                         />
                     </div> */}
+
                 </div>
             </div>
             <div id="recording-indicator" style={{ display: 'none' }}>
                 <p>Recording...</p>
             </div>
+
+            {/* <div className="relative overflow-x-auto" >
+                <div></div>
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" className="px-6 py-3">
+                                Sr.no
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Questions
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Answer
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {showAnswerList.map((item, index) => (
+                            <tr key={index}>
+                                <td className="px-6 py-3">{index + 1}</td>
+                                <td className="px-6 py-3">{item.question}</td>
+                                <td className="px-6 py-3">{item.answer}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div> */}
+
+            <div>
+                <h3>Interview Question/Answer  </h3>
+                {showAnswerList.length > 0 ? (
+                    <div className="relative overflow-x-auto">
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" className="px-6 py-3">
+                                        Sr.no
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Questions
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Answer
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {showAnswerList.map((item, index) => (
+                                    <tr key={index}>
+                                        <td className="px-6 py-3">{index+1}</td>
+                                        <td className="px-6 py-3">{item.question}</td>
+                                        <td className="px-6 py-3">{item.answer}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    <p></p>
+                )}
+            </div>
+
+
         </div>
-        
+
     );
 }
 
