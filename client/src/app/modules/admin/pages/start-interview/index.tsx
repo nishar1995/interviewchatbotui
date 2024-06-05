@@ -2,20 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { getInterViewQuestions, captureResponse } from '../../../../../services/interviewService'
+import { useRouter } from 'next/navigation';
 
 export default function StartInterviewDashboard() {
+    const router = useRouter();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [isRecording, setIsRecording] = useState(false);
 
-    let recognition:any;
-    let silenceDetectionTimeout:any;
-    let interViewQuestions:any;
-    let nextIndex : any  = 0;
-    let totalAnswer:any;
+    let recognition: any;
+    let silenceDetectionTimeout: any;
+    let interViewQuestions: any;
+    let nextIndex: any = 0;
+    let totalAnswer: any;
 
-    const speakQuestion = (question:any) => {
+    const speakQuestion = (question: any) => {
         const utterance = new SpeechSynthesisUtterance(question);
         const synth = window.speechSynthesis;
 
@@ -26,28 +28,29 @@ export default function StartInterviewDashboard() {
         };
     };
 
-    const startRecognition = (questions:any) => {
+    const startRecognition = (questions: any) => {
         recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.interimResults = false;
+        recognition.interimResults = true;
         recognition.lang = 'en-US';
-        recognition.continuous = false;
+        recognition.continuous = true;
 
         recognition.onstart = () => {
             setIsRecording(true);
             document.getElementById('recording-indicator').style.display = 'block';
         };
 
-        recognition.onresult = (event:any) => {
+        recognition.onresult = (event: any) => {
             clearTimeout(silenceDetectionTimeout);
             const answer = event.results[0][0].transcript;
+            console.log("answer", event.results[0][0].transcript)
 
             if (event.results[0].isFinal) {
-                handleAnswer(answer,questions);
-                recognition.stop(); // Stop recognition after receiving the answer
+                handleAnswer(answer);
+                //recognition.stop(); // Stop recognition after receiving the answer
             }
         };
 
-        recognition.onerror = (event:any) => {
+        recognition.onerror = (event: any) => {
             console.error('Speech recognition error occurred:', event.error);
         };
 
@@ -59,8 +62,9 @@ export default function StartInterviewDashboard() {
         recognition.start();
 
         silenceDetectionTimeout = setTimeout(() => {
+            speakQuestion(questions);
             recognition.stop(); // Stop the recognition if there's silence
-        }, 10000); // Adjust the timeout duration to suit your needs
+        }, 5000); // Adjust the timeout duration to suit your needs
     };
 
     // const handleAnswer = (answer:any,questions:any) => {
@@ -82,27 +86,31 @@ export default function StartInterviewDashboard() {
     //     }, 10000); // 10 seconds delay before asking the next question
     // };
 
-    const handleAnswer = (answer:any) => {
+    const handleAnswer = (answer: any) => {
+        console.log("candidate answer", answer)
         setAnswers(prevAnswers => {
             const newAnswers = [...prevAnswers];
             interViewQuestions[nextIndex].answer = answer;
             //newAnswers[currentQuestionIndex] = interViewQuestions[currentQuestionIndex];
-            console.log("new answer", interViewQuestions)
+            console.log("new answer", interViewQuestions);
+            if (interViewQuestions[nextIndex].answer) {
+                moveToNextQuestion();
+            }
             return interViewQuestions;
         });
-    
-        setTimeout(() => {
-            moveToNextQuestion();
-        }, 10000); // 10 seconds delay before asking the next question
+
+        // setTimeout(() => {
+        //     moveToNextQuestion();
+        // }, 10000); // 10 seconds delay before asking the next question
     };
 
     const moveToNextQuestion = () => {
         setCurrentQuestionIndex(prevIndex => {
             nextIndex = prevIndex + 1;
-            console.log("next index///",nextIndex);
+            console.log("next index///", nextIndex);
             if (nextIndex < interViewQuestions.length) {
                 speakQuestion(interViewQuestions[nextIndex]?.question);
-                console.log("currentIndex",currentQuestionIndex)
+                console.log("currentIndex", currentQuestionIndex)
                 return nextIndex;
             } else {
                 console.log('Interview completed.');
@@ -112,11 +120,11 @@ export default function StartInterviewDashboard() {
         });
     };
 
-    
+
     const getQuestions = async () => {
         try {
             const response = await getInterViewQuestions();
-            console.log("questions......",response.data)
+            console.log("questions......", response.data)
             interViewQuestions = response.data;
             setQuestions(response.data);
             if (response.data.length > 0) {
@@ -128,23 +136,41 @@ export default function StartInterviewDashboard() {
     };
 
 
+
     async function captureAnswer(answer: any) {
-                let body = {
-                    candidate_id:1,
-                    job_id:1,
-                    answers: answer,
-                }
-                try {
-                    const response = await captureResponse(body);
-                    console.log("capture answer", response)
-                } catch (error) {
-                    console.log("error", error)
-                }
+        let body = {
+            candidate_id: 2,
+            job_id: 1,
+            answers: answer,
+        }
+        try {
+            const response = await captureResponse(body);
+            console.log("capture answer", response)
+            if (response.status == 'success') {
+                router.push("/successfull-interview");
             }
+        } catch (error) {
+            console.log("error", error)
+        }
+    }
+
+
+    // useEffect(() => {
+    //     getQuestions();
+    // }, []);
 
     useEffect(() => {
         getQuestions();
+        // Cleanup function to stop speech synthesis and recognition when the component unmounts
+        return () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech synthesis
+            if (recognition) {
+                recognition.stop(); // Stop any ongoing speech recognition
+            }
+            clearTimeout(silenceDetectionTimeout); // Clear the timeout
+        };
     }, []);
+
 
     return (
         <div>
@@ -155,19 +181,20 @@ export default function StartInterviewDashboard() {
                     <div className="card-body">
                         <p className="card-text">{questions[currentQuestionIndex]?.question}</p>
                     </div>
-                    <div>
+                    {/* <div>
                         <textarea
                             placeholder="Recording answer..."
                             value={answers[currentQuestionIndex]?.answer || ''}
                             readOnly
                         />
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div id="recording-indicator" style={{ display: 'none' }}>
                 <p>Recording...</p>
             </div>
         </div>
+        
     );
 }
 
@@ -385,7 +412,7 @@ export default function StartInterviewDashboard() {
 //             console.error('Speech recognition error occurred:', event.error);
 //         };
 
-//         // recognition.onend = () => {  
+//         // recognition.onend = () => {
 //         //     document.getElementById('recording-indicator').style.display = 'none';
 //         //     setTimeout(() => window.location.reload(), 1000);
 //         // };
@@ -435,7 +462,7 @@ export default function StartInterviewDashboard() {
 //         // .then(data => {
 //         //     console.log('Server Response: ', data);
 //         //     if (data.status === 'success') {
-//         //         window.location.href = '/conduct_interview'; 
+//         //         window.location.href = '/conduct_interview';
 //         //     } else if (data.status === 'completed') {
 //         //         window.location.href = '/interview_completed';
 //         //     }

@@ -21,7 +21,7 @@ import axiosInterceptorInstance from './authInterceptorService';
 
 export async function getInterViewQuestions() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/intbot/?candidate_id=1&job_id=1`, {
+        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/intbot/?candidate_id=2&job_id=1`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {

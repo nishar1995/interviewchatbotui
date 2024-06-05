@@ -53,7 +53,8 @@ export const routes = {
   interview: {
     dashboard: '/interview',
     appointmentList: '/interview/list',
-    startInterview :'/start-interview'
+    startInterview :'/start-interview',
+    successfullInterview : '/successfull-interview'
   },
   executive: {
     dashboard: '/executive',
