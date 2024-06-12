@@ -380,7 +380,7 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
             {/* {moment(start_time).format('DD-MM-YYYY, h:mm a')} */}
             {moment.utc(start_time).format("DD-MM-YYYY, h:mm a")}
-            
+
           </Text>
         </div>
       )
@@ -439,10 +439,16 @@ function RenderAction({
 }) {
   const router = useRouter();
   const { openModal, closeModal } = useModal();
-  const onClickMeeting = (id:any) => {
-    console.log("start Meeting",id);
+  const onClickMeeting = (id: any) => {
+    console.log("start Meeting", id);
     //router.push(`/start-meeting/${id}`);
     window.open(`/start-meeting/${id}`, '_blank');
+  }
+
+  const onClickStartInterview = (id: any) => {
+    console.log("start interview", id);
+    //router.push(`/start-meeting/${id}`);
+    window.open(`/start-interview/${id}`, '_blank');
   }
   function handleCreateModal(row: any) {
     console.log("row////////", row)
@@ -487,7 +493,7 @@ function RenderAction({
         </ActionIcon>
       </Tooltip> */}
 
-      <Tooltip
+      {/* <Tooltip
         size="sm"
         content={'Start Meeting'}
         placement="top"
@@ -504,7 +510,27 @@ function RenderAction({
         >
           <VideoIcon className="h-4 w-4" />
         </ActionIcon>
+      </Tooltip> */}
+
+      <Tooltip
+        size="sm"
+        content={'Start Interview'}
+        placement="top"
+        color="invert"
+      >
+        <ActionIcon
+          as="span"
+          size="sm"
+          variant="outline"
+          aria-label={'Start Interview'}
+          onClick={() => onClickStartInterview(row.id)
+          }
+          className="hover:!border-gray-900 hover:text-gray-700"
+        >
+          <VideoIcon className="h-4 w-4" />
+        </ActionIcon>
       </Tooltip>
+
       <DeletePopover
         title={`Delete the Schedule Meetting`}
         description={`Are you sure you want to delete this Schedule Meeting?`}

@@ -33,7 +33,7 @@ export default function ExpandedOrderRow({ data, handlePopupClose, onDeleteItem 
 
           {/* Actions */}
           <RenderAction
-            key={question.id}
+            
             row={question}
             onDeleteItem={onDeleteItem}
             onPopupClose={handlePopupClose}

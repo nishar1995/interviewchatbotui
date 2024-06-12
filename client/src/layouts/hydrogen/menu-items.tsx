@@ -204,11 +204,11 @@ export const menuItems = (userEmail: string) => {
       href: routes.meeting.dashboard,
       icon: <PiBriefcaseDuotone />,
     },
-    {
-      name: 'Start Interview',
-      href: routes.interview.startInterview,
-      icon: <PiBriefcaseDuotone />,
-    },
+    // {
+    //   name: 'Start Interview',
+    //   href: routes.interview.startInterview,
+    //   icon: <PiBriefcaseDuotone />,
+    // },
 
 
 

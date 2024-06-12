@@ -13,9 +13,17 @@ import { useColumn } from '@/hooks/use-column';
 export default function MyInterviews() {
   const cookieValue: any = Cookies.get('candidate_details');
   const candidateDetails: any = cookieValue ? JSON.parse(cookieValue) : {};
-  const InterviewDetails = candidateDetails.schedules
-  console.log("candidate details", candidateDetails)
+  const InterviewDetails = candidateDetails?.schedules
+  console.log("candidate details", InterviewDetails)
+  if (!candidateDetails) {
+    // Render a fallback UI or a loading state if candidateDetails is null
+    console.log("jfjbfjhcfd")
+    return <div>No Schedule the interview</div>;
+  }
+ 
+
   const columns = getColumnsData(InterviewDetails);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { visibleColumns } = useColumn(columns);
   return (
     <WidgetCard

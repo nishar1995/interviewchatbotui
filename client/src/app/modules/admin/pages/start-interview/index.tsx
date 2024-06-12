@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { getInterViewQuestions, captureResponse } from '../../../../../services/interviewService'
 import { useRouter } from 'next/navigation';
+import { getMeetingById } from "@/services/meetingScheduleService";
 
-export default function StartInterviewDashboard() {
+export default function StartInterviewDashboard({ id }: any) {
+    console.log("start interview id.....", id)
     const router = useRouter();
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -16,8 +18,27 @@ export default function StartInterviewDashboard() {
     let interViewQuestions: any[] = [];
     let nextIndex: any = 0;
     let totalAnswer: any;
+    let candidate_id: any;
+    let job_id: any;
     //let showAnswerList: any[] = []
 
+
+    const getMeetingDetailsById = async () => {
+        try {
+            const response = await getMeetingById(id);
+            console.log("questions Meeting......", response.data)
+            candidate_id = response.data.candidate;
+            job_id = response.data.job;
+            console.log("candidate_id/.....", candidate_id);
+            console.log("job_id.....", job_id);
+            if (candidate_id && job_id) {
+                getQuestions();
+            }
+
+        } catch (error) {
+            console.log("Error fetching questions: ", error);
+        }
+    };
     const speakQuestion = (question: any) => {
         const utterance = new SpeechSynthesisUtterance(question);
         const synth = window.speechSynthesis;
@@ -105,7 +126,7 @@ export default function StartInterviewDashboard() {
             console.log("answer list", showAnswerList)
             if (interViewQuestions[nextIndex].answer) {
                 moveToNextQuestion();
-             }
+            }
             // setTimeout(() => {
             //     moveToNextQuestion();
             // }, 5000);
@@ -134,7 +155,7 @@ export default function StartInterviewDashboard() {
 
     const getQuestions = async () => {
         try {
-            const response = await getInterViewQuestions();
+            const response = await getInterViewQuestions(candidate_id, job_id);
             console.log("questions......", response.data)
             interViewQuestions = response.data;
             setQuestions(response.data);
@@ -150,8 +171,8 @@ export default function StartInterviewDashboard() {
 
     async function captureAnswer(answer: any) {
         let body = {
-            candidate_id: 1,
-            job_id: 1,
+            candidate_id: candidate_id,
+            job_id: job_id,
             answers: answer,
         }
         try {
@@ -171,14 +192,15 @@ export default function StartInterviewDashboard() {
     // }, []);
 
     useEffect(() => {
-        getQuestions();
-        // Cleanup function to stop speech synthesis and recognition when the component unmounts
+        if (id) {
+            getMeetingDetailsById();
+        }
         return () => {
-            window.speechSynthesis.cancel(); // Stop any ongoing speech synthesis
+            window.speechSynthesis.cancel();
             if (recognition) {
-                recognition.stop(); // Stop any ongoing speech recognition
+                recognition.stop();
             }
-            clearTimeout(silenceDetectionTimeout); // Clear the timeout
+            clearTimeout(silenceDetectionTimeout);
         };
     }, []);
 
@@ -255,7 +277,7 @@ export default function StartInterviewDashboard() {
                             <tbody>
                                 {showAnswerList.map((item, index) => (
                                     <tr key={index}>
-                                        <td className="px-6 py-3">{index+1}</td>
+                                        <td className="px-6 py-3">{index + 1}</td>
                                         <td className="px-6 py-3">{item.question}</td>
                                         <td className="px-6 py-3">{item.answer}</td>
                                     </tr>

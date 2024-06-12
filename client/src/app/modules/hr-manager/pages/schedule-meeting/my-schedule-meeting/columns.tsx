@@ -444,6 +444,12 @@ function RenderAction({
     //router.push(`/start-meeting/${id}`);
     window.open(`/start-meeting/${id}`, '_blank');
   }
+
+  const onClickStartInterview = (id: any) => {
+    console.log("start interview", id);
+    //router.push(`/start-meeting/${id}`);
+    window.open(`/start-interview/${id}`, '_blank');
+  }
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
@@ -455,7 +461,7 @@ function RenderAction({
   // className="w-full @lg:w-auto "
   return (
     <div className="flex items-center justify-end gap-3 pe-3">
-      <Tooltip
+      {/* <Tooltip
         size="sm"
         content={'Edit Meeting'}
         placement="top"
@@ -499,6 +505,25 @@ function RenderAction({
           variant="outline"
           aria-label={'Start Meeting'}
           onClick={() => onClickMeeting(row.id)
+          }
+          className="hover:!border-gray-900 hover:text-gray-700"
+        >
+          <VideoIcon className="h-4 w-4" />
+        </ActionIcon>
+      </Tooltip> */}
+
+<Tooltip
+        size="sm"
+        content={'Start Interview'}
+        placement="top"
+        color="invert"
+      >
+        <ActionIcon
+          as="span"
+          size="sm"
+          variant="outline"
+          aria-label={'Start Interview'}
+          onClick={() => onClickStartInterview(row.id)
           }
           className="hover:!border-gray-900 hover:text-gray-700"
         >

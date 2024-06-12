@@ -150,6 +150,7 @@ export const routes = {
   },
 
   startMeeting: (id: string) => `/start-meeting/${id}`,
+  startInterview: (id: string) =>`/start-interview/${id}`,
 
 
 };

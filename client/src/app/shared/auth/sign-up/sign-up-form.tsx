@@ -10,6 +10,7 @@ import { routes } from '@/config/routes';
 import { SignUpSchema, signUpSchema } from '@/utils/validators/signup.schema';
 import { registration } from '@/services/authService';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const initialValues: SignUpSchema = {
   first_name: '',
@@ -35,7 +36,9 @@ export default function SignUpForm() {
       console.log(data);
       const response = await registration(data);
       console.log("response..", response);
+      Cookies.set('candidate_details', JSON.stringify(response));
       if(response){
+
         setReset({ ...initialValues, isAgreed: false });
         routes.auth.signIn
         router.push("/shared/auth/signin");
