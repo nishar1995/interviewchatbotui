@@ -376,6 +376,7 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
 
 
   const onSubmit = async (data: any) => {
+    console.log("data.....,",data)
     setLoading(true);
     try {
       if (questionsDetail) {
@@ -402,7 +403,7 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
 
   return (
     <Form
-      resetValues={reset}
+      //resetValues={reset}
       onSubmit={onSubmit}
       validationSchema={tenantQuestionsSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"

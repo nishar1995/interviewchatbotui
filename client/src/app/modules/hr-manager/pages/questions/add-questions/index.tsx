@@ -25,6 +25,7 @@ function MyQuestionsTable() {
 
 
   useEffect(() => {
+    console.log("hr manager")
     fetchQuestionsList();
   }, []);
 
@@ -121,12 +122,14 @@ function MyQuestionsTable() {
           expandIcon: CustomExpandIcon,
           expandedRowRender: (record) => (
             <ExpandedOrderRow
+            key={`expanded-${record.application_id}`} // Ensure unique key for expanded row
               data={record}
               handlePopupClose={handlePopupClose}
               onDeleteItem={onDeleteItem}
             />
           ),
         }}
+        rowKey={(record) => record.application_id} // Ensure unique key for table rows
       />
     </WidgetCard>
   );
