@@ -270,6 +270,7 @@ import { candidateList } from '@/services/candidateService';
 
 export default function CreateQuestions({ onClose, questionsDetail }: any) {
   console.log('questions detail', questionsDetail);
+  console.log("admin page.....................................")
 
   const defaultValues = {
     question: '',
@@ -392,6 +393,11 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     setLoading(true);
     try {
       if (questionsDetail) {
+        if(data.candidate_id == '' && data.job_id == ''){
+          data.candidate_id = questionsDetail?.candidate;
+          data.job_id = questionsDetail?.job;
+          data.answer = questionsDetail?.answer;
+        }
         const response = await updateQuestions(questionsDetail.id, data);
         if (response) {
           setReset(defaultValues);

@@ -40,14 +40,17 @@ export default function StartInterviewDashboard({ id }: any) {
         }
     };
     const speakQuestion = (question: any) => {
-        const utterance = new SpeechSynthesisUtterance(question);
-        const synth = window.speechSynthesis;
+        if (question) {
+            const utterance = new SpeechSynthesisUtterance(question);
+            const synth = window.speechSynthesis;
 
-        synth.speak(utterance);
+            synth.speak(utterance);
 
-        utterance.onend = function () {
-            startRecognition(question); // Start recognition after speaking
-        };
+            utterance.onend = function () {
+                startRecognition(question); // Start recognition after speaking
+            };
+        }
+
     };
 
     const startRecognition = (questions: any) => {
@@ -114,6 +117,8 @@ export default function StartInterviewDashboard({ id }: any) {
         console.log("candidate answer", answer)
         setAnswers(prevAnswers => {
             const newAnswers = [...prevAnswers];
+            console.log("next index......",nextIndex)
+            console.log("question next index....",interViewQuestions[nextIndex])
             interViewQuestions[nextIndex].answer = answer;
             //newAnswers[currentQuestionIndex] = interViewQuestions[currentQuestionIndex];
             console.log("interview questions//////////", interViewQuestions);
@@ -137,12 +142,14 @@ export default function StartInterviewDashboard({ id }: any) {
     };
 
     const moveToNextQuestion = () => {
+        
         setCurrentQuestionIndex(prevIndex => {
             nextIndex = prevIndex + 1;
             console.log("next index///", nextIndex);
             if (nextIndex < interViewQuestions.length) {
+                
                 speakQuestion(interViewQuestions[nextIndex]?.question);
-                console.log("currentIndex", currentQuestionIndex)
+                console.log("new currentIndex", currentQuestionIndex)
                 return nextIndex;
             } else {
                 console.log('Interview completed.');
@@ -175,6 +182,7 @@ export default function StartInterviewDashboard({ id }: any) {
             job_id: job_id,
             answers: answer,
         }
+        console.log("capture the answer........",body)
         try {
             const response = await captureResponse(body);
             console.log("capture answer", response)

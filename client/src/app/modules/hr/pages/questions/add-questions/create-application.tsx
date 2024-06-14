@@ -270,6 +270,7 @@ import { candidateList } from '@/services/candidateService';
 
 export default function CreateQuestions({ onClose, questionsDetail }: any) {
   console.log('questions detail', questionsDetail);
+  console.log("hr page.....................................")
 
   const defaultValues = {
     question: '',
@@ -286,8 +287,9 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
   const [candidatedata, setCandidateData] = useState([]);
   const [selectedJobId, setSelectedJobId] = useState('' || questionsDetail?.job);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
-  const [selectedCandidateId, setSelectedCandidateId] = useState('' || questionsDetail?.candiate);
-
+  const [selectedCandidateId, setSelectedCandidateId] = useState('' || questionsDetail?.candidate);
+  let selectedJob:any;
+  let selectedCandidate:any;
   const imageRef = useRef(null);
 
   useEffect(() => {
@@ -317,9 +319,9 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
 
     });
     setSelectedJobId(questionsDetail?.job || '');
-    console.log("selected job",selectedJobId)
+    console.log("selected job", selectedJobId)
     setSelectedCandidateId(questionsDetail?.candidate || '');
-    console.log("selected candidate",selectedCandidateId);
+    console.log("selected candidate", selectedCandidateId);
   };
 
   const jobList = async () => {
@@ -362,22 +364,30 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
     console.log("hr page...")
     if (questionsDetail?.job) {
       setSelectedCandidateId(questionsDetail?.candidate);
-      console.log("candidate data",candidatedata)
-      if(candidatedata){
+      console.log("candidate data", candidatedata)
+      if (candidatedata) {
         filterCandidatesByJobId(selectedJobId, candidatedata)
 
       }
     }
-    else{
+    else {
       filterCandidatesByJobId(selectedJobId, candidatedata);
     }
-    
+
   }, [selectedJobId, candidatedata]);
 
   const onSubmit = async (data: any) => {
+    console.log("data..........", data);
+   
     setLoading(true);
     try {
       if (questionsDetail) {
+        if(data.candidate_id == '' && data.job_id == ''){
+          data.candidate_id = questionsDetail?.candidate;
+          data.job_id = questionsDetail?.job;
+          data.answer = questionsDetail?.answer;
+        }
+        
         const response = await updateQuestions(questionsDetail.id, data);
         if (response) {
           setReset(defaultValues);
@@ -401,7 +411,7 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
 
   return (
     <Form
-      resetValues={reset}
+      //resetValues={reset}
       onSubmit={onSubmit}
       validationSchema={tenantQuestionsSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
@@ -421,7 +431,7 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
             id="job-select"
             className="col-span-full"
             {...register('job_id')}
-            value={selectedJobId}
+            value={questionsDetail?.job}
             onChange={onChangeJob}
           >
             <option value="">Select a job</option>
@@ -436,7 +446,7 @@ export default function CreateQuestions({ onClose, questionsDetail }: any) {
             id="candidate-select"
             className="col-span-full"
             {...register('candidate_id')}
-            value={selectedCandidateId}
+            value={questionsDetail?.candidate}
             onChange={onChangeCandidate}
           >
             <option value="">Select a candidate</option>
