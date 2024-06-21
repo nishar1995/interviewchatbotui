@@ -9,6 +9,22 @@ chroma_db_files/
 venv
 client/node_modules/
 zoomsdk/__pycache__/
+client/.next/
+users/__pycache__/
+users/migrations/__pycache__/
+tenant/__pycache__/
+tenant/migrations/__pycache__/
+schedule/migrations/__pycache__/
+schedule/__pycache__/
+questions/__pycache__/
+questions/migrations/__pycache__/
+job/__pycache__/
+job/migrations/__pycache__/
+intbot/__pycache__/
+intbot/migrations/__pycache__/
+djangointerviewbot/__pycache__/
+candidate/__pycache__/
+candidate/migrations/__pycache__/
 
 # testing
 /coverage

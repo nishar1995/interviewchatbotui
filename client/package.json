@@ -7,7 +7,7 @@
     "clean": "rimraf -g \"{node_modules,.next,.cache}\"",
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "next start",
+    "start": "next dev --turbo",
     "lint": "next lint",
     "generate-icons": "node generate-icons-data.js",
     "format": "prettier --write .",

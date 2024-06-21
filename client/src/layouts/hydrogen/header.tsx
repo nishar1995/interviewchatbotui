@@ -17,8 +17,8 @@ export default function Header() {
         />
         <Link
           href={'#'}
-          aria-label="Site Logo"
-          className="me-4 w-9 shrink-0 text-gray-800 hover:text-gray-900 lg:me-5 xl:hidden"
+          aria-label="Site Logo1"
+          className="me-4 max-w-60 text-gray-800 hover:text-gray-900 lg:me-5 xl:hidden"
         >
           <Logo iconOnly={true} />
         </Link>

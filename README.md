@@ -143,3 +143,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Upon running the project, the chatbot will be accessible via the provided URL.
 
+# Users
+
+ADMIN 
+   USERNAME :  nisha@321 
+   PASSWORD :  Qwe@123 
+HR 
+   USERNAME :  rushali@321 
+   PASSWORD :  Qwe@123 
+HR MANAGER 
+ 	USERNAME :  preeti@321 
+   PASSWORD :  Qwe@123  
+CANDIDATE 
+ 	USERNAME :  vand@321, khus@321 
+   PASSWORD :  Qwe@123
