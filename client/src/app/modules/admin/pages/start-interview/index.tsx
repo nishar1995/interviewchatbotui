@@ -75,7 +75,7 @@ export default function StartInterviewDashboard({ id }: any) {
         } else {
             utterance = new SpeechSynthesisUtterance(question);
         }
-        utterance.voice = voices[93];
+        // utterance.voice = voices[93];
         synth.speak(utterance);
 
         utterance.onstart = function () {
