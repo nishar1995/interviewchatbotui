@@ -120,7 +120,7 @@ class IntBotView(APIView):
         job_id = request.data.get('job_id')
         answers = request.data.get('answers', [])
         
-        if not candidate_id or not job_id or not answers:
+        if not candidate_id or not job_id:
             return Response({'detail': 'candidate_id, job_id, and answers are required fields.'},
                             status=status.HTTP_400_BAD_REQUEST)
         history = []
@@ -128,7 +128,7 @@ class IntBotView(APIView):
             question = answer_data.get('question')
             answer = answer_data.get('answer')
 
-            if not question or not answer:
+            if not question:
                 return Response({'detail': 'Each answer must include a question and an answer.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
