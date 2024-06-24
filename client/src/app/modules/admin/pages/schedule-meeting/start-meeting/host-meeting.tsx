@@ -24,7 +24,7 @@ const HostJoinPage = () => {
                 language: 'en-US',
                 patchJsMedia: true,
                 leaveOnPageUnload: true
-            }).then(() => {
+            } as any ).then(() => {
                 client.join({
                     signature: data.token,
                     sdkKey: process.env.NEXT_PUBLIC_ZOOM_SDK_KEY,

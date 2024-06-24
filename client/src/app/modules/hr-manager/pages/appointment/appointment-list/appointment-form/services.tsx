@@ -6,13 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ActionIcon, Select, Title } from 'rizzui';
 import Footer from './footer';
-import {
-  formDataAtom,
-  useStepperAppointment,
-} from '@/app/shared/appointment/appointment-list/appointment-form';
+// import {
+//   formDataAtom,
+//   useStepperAppointment,
+// } from '@/app/shared/appointment/appointment-list/appointment-form';
 import { PiXBold } from 'react-icons/pi';
 import { useModal } from '@/app/shared/modal-views/use-modal';
-import { appointmentTypesOptions } from '../list';
+// import { appointmentTypesOptions } from '../list';
 
 export const appointmentBookSchema = z.object({
   category: z.string({ required_error: 'Category is required' }),
@@ -46,29 +46,29 @@ const FormSchema = appointmentBookSchema;
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 export default function AppointmentServices() {
-  const { gotoNextStep } = useStepperAppointment();
+  // const { gotoNextStep } = useStepperAppointment();
   const { closeModal } = useModal();
-  const [formData, setFormData] = useAtom(formDataAtom);
+  // const [formData, setFormData] = useAtom(formDataAtom);
   const {
     control,
     formState: { errors },
     handleSubmit,
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      category: formData.category,
-      service: formData.service,
-    },
+    // defaultValues: {
+    //   category: formData.category,
+    //   service: formData.service,
+    // },
   });
 
   const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
     console.log('data', data);
-    setFormData((prev) => ({
-      ...prev,
-      category: data.category,
-      service: data.service,
-    }));
-    gotoNextStep();
+    // setFormData((prev) => ({
+    //   ...prev,
+    //   category: data.category,
+    //   service: data.service,
+    // }));
+    // gotoNextStep();
   };
 
   return (
@@ -109,7 +109,7 @@ export default function AppointmentServices() {
             />
           )}
         />
-        <Controller
+        {/* <Controller
           control={control}
           name="service"
           render={({ field: { value, onChange } }) => (
@@ -121,16 +121,16 @@ export default function AppointmentServices() {
               dropdownClassName="p-2 gap-1 grid !z-[9999]"
               onChange={onChange}
               value={value}
-              options={appointmentTypesOptions}
+              // options={appointmentTypesOptions}
               getOptionValue={(option) => option.value}
               displayValue={(selected) =>
-                appointmentTypesOptions?.find((p) => p.value === selected)
+                // appointmentTypesOptions?.find((p) => p.value === selected)
                   ?.label ?? ''
               }
               error={errors?.category?.message as string}
             />
           )}
-        />
+        /> */}
       </div>
       <Footer />
     </form>

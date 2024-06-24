@@ -8,7 +8,7 @@ import { useCart } from '@/store/quick-cart/cart.context';
 import { routes } from '@/config/routes';
 import cn from '@/utils/class-names';
 import { DUMMY_ID } from '@/config/constants';
-import CartDrawerView from './ecommerce/cart/cart-drawer-view';
+// import CartDrawerView from './ecommerce/cart/cart-drawer-view';
 
 const Drawer = dynamic(() => import('rizzui').then((module) => module.Drawer), {
   ssr: false,
@@ -68,14 +68,14 @@ export default function FloatingCart({ className }: FloatingCartProps) {
           containerClassName="dark:bg-gray-100"
           className="z-[9999]"
         >
-          <CartDrawerView
+          {/* <CartDrawerView
             setOpenDrawer={setOpenDrawer}
             clearItemFromCart={clearItemFromCart}
             removeItemFromCart={removeItemFromCart}
             addItemToCart={addItemToCart}
             items={items}
             total={total}
-          />
+          /> */}
         </Drawer>
       </>
     )

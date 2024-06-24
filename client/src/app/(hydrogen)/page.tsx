@@ -1,8 +1,6 @@
 'use server';
 import { routes } from '@/config/routes';
-import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
-import { authOptions } from '../api/auth/[...nextauth]/auth-options';
 import Cookies from 'js-cookie';
 import { UserRole } from '@/enums/role';
 

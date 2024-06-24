@@ -1,6 +1,6 @@
 import { routes } from '@/config/routes';
 import { productsData } from '@/data/products-data';
-import { getColumns } from '@/app/shared/ecommerce/product/product-list/columns';
+// import { getColumns } from '@/app/shared/ecommerce/product/product-list/columns';
 import BasicTableWidget from '@/components/controlled-table/basic-table-widget';
 import TableLayout from '@/app/(hydrogen)/tables/table-layout';
 import { metaObject } from '@/config/site.config';
@@ -34,7 +34,7 @@ export default function PaginationTablePage() {
       fileName="product_data"
       header="ID,Name,Category,Product Thumbnail,SKU,Stock,Price,Status,Rating"
     >
-      <BasicTableWidget
+      {/* <BasicTableWidget
         title="Pagination Table"
         noGutter
         variant="modern"
@@ -44,7 +44,7 @@ export default function PaginationTablePage() {
         enableSearch={false}
         enablePagination
         className="min-h-[480px] [&_.widget-card-header_h5]:font-medium"
-      />
+      /> */}
     </TableLayout>
   );
 }

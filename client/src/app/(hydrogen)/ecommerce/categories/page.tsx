@@ -1,5 +1,5 @@
 import { routes } from '@/config/routes';
-import CategoryTable from '@/app/shared/ecommerce/category/category-list/table';
+//import CategoryTable from '@/app/shared/ecommerce/category/category-list/table';
 import CategoryPageHeader from './category-page-header';
 import { metaObject } from '@/config/site.config';
 
@@ -31,7 +31,7 @@ export default function CategoriesPage() {
         title={pageHeader.title}
         breadcrumb={pageHeader.breadcrumb}
       />
-      <CategoryTable />
+      {/* <CategoryTable /> */}
     </>
   );
 }

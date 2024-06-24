@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { PiPlusBold } from 'react-icons/pi';
-import { productData } from '@/app/shared/ecommerce/product/create-edit/form-utils';
-import CreateEditProduct from '@/app/shared/ecommerce/product/create-edit';
+// import { productData } from '@/app/shared/ecommerce/product/create-edit/form-utils';
+// import CreateEditProduct from '@/app/shared/ecommerce/product/create-edit';
 import PageHeader from '@/app/shared/page-header';
 import { metaObject } from '@/config/site.config';
 import { Button } from 'rizzui';
@@ -60,7 +60,7 @@ export default function EditProductPage({
         </Link>
       </PageHeader>
 
-      <CreateEditProduct slug={params.slug} product={productData} />
+      {/* <CreateEditProduct slug={params.slug} product={productData} /> */}
     </>
   );
 }

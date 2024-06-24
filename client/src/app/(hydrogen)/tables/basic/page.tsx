@@ -2,9 +2,9 @@ import { routes } from '@/config/routes';
 import { orderData } from '@/data/order-data';
 import { invoiceData } from '@/data/invoice-data';
 import { productsData } from '@/data/products-data';
-import { getColumns } from '@/app/shared/invoice/invoice-list/columns';
-import { getColumns as getOrderColumns } from '@/app/shared/ecommerce/order/order-list/columns';
-import { getColumns as getProductColumns } from '@/app/shared/ecommerce/product/product-list/columns';
+// import { getColumns } from '@/app/shared/invoice/invoice-list/columns';
+// import { getColumns as getOrderColumns } from '@/app/shared/ecommerce/order/order-list/columns';
+// import { getColumns as getProductColumns } from '@/app/shared/ecommerce/product/product-list/columns';
 import BasicTableWidget from '@/components/controlled-table/basic-table-widget';
 import TableLayout from '@/app/(hydrogen)/tables/table-layout';
 import { metaObject } from '@/config/site.config';
@@ -39,16 +39,16 @@ export default function BasicTablePage() {
       header="Order ID,Name,Email,Avatar,Items,Price,Status,Created At,Updated At"
     >
       <div className="grid grid-cols-1 gap-6 3xl:gap-8">
-        <BasicTableWidget
+        {/* <BasicTableWidget
           variant="classic"
           title="Classic Table"
           data={orderData}
           // @ts-ignore
           getColumns={getOrderColumns}
           enableSearch={false}
-        />
+        /> */}
 
-        <BasicTableWidget
+        {/* <BasicTableWidget
           title="Modern Table"
           variant="modern"
           data={productsData}
@@ -56,16 +56,16 @@ export default function BasicTablePage() {
           getColumns={getProductColumns}
           enableSearch={false}
           className="[&_.rc-table-content_table_tbody_tr:last-child_td]:border-0"
-        />
+        /> */}
 
-        <BasicTableWidget
+        {/* <BasicTableWidget
           title="Minimal Table"
           variant="minimal"
           data={invoiceData}
           // @ts-ignore
           getColumns={getColumns}
           enableSearch={false}
-        />
+        /> */}
 
         <BasicTableWidget
           title="Elegant Table"

@@ -42,9 +42,9 @@ export default function CreateTenant({ onClose, tenantDetails }: any) {
   const { closeModal } = useModal();
   const [reset, setReset] = useState(defaultValues);
   const [isLoading, setLoading] = useState(false);
-  const [countries, setCountries] = useState([]);
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState<any>([]);
+  const [states, setStates] = useState<any>([]);
+  const [cities, setCities] = useState<any>([]);
   const [selectedCountry, setSelectedCountry] = useState('' || tenantDetails?.country);
   const [selectedState, setSelectedState] = useState('' || tenantDetails?.state);
   const [selectedCity, setSelectedCity] = useState('' || tenantDetails?.city);

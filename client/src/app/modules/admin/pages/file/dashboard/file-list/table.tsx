@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useTable } from '@/hooks/use-table';
 import { useColumn } from '@/hooks/use-column';
-import { getColumns } from '@/app/shared/file/dashboard/file-list/columns';
+// import { getColumns } from '@/app/shared/file/dashboard/file-list/columns';
 import { Title } from 'rizzui';
 import ControlledTable from '@/components/controlled-table';
 import { routes } from '@/config/routes';
@@ -33,13 +33,13 @@ export default function FileListTable({ className }: { className?: string }) {
     handleDelete,
   } = useTable(allFilesData, pageSize);
 
-  const columns = useMemo(
-    () => getColumns({ sortConfig, onHeaderCellClick, onDeleteItem }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onHeaderCellClick, sortConfig.key, sortConfig.direction, onDeleteItem]
-  );
+  // const columns = useMemo(
+  //   () => getColumns({ sortConfig, onHeaderCellClick, onDeleteItem }),
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [onHeaderCellClick, sortConfig.key, sortConfig.direction, onDeleteItem]
+  // );
 
-  const { visibleColumns } = useColumn(columns);
+  // const { visibleColumns } = useColumn(columns);
 
   return (
     <div className={className}>

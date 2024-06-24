@@ -2,11 +2,11 @@ import { PiPrinterBold, PiDownloadSimpleBold } from 'react-icons/pi';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
-import Addresses from '@/app/shared/logistics/shipment/details/addresses';
-import InvoiceDetails from '@/app/shared/logistics/shipment/details/invoice-details';
-import DeliveryDetails from '@/app/shared/logistics/shipment/details/delivery-details';
-import TrackingHistory from '@/app/shared/logistics/shipment/details/tracking-history';
-import ShippingDetails from '@/app/shared/logistics/shipment/details/shipping-details';
+// import Addresses from '@/app/shared/logistics/shipment/details/addresses';
+// import InvoiceDetails from '@/app/shared/logistics/shipment/details/invoice-details';
+// import DeliveryDetails from '@/app/shared/logistics/shipment/details/delivery-details';
+// import TrackingHistory from '@/app/shared/logistics/shipment/details/tracking-history';
+// import ShippingDetails from '@/app/shared/logistics/shipment/details/shipping-details';
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
@@ -46,13 +46,13 @@ export default function LogisticsListPage() {
         </div>
       </PageHeader>
 
-      <div className="mt-2 flex flex-col gap-y-6 @container sm:gap-y-10">
+      {/* <div className="mt-2 flex flex-col gap-y-6 @container sm:gap-y-10">
         <InvoiceDetails />
         <DeliveryDetails />
         <TrackingHistory />
         <ShippingDetails />
         <Addresses />
-      </div>
+      </div> */}
     </>
   );
 }

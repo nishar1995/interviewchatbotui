@@ -1,11 +1,11 @@
 import { metaObject } from '@/config/site.config';
-import EventCalendarView from '@/app/shared/event-calendar';
+// import EventCalendarView from '@/app/shared/event-calendar';
 import ExportButton from '@/app/shared/export-button';
 import ModalButton from '@/app/shared/modal-button';
 import PageHeader from '@/app/shared/page-header';
 import { routes } from '@/config/routes';
 import { eventData } from '@/data/event-data';
-import EventForm from '@/app/shared/event-calendar/event-form';
+// import EventForm from '@/app/shared/event-calendar/event-form';
 
 export const metadata = {
   ...metaObject('Event Calendar'),
@@ -35,16 +35,16 @@ export default function EventCalendarPage() {
             fileName="event_data"
             header="ID,Title,Description,Location,Start,end"
           />
-          <ModalButton
+          {/* <ModalButton
             label="Create Event"
             view={<EventForm />}
             customSize="900px"
             className="mt-0 w-full @lg:w-auto"
-          />
+          /> */}
         </div>
       </PageHeader>
 
-      <EventCalendarView />
+      {/* <EventCalendarView /> */}
     </>
   );
 }

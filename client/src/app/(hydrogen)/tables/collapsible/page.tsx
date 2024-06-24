@@ -1,6 +1,6 @@
 import { routes } from '@/config/routes';
 import { orderData } from '@/data/order-data';
-import OrderTable from '@/app/shared/ecommerce/order/order-list/table';
+// import OrderTable from '@/app/shared/ecommerce/order/order-list/table';
 import TableLayout from '@/app/(hydrogen)/tables/table-layout';
 import { metaObject } from '@/config/site.config';
 
@@ -33,11 +33,11 @@ export default function CollapsibleTablePage() {
       fileName="order_data"
       header="Order ID,Name,Email,Avatar,Items,Price,Status,Created At,Updated At"
     >
-      <OrderTable
+      {/* <OrderTable
         data={orderData}
         variant="elegant"
         className="[&_.table-filter]:hidden [&_.table-pagination]:hidden"
-      />
+      /> */}
     </TableLayout>
   );
 }

@@ -1,6 +1,6 @@
 import { routes } from '@/config/routes';
 import { orderData } from '@/data/order-data';
-import { getColumns } from '@/app/shared/ecommerce/order/order-list/columns';
+// import { getColumns } from '@/app/shared/ecommerce/order/order-list/columns';
 import BasicTableWidget from '@/components/controlled-table/basic-table-widget';
 import TableLayout from '@/app/(hydrogen)/tables/table-layout';
 import { metaObject } from '@/config/site.config';
@@ -34,7 +34,7 @@ export default function SearchTablePage() {
       fileName="order_data"
       header="Order ID,Name,Email,Avatar,Items,Price,Status,Created At,Updated At"
     >
-      <BasicTableWidget
+      {/* <BasicTableWidget
         title="Search Table"
         variant="minimal"
         data={orderData}
@@ -43,7 +43,7 @@ export default function SearchTablePage() {
         enablePagination
         searchPlaceholder="Search order..."
         className="min-h-[480px] [&_.widget-card-header]:items-center [&_.widget-card-header_h5]:font-medium"
-      />
+      /> */}
     </TableLayout>
   );
 }

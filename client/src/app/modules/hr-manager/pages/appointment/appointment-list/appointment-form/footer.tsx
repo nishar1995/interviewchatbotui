@@ -2,14 +2,14 @@
 
 import { Button } from 'rizzui';
 import cn from '@/utils/class-names';
-import { useStepperAppointment } from '@/app/shared/appointment/appointment-list/appointment-form';
+// import { useStepperAppointment } from '@/app/shared/appointment/appointment-list/appointment-form';
 
 interface FooterProps {
   className?: string;
 }
 
 export default function Footer({ className }: FooterProps) {
-  const { step, gotoPrevStep } = useStepperAppointment();
+  // const { step, gotoPrevStep } = useStepperAppointment();
 
   return (
     <footer
@@ -23,15 +23,15 @@ export default function Footer({ className }: FooterProps) {
           <Button
             key={`step-${x}`}
             variant="text"
-            className={cn(
-              'h-2 p-0',
-              x === step ? 'w-4 bg-gray-400' : 'w-3 bg-gray-200'
-            )}
+            // className={cn(
+            //   'h-2 p-0',
+            //   x === step ? 'w-4 bg-gray-400' : 'w-3 bg-gray-200'
+            // )}
           />
         ))}
       </div>
 
-      <div className="flex gap-3">
+      {/* <div className="flex gap-3">
         {step > 0 && step < 3 && (
           <Button
             onClick={gotoPrevStep}
@@ -45,7 +45,7 @@ export default function Footer({ className }: FooterProps) {
         <Button className="!w-auto" type="submit" rounded="lg">
           {step === 2 ? 'Submit' : 'Next'}
         </Button>
-      </div>
+      </div> */}
     </footer>
   );
 }

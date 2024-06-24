@@ -65,16 +65,47 @@ export const menuItems = (userEmail: string) => {
         name: 'File Manager',
         href: routes.fileManager.dashboard,
         icon: <PiFolderNotchDuotone />,
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
       {
         name: 'Candidates List',
         href: routes.executive.dashboard,
         icon: <PiBriefcaseDuotone />,
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
+        
       },
       {
         name: 'Meeting Schedule',
         href: routes.meeting.dashboard,
         icon: <PiBriefcaseDuotone />,
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
       // {
       //   name: 'Tenant Management',
@@ -107,6 +138,16 @@ export const menuItems = (userEmail: string) => {
         href: routes.candidate.dashboard,
         icon: <PiCalendarDuotone />,
         // badge: 'UPD',
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
 
       {
@@ -114,6 +155,16 @@ export const menuItems = (userEmail: string) => {
         href: routes.candidate.meeting,
         icon: <PiCalendarDuotone />,
         // badge: 'UPD',
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
     ];
   }
@@ -129,6 +180,16 @@ export const menuItems = (userEmail: string) => {
         name: 'Interview',
         href: routes.interview.dashboard,
         icon: <PiCalendarDuotone />,
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
         // badge: 'UPD',
       },
       {
@@ -136,23 +197,63 @@ export const menuItems = (userEmail: string) => {
         href: routes.job.dashboard,
         icon: <PiCalendarDuotone />,
         // badge: 'UPD',
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
 
       {
         name: 'Questions Management',
         href: routes.questions.dashboard,
         icon: <PiBriefcaseDuotone />,
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
 
       {
         name: 'Candidates List',
         href: routes.executive.dashboard,
         icon: <PiBriefcaseDuotone />,
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
       {
         name: 'Meeting Schedule',
         href: routes.meeting.dashboard,
         icon: <PiBriefcaseDuotone />,
+        // dropdownItems: [
+        //   {
+        //     name: 'Dropdown Item 3',
+        //     href: '/item2/dropdown1',
+        //   },
+        //   {
+        //     name: 'Dropdown Item 4',
+        //     href: '/item2/dropdown2',
+        //   },
+        // ],
       },
     ];
   }
@@ -166,24 +267,64 @@ export const menuItems = (userEmail: string) => {
       name: 'File Manager',
       href: routes.fileManager.dashboard,
       icon: <PiFolderNotchDuotone />,
+      // dropdownItems: [
+      //   {
+      //     name: 'Dropdown Item 3',
+      //     href: '/item2/dropdown1',
+      //   },
+      //   {
+      //     name: 'Dropdown Item 4',
+      //     href: '/item2/dropdown2',
+      //   },
+      // ],
     },
 
     {
       name: 'Tenant Management',
       href: routes.tenant.dashboard,
       icon: <PiBriefcaseDuotone />,
+      // dropdownItems: [
+      //   {
+      //     name: 'Dropdown Item 3',
+      //     href: '/item2/dropdown1',
+      //   },
+      //   {
+      //     name: 'Dropdown Item 4',
+      //     href: '/item2/dropdown2',
+      //   },
+      // ],
     },
 
     {
       name: 'Roles & Permissions',
       href: routes.rolesPermissions,
       icon: <PiFolderLockDuotone />,
+      // dropdownItems: [
+      //   {
+      //     name: 'Dropdown Item 3',
+      //     href: '/item2/dropdown1',
+      //   },
+      //   {
+      //     name: 'Dropdown Item 4',
+      //     href: '/item2/dropdown2',
+      //   },
+      // ],
     },
 
     {
       name: 'Job',
       href: routes.job.dashboard,
       icon: <PiCalendarDuotone />,
+      // dropdownItems: [
+      //   {
+      //     name: 'Dropdown Item 3',
+      //     href: '/item2/dropdown1',
+      //   },
+      //   {
+      //     name: 'Dropdown Item 4',
+      //     href: '/item2/dropdown2',
+      //   },
+      // ],
       // badge: 'UPD',
     },
 
@@ -191,18 +332,48 @@ export const menuItems = (userEmail: string) => {
       name: 'Candidates List',
       href: routes.executive.dashboard,
       icon: <PiBriefcaseDuotone />,
+      // dropdownItems: [
+      //   {
+      //     name: 'Dropdown Item 3',
+      //     href: '/item2/dropdown1',
+      //   },
+      //   {
+      //     name: 'Dropdown Item 4',
+      //     href: '/item2/dropdown2',
+      //   },
+      // ],
     },
 
     {
       name: 'Questions Management',
       href: routes.questions.dashboard,
       icon: <PiBriefcaseDuotone />,
+      // dropdownItems: [
+      //   {
+      //     name: 'Dropdown Item 3',
+      //     href: '/item2/dropdown1',
+      //   },
+      //   {
+      //     name: 'Dropdown Item 4',
+      //     href: '/item2/dropdown2',
+      //   },
+      // ],
     },
 
     {
       name: 'Meeting Schedule',
       href: routes.meeting.dashboard,
       icon: <PiBriefcaseDuotone />,
+      // dropdownItems: [
+      //   {
+      //     name: 'Dropdown Item 3',
+      //     href: '/item2/dropdown1',
+      //   },
+      //   {
+      //     name: 'Dropdown Item 4',
+      //     href: '/item2/dropdown2',
+      //   },
+      // ],
     },
     // {
     //   name: 'Start Interview',

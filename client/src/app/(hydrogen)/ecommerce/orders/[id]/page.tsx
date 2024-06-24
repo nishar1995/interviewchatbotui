@@ -2,7 +2,7 @@ import { Button } from 'rizzui';
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
 import Link from 'next/link';
-import OrderView from '@/app/shared/ecommerce/order/order-view';
+// import OrderView from '@/app/shared/ecommerce/order/order-view';
 
 export default function OrderDetailsPage({ params }: any) {
   const pageHeader = {
@@ -33,7 +33,7 @@ export default function OrderDetailsPage({ params }: any) {
           </Button>
         </Link>
       </PageHeader>
-      <OrderView />
+      {/* <OrderView /> */}
     </>
   );
 }

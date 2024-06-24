@@ -6,7 +6,6 @@ import { useCallback, useState, useMemo, useEffect } from 'react';
 import { useColumn } from '@/hooks/use-column';
 import { useTable } from '@/hooks/use-table';
 import ControlledTable from '@/components/controlled-table';
-import { getColumns } from './columns';
 import { getColumnsData } from './columns';
 import ModalButton from '@/app/shared/modal-button';
 import CreateJob from './create-job';

@@ -20,7 +20,7 @@ declare global {
 export default function StartInterviewDashboard({ id }: any) {
     console.log("start interview id.....", id)
     const router = useRouter();
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState<any[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers]: any = useState([]);
     const [isRecording, setIsRecording] = useState(false);

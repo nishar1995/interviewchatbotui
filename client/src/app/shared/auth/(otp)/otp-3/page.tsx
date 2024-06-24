@@ -1,5 +1,5 @@
 import { Text } from 'rizzui';
-import OtpForm from '@/app/auth/(otp)/otp-3/otp-form';
+// import OtpForm from '@/app/auth/(otp)/otp-3/otp-form';
 import AuthWrapperThree from '@/app/shared/auth-layout/auth-wrapper-three';
 
 export default function ForgotPassword() {
@@ -17,7 +17,7 @@ export default function ForgotPassword() {
       <Text className="pb-7 text-center text-[15px] leading-[1.85] text-gray-700 md:text-base md:!leading-loose lg:-mt-1">
         We have sent you One Time Password to your email. Please enter your OTP
       </Text>
-      <OtpForm />
+      {/* <OtpForm /> */}
     </AuthWrapperThree>
   );
 }

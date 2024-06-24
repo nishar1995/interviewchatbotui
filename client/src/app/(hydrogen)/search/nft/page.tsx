@@ -1,7 +1,7 @@
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import NFTSearchPageView from '@/app/shared/explore-nft';
-import NFTDrawer from '@/app/shared/explore-nft/nft-drawer';
+// import NFTSearchPageView from '@/app/shared/explore-nft';
+// import NFTDrawer from '@/app/shared/explore-nft/nft-drawer';
 
 const pageHeader = {
   title: 'Search & Filters',
@@ -23,9 +23,9 @@ export default function NFTPage() {
   return (
     <div className="@container">
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
-        <NFTDrawer />
+        {/* <NFTDrawer /> */}
       </PageHeader>
-      <NFTSearchPageView />
+      {/* <NFTSearchPageView /> */}
     </div>
   );
 }

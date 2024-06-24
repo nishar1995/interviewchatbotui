@@ -1,4 +1,4 @@
-import EcommerceDashboard from '@/app/shared/ecommerce/dashboard';
+// import EcommerceDashboard from '@/app/shared/ecommerce/dashboard';
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function eCommerceDashboardPage() {
-  return <EcommerceDashboard />;
+  // return <EcommerceDashboard />;
 }

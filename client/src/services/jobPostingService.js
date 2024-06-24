@@ -33,16 +33,16 @@ export async function fetchDataById(jobPostingId) {
 }
 
 // fuction of get all  job post
-export async function fetchDataById(tenantId) {
-    try {
-        const response = await fetch(`http://intapp.learninginbits.com:8080/jobPosting/all?tenantId=${tenantId}`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("error", error);
-        throw new error("error by not show the all job post");
-    }
-}
+// export async function fetchDataById(tenantId) {
+//     try {
+//         const response = await fetch(`http://intapp.learninginbits.com:8080/jobPosting/all?tenantId=${tenantId}`);
+//         const data = await response.json();
+//         return data;
+//     } catch (error) {
+//         console.error("error", error);
+//         throw new error("error by not show the all job post");
+//     }
+// }
 
 // fuction of add job post
 export async function addJob(data) {

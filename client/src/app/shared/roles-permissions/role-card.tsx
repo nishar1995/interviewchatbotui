@@ -34,42 +34,42 @@ interface RoleCardProps {
 const users1 = [
   {
     id: 1,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 2,
-    role: ROLES.Administrator,
+   //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 3,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 4,
-    role: ROLES.Administrator,
+   // role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 5,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 6,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,

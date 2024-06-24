@@ -29,16 +29,16 @@ export async function getQuestions() {
 }
 
 // fuction of get all  tenant questions 
-export async function fetchDataById(tenantId) {
-    try {
-        const response = await fetch(`http://intapp.learninginbits.com:8080/tenantQuestion/all?tenantId=${tenantId}`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("error", error);
-        throw new error("error by not show the all tentent questions");
-    }
-}
+// export async function fetchDataById(tenantId) {
+//     try {
+//         const response = await fetch(`http://intapp.learninginbits.com:8080/tenantQuestion/all?tenantId=${tenantId}`);
+//         const data = await response.json();
+//         return data;
+//     } catch (error) {
+//         console.error("error", error);
+//         throw new error("error by not show the all tentent questions");
+//     }
+// }
 
 // fuction of add tenant questions
 export async function addQuestion(data) {

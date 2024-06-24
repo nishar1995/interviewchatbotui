@@ -1,7 +1,7 @@
 import { Button } from 'rizzui';
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import CreateCategory from '@/app/shared/ecommerce/category/create-category';
+// import CreateCategory from '@/app/shared/ecommerce/category/create-category';
 import Link from 'next/link';
 import { metaObject } from '@/config/site.config';
 import { Metadata } from 'next';
@@ -61,7 +61,7 @@ export default function EditCategoryPage({ params }: any) {
           </Button>
         </Link>
       </PageHeader>
-      <CreateCategory id={params.id} category={categoryData} />
+      {/* <CreateCategory id={params.id} category={categoryData} /> */}
     </>
   );
 }

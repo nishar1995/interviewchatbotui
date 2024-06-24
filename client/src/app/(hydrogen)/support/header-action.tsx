@@ -4,18 +4,18 @@ import dynamic from 'next/dynamic';
 import { Button, Title, ActionIcon, cn } from 'rizzui';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import { PiPlusBold, PiFolderBold, PiXBold } from 'react-icons/pi';
-const CreateFolder = dynamic(
-  () => import('@/app/shared/support/inbox/create-folder'),
-  {
-    ssr: false,
-  }
-);
-const CreateSnippetTemplateForm = dynamic(
-  () => import('@/app/shared/support/create-snippet-template-from'),
-  {
-    ssr: false,
-  }
-);
+// const CreateFolder = dynamic(
+//   () => import('@/app/shared/support/inbox/create-folder'),
+//   {
+//     ssr: false,
+//   }
+// );
+// const CreateSnippetTemplateForm = dynamic(
+//   () => import('@/app/shared/support/create-snippet-template-from'),
+//   {
+//     ssr: false,
+//   }
+// );
 
 function CreateFolderModalView() {
   const { closeModal } = useModal();
@@ -30,7 +30,7 @@ function CreateFolderModalView() {
         </ActionIcon>
       </div>
 
-      <CreateFolder onClose={() => closeModal()} />
+      {/* <CreateFolder onClose={() => closeModal()} /> */}
     </div>
   );
 }
@@ -60,12 +60,12 @@ export default function HeaderAction({ title, className }: HeaderActionProps) {
         </Button>
         <Button
           className="w-full text-xs capitalize @lg:w-auto sm:text-sm"
-          onClick={() =>
-            openModal({
-              view: <CreateSnippetTemplateForm title={title} />,
-              customSize: '720px',
-            })
-          }
+          // onClick={() =>
+          //   openModal({
+          //     view: <CreateSnippetTemplateForm title={title} />,
+          //     customSize: '720px',
+          //   })
+          // }
         >
           <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
           Create {title}

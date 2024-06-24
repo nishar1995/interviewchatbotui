@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import ShippingInfo from '@/app/shared/logistics/tracking/shipping-info';
-import TrackingOverview from '@/app/shared/logistics/tracking/tracking-overview';
-import TrackingHistory from '@/app/shared/logistics/tracking/tracking-history';
+// import ShippingInfo from '@/app/shared/logistics/tracking/shipping-info';
+// import TrackingOverview from '@/app/shared/logistics/tracking/tracking-overview';
+// import TrackingHistory from '@/app/shared/logistics/tracking/tracking-history';
 import { metaObject } from '@/config/site.config';
 import { Metadata } from 'next';
 
@@ -45,9 +45,9 @@ export default function TrackingPage({ params }: any) {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      <TrackingOverview className="mb-10" />
+      {/* <TrackingOverview className="mb-10" />
       <ShippingInfo />
-      <TrackingHistory />
+      <TrackingHistory /> */}
     </>
   );
 }

@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { Button, Title } from 'rizzui';
 import ForbiddenImg from '@public/403img.svg';
 import ForbiddenTwoImg from '@public/forbidden-two.png';
-import { PiHouseLineBold } from 'react-icons/pi';
-import Link from 'next/link';
+// import { PiHouseLineBold } from 'react-icons/pi';
+// import Link from 'next/link';
 
 export default function AccessDeniedPage() {
   return (

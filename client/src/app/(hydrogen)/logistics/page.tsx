@@ -1,4 +1,4 @@
-import LogisticsDashboard from '@/app/shared/logistics/dashboard';
+// import LogisticsDashboard from '@/app/shared/logistics/dashboard';
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function LogisticsPage() {
-  return <LogisticsDashboard />;
+  // return <LogisticsDashboard />;
 }

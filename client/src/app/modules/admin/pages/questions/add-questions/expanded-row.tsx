@@ -2,7 +2,7 @@ import DeletePopover from '@/app/shared/delete-popover';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import PencilIcon from '@/components/icons/pencil';
 import React from 'react';
-import { PiXBold } from 'react-icons/pi';
+// import { PiXBold } from 'react-icons/pi';
 import { Title, Text, Tooltip, ActionIcon } from 'rizzui';
 import CreateApplication from '../../../../hr/pages/questions/add-questions/create-application';
 

@@ -1,6 +1,6 @@
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import CreateOrder from '@/app/shared/ecommerce/order/create-order';
+// import CreateOrder from '@/app/shared/ecommerce/order/create-order';
 import ImportButton from '@/app/shared/import-button';
 import { metaObject } from '@/config/site.config';
 
@@ -35,7 +35,7 @@ export default function CreateOrderPage() {
           className="mt-4 w-full @lg:mt-0 @lg:w-auto"
         />
       </PageHeader>
-      <CreateOrder />
+      {/* <CreateOrder /> */}
     </>
   );
 }

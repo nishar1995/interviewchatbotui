@@ -8,7 +8,7 @@ import PageHeader from '@/app/shared/page-header';
 import ExportButton from '@/app/shared/export-button';
 import { appointmentData } from '@/data/appointment-data';
 import { useModal } from '@/app/shared/modal-views/use-modal';
-import CreateUpdateAppointmentForm from '@/app/shared/appointment/appointment-list/appointment-form';
+//import CreateUpdateAppointmentForm from '@/app/shared/appointment/appointment-list/appointment-form';
 
 const pageHeader = {
   title: 'Appointment List',
@@ -30,11 +30,11 @@ interface HeaderProps {
 export default function AppointmentListPageHeader({ className }: HeaderProps) {
   const { closeModal, openModal } = useModal();
   function handleCreateModal() {
-    closeModal(),
-      openModal({
-        view: <CreateUpdateAppointmentForm />,
-        customSize: '700px',
-      });
+    // closeModal(),
+    //   openModal({
+    //     view: <CreateUpdateAppointmentForm />,
+    //     customSize: '700px',
+    //   });
   }
   return (
     <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>

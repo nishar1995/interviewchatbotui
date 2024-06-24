@@ -1,4 +1,4 @@
-import SupportDashboard from '@/app/shared/support/dashboard';
+// import SupportDashboard from '@/app/shared/support/dashboard';
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function SupportDashboardPage() {
-  return <SupportDashboard />;
+  // return <SupportDashboard />;
 }

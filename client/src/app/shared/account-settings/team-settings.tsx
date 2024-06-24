@@ -7,7 +7,7 @@ import HorizontalFormBlockWrapper from '@/app/shared/account-settings/horiozonta
 import GithubIcon from '@/components/icons/github';
 import TeamsIcon from '@/components/icons/teams';
 import FigmaIcon from '@/components/icons/figma';
-import AddTeamMemberModalView from '@/app/shared/account-settings/modal/add-team-member';
+// import AddTeamMemberModalView from '@/app/shared/account-settings/modal/add-team-member';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import { loggedInDeviceData } from '@/data/logged-in-device';
 import { PiPlusBold } from 'react-icons/pi';
@@ -43,11 +43,11 @@ export default function TeamSettingsView() {
         <div className="col-span-2 flex justify-end gap-4">
           <Button
             type="button"
-            onClick={() =>
-              openModal({
-                view: <AddTeamMemberModalView />,
-              })
-            }
+            // onClick={() =>
+            //   openModal({
+            //     view: <AddTeamMemberModalView />,
+            //   })
+            // }
           >
             <PiPlusBold className="me-1.5 h-4 w-4" />
             Add Member

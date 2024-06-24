@@ -1,7 +1,7 @@
 'use client'
 
 import RoleCard from '@/app/shared/roles-permissions/role-card';
-import { rolesList } from '@/data/roles-permissions';
+// import { rolesList } from '@/data/roles-permissions';
 import { getUsersRoleCount } from '@/services/userService';
 import cn from '@/utils/class-names';
 import { useEffect, useState } from 'react';

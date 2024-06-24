@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
-import OrdersTable from '@/app/shared/ecommerce/order/order-list/table';
+// import OrdersTable from '@/app/shared/ecommerce/order/order-list/table';
 import { PiPlusBold } from 'react-icons/pi';
 import { orderData } from '@/data/order-data';
 import { metaObject } from '@/config/site.config';
@@ -51,7 +51,7 @@ export default function OrdersPage() {
         </div>
       </PageHeader>
 
-      <OrdersTable data={orderData} />
+      {/* <OrdersTable data={orderData} /> */}
     </>
   );
 }

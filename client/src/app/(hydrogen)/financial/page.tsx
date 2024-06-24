@@ -1,4 +1,4 @@
-import FinancialDashboard from '@/app/shared/financial/dashboard';
+// import FinancialDashboard from '@/app/shared/financial/dashboard';
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function FinancialPage() {
-  return <FinancialDashboard />;
+  // return <FinancialDashboard />;
 }

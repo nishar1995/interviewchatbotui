@@ -1,6 +1,6 @@
 import { recentCustomers } from '@/data/recent-customers-data';
 import BasicTableWidget from '@/components/controlled-table/basic-table-widget';
-import { getColumns } from '@/app/shared/executive/recent-customers/columns';
+// import { getColumns } from '@/app/shared/executive/recent-customers/columns';
 
 export default function RecentCustomers({ className }: { className?: string }) {
   return (

@@ -1,7 +1,7 @@
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
-import ChartWidgets from '@/app/shared/chart-widgets';
+// import ChartWidgets from '@/app/shared/chart-widgets';
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
@@ -42,7 +42,7 @@ export default function ChartsPage() {
         </div>
       </PageHeader>
 
-      <ChartWidgets />
+      {/* <ChartWidgets /> */}
     </>
   );
 }

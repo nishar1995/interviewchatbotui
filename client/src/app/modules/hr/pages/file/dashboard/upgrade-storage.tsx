@@ -1,4 +1,4 @@
-import BannerCard from '@/components/banners/banner-card';
+// import BannerCard from '@/components/banners/banner-card';
 import Link from 'next/link';
 import { Text } from 'rizzui';
 import { PiCheckCircleFill } from 'react-icons/pi';
@@ -12,7 +12,7 @@ const features = [
 export default function UpgradeStorage({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <BannerCard
+      {/* <BannerCard
         title="Upgrade Storage"
         className="min-h-[280px] overflow-hidden rounded-lg"
       >
@@ -33,7 +33,7 @@ export default function UpgradeStorage({ className }: { className?: string }) {
         >
           Upgrade Storage
         </Link>
-      </BannerCard>
+      </BannerCard> */}
     </div>
   );
 }

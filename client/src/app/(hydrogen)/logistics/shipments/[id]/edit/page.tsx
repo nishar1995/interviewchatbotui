@@ -3,8 +3,8 @@ import { routes } from '@/config/routes';
 import { metaObject } from '@/config/site.config';
 import PageHeader from '@/app/shared/page-header';
 import ImportButton from '@/app/shared/import-button';
-import CreateEditShipment from '@/app/shared/logistics/shipment/create-edit';
-import { shipmentData } from '@/app/shared/logistics/shipment/create-edit/form-utils';
+// import CreateEditShipment from '@/app/shared/logistics/shipment/create-edit';
+// import { shipmentData } from '@/app/shared/logistics/shipment/create-edit/form-utils';
 
 type Props = {
   params: { id: string };
@@ -50,7 +50,7 @@ export default function EditShipmentsPage({
         <ImportButton title={'Import File'} />
       </PageHeader>
 
-      <CreateEditShipment id={params.id} shipment={shipmentData} />
+      {/* <CreateEditShipment id={params.id} shipment={shipmentData} /> */}
     </>
   );
 }

@@ -100,7 +100,7 @@ const MeetingComponent = ({ id }: any) => {
                     userEmail: userEmail,
                     tk: registrantToken,
                     zak: zakToken
-                }).then(() => {
+                } ).then(() => {
                     console.log('joined successfully');
                     //hostJoin(meetingUserDetails)
 

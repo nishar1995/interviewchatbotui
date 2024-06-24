@@ -32,10 +32,10 @@ type FilterElementProps = {
   searchTerm: string;
 };
 
-const roles = rolesList.map((role) => ({
-  label: role.name,
-  value: role.name,
-}));
+// const roles = rolesList.map((role) => ({
+//   label: role.name,
+//   value: role.name,
+// }));
 
 export default function FilterElement({
   isFiltered,
@@ -70,7 +70,7 @@ export default function FilterElement({
           }
         />
 
-        <StatusField
+        {/* <StatusField
           options={roles}
           dropdownClassName="!z-10 w-48"
           value={filters['role']}
@@ -83,7 +83,7 @@ export default function FilterElement({
           displayValue={(selected: string) =>
             roles.find((option) => option.value === selected)?.value ?? selected
           }
-        />
+        /> */}
 
         {isFiltered && (
           <Button

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Title } from 'rizzui';
 import SimpleBar from '@/components/ui/simplebar';
 import FolderIcon from '@/components/icons/folder-solid';
-import { Card } from '@/app/shared/file/manager/file-grid/grid';
+// import { Card } from '@/app/shared/file/manager/file-grid/grid';
 
 const recentFiles = [
   {
@@ -62,14 +62,14 @@ export default function RecentFiles({ className }: { className?: string }) {
 
       <SimpleBar>
         <div className="grid grid-flow-col gap-5">
-          {recentFiles.map((item) => (
+          {/* {recentFiles.map((item) => (
             <Card
               key={item.id}
               item={item}
               onDeleteItem={() => null}
               className="min-w-[273px] hover:-translate-y-0 hover:shadow-none"
             />
-          ))}
+          ))} */}
         </div>
       </SimpleBar>
     </div>

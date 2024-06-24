@@ -6,10 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ActionIcon, Input, Text, Title } from 'rizzui';
 import Footer from './footer';
-import {
-  formDataAtom,
-  useStepperAppointment,
-} from '@/app/shared/appointment/appointment-list/appointment-form';
+// import {
+//   formDataAtom,
+//   useStepperAppointment,
+// } from '@/app/shared/appointment/appointment-list/appointment-form';
 import { PiXBold } from 'react-icons/pi';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import toast from 'react-hot-toast';
@@ -31,39 +31,39 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 export default function PatientInformation() {
   const [_, setLoading] = useState(false);
 
-  const { setStep } = useStepperAppointment();
+  // const { setStep } = useStepperAppointment();
   const { closeModal } = useModal();
-  const [formData, setFormData] = useAtom(formDataAtom);
+  // const [formData, setFormData] = useAtom(formDataAtom);
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-    },
+    // defaultValues: {
+    //   name: formData.name,
+    //   email: formData.email,
+    //   phone: formData.phone,
+    // },
   });
 
   const onSubmit: SubmitHandler<FormSchemaType> = (data) => {
     console.log('data', data);
     setTimeout(() => {
       setLoading(true);
-      setFormData((prev) => ({
-        ...prev,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-      }));
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   name: data.name,
+      //   email: data.email,
+      //   phone: data.phone,
+      // }));
       toast.success(
         // <Text as="b">Product successfully {slug ? 'updated' : 'created'}</Text>
         <Text as="b">Appointment successfully created</Text>
       );
-      setStep(0);
+      // setStep(0);
     }, 600);
-    console.log('FormData', formData);
+    // console.log('FormData', formData);
     closeModal();
   };
 

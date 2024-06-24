@@ -1,34 +1,34 @@
 'use client';
 
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useAtom } from 'jotai';
-const StepOne = dynamic(
-  () =>
-    import(
-      '@/app/shared/appointment/appointment-list/appointment-form/data-time'
-    ),
-  {
-    ssr: false,
-  }
-);
-const StepTwo = dynamic(
-  () =>
-    import(
-      '@/app/shared/appointment/appointment-list/appointment-form/services'
-    ),
-  {
-    ssr: false,
-  }
-);
-const StepThree = dynamic(
-  () =>
-    import(
-      '@/app/shared/appointment/appointment-list/appointment-form/patient-information'
-    ),
-  {
-    ssr: false,
-  }
-);
+// const StepOne = dynamic(
+//   () =>
+//     import(
+//       '@/app/shared/appointment/appointment-list/appointment-form/data-time'
+//     ),
+//   {
+//     ssr: false,
+//   }
+// );
+// const StepTwo = dynamic(
+//   () =>
+//     import(
+//       '@/app/shared/appointment/appointment-list/appointment-form/services'
+//     ),
+//   {
+//     ssr: false,
+//   }
+// );
+// const StepThree = dynamic(
+//   () =>
+//     import(
+//       '@/app/shared/appointment/appointment-list/appointment-form/patient-information'
+//     ),
+//   {
+//     ssr: false,
+//   }
+// );
 import { atomWithReset, atomWithStorage, useResetAtom } from 'jotai/utils';
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -88,22 +88,22 @@ export function useStepperAppointment() {
   };
 }
 
-const MAP_STEP_TO_COMPONENT = {
-  [Step.StepOne]: StepOne,
-  [Step.StepTwo]: StepTwo,
-  [Step.StepThree]: StepThree,
-};
+// const MAP_STEP_TO_COMPONENT = {
+//   [Step.StepOne]: StepOne,
+//   [Step.StepTwo]: StepTwo,
+//   [Step.StepThree]: StepThree,
+// };
 
-export const stepAppointmentTotalSteps = Object.keys(
-  MAP_STEP_TO_COMPONENT
-).length;
+// export const stepAppointmentTotalSteps = Object.keys(
+//   MAP_STEP_TO_COMPONENT
+// ).length;
 
 export default function CreateUpdateAppointmentForm() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [step] = useAtom(stepperAtomAppointment);
   const [_, setFormData] = useAtom(formDataAtom);
-  const Component = MAP_STEP_TO_COMPONENT[step];
+  // const Component = MAP_STEP_TO_COMPONENT[step];
   const resetLocation = useResetAtom(stepperAtomAppointment);
   useEffect(() => {
     resetLocation();
@@ -114,7 +114,7 @@ export default function CreateUpdateAppointmentForm() {
   return (
     <div className="relative flex justify-center md:items-center">
       <div className="w-full">
-        <Component />
+        {/* <Component /> */}
       </div>
     </div>
   );

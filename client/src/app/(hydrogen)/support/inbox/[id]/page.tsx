@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 import { metaObject } from '@/config/site.config';
-import BackButton from '@/app/shared/support/inbox/back-button';
-import MessageList from '@/app/shared/support/inbox/message-list';
-import MessageDetails from '@/app/shared/support/inbox/message-details';
+// import BackButton from '@/app/shared/support/inbox/back-button';
+// import MessageList from '@/app/shared/support/inbox/message-list';
+// import MessageDetails from '@/app/shared/support/inbox/message-details';
 
 type Props = {
   params: { id: string };
@@ -25,11 +25,11 @@ export default function Page() {
     <>
       <div className="mt-5 items-start @container lg:mt-9 lg:grid lg:grid-cols-[330px_1fr] lg:gap-7 2xl:grid-cols-[400px_1fr]">
         <div className="col-span-full">
-          <BackButton />
+          {/* <BackButton /> */}
         </div>
 
-        <MessageList className="lg:hidden" />
-        <MessageDetails />
+        {/* <MessageList className="lg:hidden" /> */}
+        {/* <MessageDetails /> */}
       </div>
     </>
   );

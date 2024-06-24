@@ -16,10 +16,10 @@ export function SidebarMenu() {
 
   return (
     <div className="mt-4 pb-3 3xl:mt-6">
-      {menuItems(userEmail ?? '').map((item, index) => {
+      {menuItems(userEmail ?? '').map((item:any, index:number) => {
         const isActive = pathname === (item?.href as string);
         const pathnameExistInDropdowns: any = item?.dropdownItems?.filter(
-          (dropdownItem) => dropdownItem.href === pathname
+          (dropdownItem:any) => dropdownItem.href === pathname
         );
         const isDropdownOpen = Boolean(pathnameExistInDropdowns?.length);
 
@@ -66,7 +66,7 @@ export function SidebarMenu() {
                       </div>
                     )}
                   >
-                    {item?.dropdownItems?.map((dropdownItem, index) => {
+                    {item?.dropdownItems?.map((dropdownItem:any, index:number) => {
                       const isChildActive =
                         pathname === (dropdownItem?.href as string);
 

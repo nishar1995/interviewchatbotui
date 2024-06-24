@@ -14,7 +14,7 @@ import {
   PiStackSimple,
 } from 'react-icons/pi';
 import BillingHistoryTable from '@/app/shared/account-settings/billing-history/table';
-import AddBillingCardModalView from '@/app/shared/account-settings/modal/add-billing-card';
+// import AddBillingCardModalView from '@/app/shared/account-settings/modal/add-billing-card';
 import MasterCardIcon from '@/components/icons/mastercard';
 import VisaIcon from '@/components/icons/visa';
 import ApplePayIcon from '@/components/icons/apple-pay';
@@ -222,11 +222,11 @@ export function CardDetails() {
           type="button"
           variant="outline"
           className="mt-4"
-          onClick={() =>
-            openModal({
-              view: <AddBillingCardModalView />,
-            })
-          }
+          // onClick={() =>
+          //   openModal({
+          //     view: <AddBillingCardModalView />,
+          //   })
+          // }
         >
           <PiPlusBold className="me-2 h-4 w-4" />
           <span>Add new card</span>

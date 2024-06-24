@@ -4,8 +4,8 @@ import { routes } from '@/config/routes';
 import { Button } from 'rizzui';
 import { metaObject } from '@/config/site.config';
 import PageHeader from '@/app/shared/page-header';
-import CreateOrder from '@/app/shared/ecommerce/order/create-order';
-import { orderData } from '@/app/shared/ecommerce/order/order-form/form-utils';
+// import CreateOrder from '@/app/shared/ecommerce/order/create-order';
+// import { orderData } from '@/app/shared/ecommerce/order/order-form/form-utils';
 
 type Props = {
   params: { id: string };
@@ -55,7 +55,7 @@ export default function EditOrderPage({ params }: any) {
           </Button>
         </Link>
       </PageHeader>
-      <CreateOrder id={params.id} order={orderData} />
+      {/* <CreateOrder id={params.id} order={orderData} /> */}
     </>
   );
 }

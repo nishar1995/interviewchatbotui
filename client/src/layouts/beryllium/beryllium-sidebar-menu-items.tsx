@@ -419,87 +419,87 @@ export const berylliumSidebarMenuItems = [
     name: 'Authentication',
   },
   // label end
-  {
-    name: 'Sign Up',
-    href: '#',
-    icon: <PiUserPlus />,
-    dropdownItems: [
-      {
-        name: 'Modern Sign up',
-        href: routes.auth.signUp1,
-      },
-      {
-        name: 'Vintage Sign up',
-        href: routes.auth.signUp2,
-      },
-      {
-        name: 'Trendy Sign up',
-        href: routes.auth.signUp3,
-      },
-      {
-        name: 'Elegant Sign up',
-        href: routes.auth.signUp4,
-      },
-      {
-        name: 'Classic Sign up',
-        href: routes.auth.signUp5,
-      },
-    ],
-  },
-  {
-    name: 'Sign In',
-    href: '#',
-    icon: <PiShieldCheck />,
-    dropdownItems: [
-      {
-        name: 'Modern Sign in',
-        href: routes.auth.signIn1,
-      },
-      {
-        name: 'Vintage Sign in',
-        href: routes.auth.signIn2,
-      },
-      {
-        name: 'Trendy Sign in',
-        href: routes.auth.signIn3,
-      },
-      {
-        name: 'Elegant Sign in',
-        href: routes.auth.signIn4,
-      },
-      {
-        name: 'Classic Sign in',
-        href: routes.auth.signIn5,
-      },
-    ],
-  },
-  {
-    name: 'Forgot Password',
-    href: '#',
-    icon: <PiLockKey />,
-    dropdownItems: [
-      {
-        name: 'Modern Forgot password',
-        href: routes.auth.forgotPassword1,
-      },
-      {
-        name: 'Vintage Forgot password',
-        href: routes.auth.forgotPassword2,
-      },
-      {
-        name: 'Trendy Forgot password',
-        href: routes.auth.forgotPassword3,
-      },
-      {
-        name: 'Elegant Forgot password',
-        href: routes.auth.forgotPassword4,
-      },
-      {
-        name: 'Classic Forgot password',
-        href: routes.auth.forgotPassword5,
-      },
-    ],
-  },
+  // {
+  //   name: 'Sign Up',
+  //   href: '#',
+  //   icon: <PiUserPlus />,
+  //   dropdownItems: [
+  //     {
+  //       name: 'Modern Sign up',
+  //       href: routes.auth.signUp1,
+  //     },
+  //     {
+  //       name: 'Vintage Sign up',
+  //       href: routes.auth.signUp2,
+  //     },
+  //     {
+  //       name: 'Trendy Sign up',
+  //       href: routes.auth.signUp3,
+  //     },
+  //     {
+  //       name: 'Elegant Sign up',
+  //       href: routes.auth.signUp4,
+  //     },
+  //     {
+  //       name: 'Classic Sign up',
+  //       href: routes.auth.signUp5,
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'Sign In',
+  //   href: '#',
+  //   icon: <PiShieldCheck />,
+  //   dropdownItems: [
+  //     {
+  //       name: 'Modern Sign in',
+  //       href: routes.auth.signIn1,
+  //     },
+  //     {
+  //       name: 'Vintage Sign in',
+  //       href: routes.auth.signIn2,
+  //     },
+  //     {
+  //       name: 'Trendy Sign in',
+  //       href: routes.auth.signIn3,
+  //     },
+  //     {
+  //       name: 'Elegant Sign in',
+  //       href: routes.auth.signIn4,
+  //     },
+  //     {
+  //       name: 'Classic Sign in',
+  //       href: routes.auth.signIn5,
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'Forgot Password',
+  //   href: '#',
+  //   icon: <PiLockKey />,
+  //   dropdownItems: [
+  //     {
+  //       name: 'Modern Forgot password',
+  //       href: routes.auth.forgotPassword1,
+  //     },
+  //     {
+  //       name: 'Vintage Forgot password',
+  //       href: routes.auth.forgotPassword2,
+  //     },
+  //     {
+  //       name: 'Trendy Forgot password',
+  //       href: routes.auth.forgotPassword3,
+  //     },
+  //     {
+  //       name: 'Elegant Forgot password',
+  //       href: routes.auth.forgotPassword4,
+  //     },
+  //     {
+  //       name: 'Classic Forgot password',
+  //       href: routes.auth.forgotPassword5,
+  //     },
+  //   ],
+  // },
   {
     name: 'OTP Pages',
     href: '#',

@@ -1,4 +1,4 @@
-import CartDrawer from '@/app/shared/ecommerce/cart/cart-drawer';
+//import CartDrawer from '@/app/shared/ecommerce/cart/cart-drawer';
 // import FloatingCart from '@/app/shared/floating-cart';
 import { CartProvider } from '@/store/quick-cart/cart.context';
 
@@ -10,7 +10,7 @@ export default function EcommerceLayout({
   return (
     <CartProvider>
       {children}
-      <CartDrawer />
+      {/* <CartDrawer /> */}
     </CartProvider>
   );
 }

@@ -1,6 +1,6 @@
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import ProductDetails from '@/app/shared/ecommerce/product/product-details';
+// import ProductDetails from '@/app/shared/ecommerce/product/product-details';
 import { metaObject } from '@/config/site.config';
 
 export const metadata = {
@@ -27,7 +27,7 @@ export default function ProductDetailsPage({ params }: any) {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      <ProductDetails />
+      {/* <ProductDetails /> */}
     </>
   );
 }

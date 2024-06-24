@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
 import { metaObject } from '@/config/site.config';
-import EmailTemplatesGrid from '@/app/shared/email-templates';
+// import EmailTemplatesGrid from '@/app/shared/email-templates';
 
 export const metadata = {
   ...metaObject('Email Templates'),
@@ -29,7 +29,7 @@ export default function EmailTemplates() {
           <Button as="span">Learn More</Button>
         </Link>
       </PageHeader>
-      <EmailTemplatesGrid />
+      {/* <EmailTemplatesGrid /> */}
     </>
   );
 }

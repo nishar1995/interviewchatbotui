@@ -5,42 +5,42 @@ import { getRandomArrayElement } from '@/utils/get-random-array-element';
 export const users = [
   {
     id: 1,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 2,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 3,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 4,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 5,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
   },
   {
     id: 6,
-    role: ROLES.Administrator,
+    //role: ROLES.Administrator,
     avatar: `https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-${getRandomArrayElement(
       avatarIds
     )}.webp`,
@@ -49,12 +49,12 @@ export const users = [
 
 export const rolesList = [
   {
-    name: ROLES.Administrator,
+    //name: ROLES.Administrator,
     color: '#2465FF',
     users,
   },
   {
-    name: ROLES.Manager,
+    //name: ROLES.Manager,
     color: '#F5A623',
     users,
   },
@@ -74,7 +74,7 @@ export const rolesList = [
   //   users,
   // },
   {
-    name: ROLES.HRD,
+    //name: ROLES.HRD,
     color: '#11A849',
     users,
   },
@@ -84,7 +84,7 @@ export const rolesList = [
   //   users,
   // },
   {
-    name: ROLES.Customer,
+    //name: ROLES.Customer,
     color: '#0070F3',
     users,
   },

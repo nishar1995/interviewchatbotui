@@ -1,0 +1,2 @@
+The interview covers topics related to the differences between Python and R in terms of primary use cases, strengths, and weaknesses, as well as how to decide which language to use for a specific data analysis project. It also discusses the concept of vectorization in both Python and R, its impact on code performance, and examples of when to leverage vectorization for optimization. Finally, the interview touches on the difference between supervised and unsupervised learning, providing examples of when each type of learning would be used.
+
