@@ -453,7 +453,7 @@ class UserView(APIView):
         return JsonResponse(data)
     
 role_dict = {
-    '1':'Admin',
+    '1': 'Admin',
     '4': 'Candidate',
     '3': 'HR',
     '2': 'HRManager'

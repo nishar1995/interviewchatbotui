@@ -95,7 +95,7 @@ def summarize_resume(resume_text,resume_filename):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are a helpful interviewer."},
             {"role": "user", "content": prompt},
         ],
         max_tokens=1024,
@@ -115,7 +115,7 @@ def cal_experience(resume_text):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are a helpful interviewer."},
             {"role": "user", "content": prompt},
         ],
         temperature=0.5,
@@ -133,7 +133,7 @@ def extract_skills(text):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are a helpful interviewer."},
             {"role": "user", "content": prompt},
         ],
         temperature=0.5,
@@ -200,10 +200,10 @@ def generate_questions(skill, experience_level, num_questions=10):
  
     question1 = [q.strip() for q in questions if q and q.strip() != ""]
     print(f"Skill: {skill}")
-    for i, question in enumerate(question1, 1):
+    for i, question in enumerate(question1, num_questions):
         print(f"Question {i}: {question}")
  
-    return question1[:num_questions]
+    return question1
  
  
 # def generate_interview_questions(matched_skills, experience_level, num_questions=1):
@@ -225,15 +225,17 @@ def generate_interview_questions(matched_skills, experience_level, num_questions
  
     for skill in matched_skills:
         skill_questions = []
-        generated_questions = generate_questions(skill, experience_level, num_questions * 2)
+        generated_questions = generate_questions(skill, experience_level, num_questions)
+        print("Generated questions: ", generated_questions)
  
         for question in generated_questions:
             question1 = question.lower().strip()
-            if question1 not in existing_questions:
-                skill_questions.append(question)
-                # existing_questions.add(question1)
-                if len(skill_questions) == num_questions:
-                    break
+            skill_questions.append(question)
+            # if question1 not in existing_questions:
+            #     skill_questions.append(question)
+            #     # existing_questions.add(question1)
+            # if len(skill_questions) == num_questions:
+            #     break
  
         questions[skill] = skill_questions
  

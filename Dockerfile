@@ -1,5 +1,5 @@
 # Base image for Django
-FROM python:3.10-slim-buster AS django-base
+FROM python:3.11-slim AS django-base
 
 # Set the working directory
 WORKDIR /

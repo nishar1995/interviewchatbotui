@@ -19,10 +19,10 @@ This project aims to create a chatbot capable of conducting technical interviews
 # Installation:
 
 1. Clone the repository:
-   
+
   ```
    git clone https://github.com/preetisidana648/djangointerview.git
- 
+
 ```
 
 2. Create and activate a virtual environment:
@@ -39,7 +39,7 @@ This project aims to create a chatbot capable of conducting technical interviews
    python -m venv env
    source env/bin/activate
 ```
-   
+
 3. Install the required packages:
 ```
    pip install -r requirements.txt
@@ -62,7 +62,7 @@ python manage.py migrate
 
 Before running the project, you need to obtain the following API keys from third-party services:
 
-### OpenAI API Key: 
+### OpenAI API Key:
 
 Obtain your OpenAI API key from the OpenAI website.
 
@@ -145,17 +145,17 @@ Upon running the project, the chatbot will be accessible via the provided URL.
 
 # Users
 
-ADMIN 
-   USERNAME :  nisha@321 
-   PASSWORD :  Qwe@123 
-HR 
-   USERNAME :  rushali@321 
-   PASSWORD :  Qwe@123 
-HR MANAGER 
- 	USERNAME :  preeti@321 
-   PASSWORD :  Qwe@123  
-CANDIDATE 
- 	USERNAME :  vand@321, khus@321 
+ADMIN
+   USERNAME :  nisha@321
+   PASSWORD :  Qwe@123
+HR MANAGER
+ 	USERNAME :  preeti@321
+   PASSWORD :  Qwe@123
+HR
+   USERNAME :  rushali@321
+   PASSWORD :  Qwe@123
+CANDIDATE
+ 	USERNAME :  vand@321, khus@321
    PASSWORD :  Qwe@123
 
 
