@@ -1,0 +1,33 @@
+Question: How would you approach identifying outliers in a dataset during exploratory data analysis? Can you discuss different techniques and algorithms that can be used for outlier detection?
+Answer: for outlite detections I can uses box technique
+
+Question: Explain the process of data cleaning and preprocessing in the context of exploratory data analysis. What are some common data quality issues you might encounter and how would you address them?
+Answer: 
+
+Question: Can you explain the difference between supervised and unsupervised learning? Provide examples of scenarios where each type of learning is more suitable.
+Answer: ya supervis learning when we have already data otherwise will use unsupervised learning
+
+Question: Describe the bias-variance tradeoff in machine learning. How does it impact model performance?
+Answer: I don't know the answer
+
+Question: Can you explain the difference between supervised and unsupervised learning in the context of data analysis?
+Answer: I am not really sure of that
+
+Question: How do you handle missing data in a dataset during the data analysis process?
+Answer: will replace with the average mean median
+
+Question: Can you explain the differences between Tableau, Power BI, and Matplotlib in terms of their features, capabilities, and use cases?
+Answer: aadisha different tools Different techniques with the variation of the data source suitable according to the approach or according to the requirement
+
+Question: How would you approach creating a dynamic dashboard in Tableau that updates in real-time with new data inputs?
+Answer: yeah will use something like real time API but really not sure about that
+
+Question: Describe the differences between dynamic typing and static typing in programming languages. Provide examples of languages that use each approach and discuss the advantages and disadvantages of each.
+Answer: kya dynamic typing is when you can easily you know interchange the variable types you can assign any value but the street typing is when you need to stick to 1 particular type for example types script is a strict typing but in Python or JavaScript you can actually assignment number or string different
+
+Question: Explain the concept of closures in programming languages. How are closures implemented in Python and R, and what are the benefits of using them in code?
+Answer: I don't know the answer actually
+
+Question: Can you explain the difference between Type I and Type II errors in hypothesis testing? How do they impact the decision-making process?
+Answer: sudizer basically false positive and first negative kind of errors so there is a box which actually makes a we need to set some P value in order to detect that and this yeah crucial for the decision making process
+

@@ -1443,8 +1443,8 @@ div[style='z-index: 1000001;'],
 
 .question, .history {
   flex: 1;
-  margin: 10px;
-  padding: 20px;
+  margin: 10px 0;
+  padding: 10px 0;
   /* border: 1px solid #ccc; */
 }
 

@@ -18,13 +18,13 @@ declare global {
 
 
 export default function StartInterviewDashboard({ id }: any) {
-    console.log("start interview id.....", id)
     const router = useRouter();
     const [questions, setQuestions] = useState<any[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers]: any = useState([]);
     const [isRecording, setIsRecording] = useState(false);
     const [showAnswerList, setShowAnswerList] = useState([]);
+    let [final_transcript_all] = useState('');
     let recognition: any;
     let silenceDetectionTimeout: any;
     let interViewQuestions: any[] = [];
@@ -33,6 +33,8 @@ export default function StartInterviewDashboard({ id }: any) {
     let candidate_id: any;
     let job_id: any;
     let repeat: any = 0;
+    let final_transcript = '';
+    let interim_transcript = '';
     //let showAnswerList: any[] = []
 
     const colors = [
@@ -75,11 +77,18 @@ export default function StartInterviewDashboard({ id }: any) {
         } else {
             utterance = new SpeechSynthesisUtterance(question);
         }
-        // utterance.voice = voices[93];
+
+        for (let i = 0; i < voices.length; i++) {
+            if (voices[i].name === 'Nicky') {
+                // utterance.voice = voices[i];
+            }
+          }
+
+        utterance.rate = .7;
         synth.speak(utterance);
 
         utterance.onstart = function () {
-            console.log('Speech has started.');
+            // console.log('Speech has started.');
         };
 
         utterance.onpause = function () {
@@ -103,7 +112,7 @@ export default function StartInterviewDashboard({ id }: any) {
         };
 
         utterance.onend = function () {
-            console.log('Speech has ended.');
+            // console.log('Speech has ended.');
             startRecognition(question); // Start recognition after speaking
         };
     };
@@ -127,18 +136,33 @@ export default function StartInterviewDashboard({ id }: any) {
         };
 
         recognition.onspeechstart = () => {
-            console.log('Speech has been detected.');
+            // console.log('Speech has been detected.');
         };
 
         recognition.onspeechend = () => {
-            console.log('Speech has stopped being detected.');
+            // console.log('Speech has stopped being detected.');
         };
 
         recognition.onresult = (event: any) => {
             clearTimeout(silenceDetectionTimeout);
+            final_transcript = '';
+            interim_transcript = '';
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                  final_transcript += event.results[i][0].transcript;
+                } else {
+                  interim_transcript += event.results[i][0].transcript;
+                }
+            }
+            final_transcript = final_transcript;
+            interim_transcript = interim_transcript;
+            final_transcript_all =  final_transcript;
+
+            console.log(final_transcript);
+
             if (event.results[event.results.length - 1].isFinal) {
-                const answer = event.results[event.results.length - 1][0].transcript;
-                handleAnswer(answer);
+                // const answer = event.results[event.results.length - 1][0].transcript;
+                setTimeout(() => handleAnswer(final_transcript), 2000);
             }
         };
 
@@ -160,6 +184,15 @@ export default function StartInterviewDashboard({ id }: any) {
                 repeat++;
                 speakQuestion(questions);
             } else {
+                interViewQuestions[nextIndex].answer = 'Candidate did not respond in time or failed to answer.';
+                interViewQuestions[nextIndex].isDone = true;
+                interViewQuestions[nextIndex].isAnswered = false;
+                if(interViewQuestions[nextIndex]) {
+                    setShowAnswerList(prevList => [...prevList, {
+                        question: interViewQuestions[nextIndex].question,
+                        answer: interViewQuestions[nextIndex].answer,
+                    }] as any);
+                }
                 moveToNextQuestion();
             }
         }, 5000); // Adjust the timeout duration to suit your needs
@@ -167,14 +200,16 @@ export default function StartInterviewDashboard({ id }: any) {
 
     const handleAnswer = (answer: any) => {
         setAnswers((prevAnswers: any) => {
-            const newAnswers = [...prevAnswers];
             interViewQuestions[nextIndex].answer = answer;
-            setShowAnswerList(prevList => [...prevList, {
-                question: interViewQuestions[nextIndex].question,
-                answer: interViewQuestions[nextIndex].answer,
-            }] as any);
-
-            if (interViewQuestions[nextIndex].answer) {
+            interViewQuestions[nextIndex].isDone = true;
+            interViewQuestions[nextIndex].isAnswered = true;
+            if(interViewQuestions[nextIndex]) {
+                setShowAnswerList(prevList => [...prevList, {
+                    question: interViewQuestions[nextIndex].question,
+                    answer: interViewQuestions[nextIndex].answer,
+                }] as any);
+            }
+            if (nextIndex < interViewQuestions.length) {
                 moveToNextQuestion();
             }
             return interViewQuestions;
@@ -221,7 +256,6 @@ export default function StartInterviewDashboard({ id }: any) {
         }
         try {
             const response = await captureResponse(body);
-            console.log("capture answer", response)
             if (response.status == 'success') {
                 router.push("/successfull-interview");
             }
@@ -246,55 +280,66 @@ export default function StartInterviewDashboard({ id }: any) {
 
     return (
         <div>
-            <h1>Interview Dashboard</h1>
-            <div className="question" id="question">
-                <div className="card">
-                    <div className="card-header">Question</div>
-                    <div className="card-body">
-                        <p className="card-text">{questions[currentQuestionIndex]?.question}</p>
-                    </div>
+            {showAnswerList.length !== questions.length && (
+                <div>
+                    <h1>Interview Dashboard</h1>
+                    <div className="question" id="question">
+                        <div className="card">
+                            <div className="card-header">Question</div>
+                            <div className="card-body">
+                                <p className="card-text">{questions[currentQuestionIndex]?.question}</p>
+                            </div>
 
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div id="recording-indicator" style={{ display: 'none' }}>
-                <p>Recording...</p>
-            </div>
-
+            )
+            }
             <div>
-                <h3>Interview Question/Answer  </h3>
-                {showAnswerList.length > 0 ? (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" className="px-6 py-3">
-                                        Sr.no
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Questions
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Answer
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {showAnswerList.map((item: any, index) => (
-                                    <tr key={index}>
-                                        <td className="px-6 py-3">{index + 1}</td>
-                                        <td className="px-6 py-3">{item.question}</td>
-                                        <td className="px-6 py-3">{item.answer}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                ) : (
-                    <p></p>
+                {showAnswerList.length === questions.length && (
+                       <h1>Interview Complete, Saving...</h1>
                 )}
+
+                {showAnswerList.length !== questions.length && (
+                    <section>
+                        <div id="recording-indicator" style={{ display: 'none' }}>
+                            <p>Recording...</p>
+                        </div>
+        
+                        <h3>Interview Question/Answer</h3>
+                        {showAnswerList.length > 0 ? (
+                            <div className="relative overflow-x-auto">
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3">
+                                                Sr.no
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Questions
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Answer
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {showAnswerList.map((item: any, index) => (
+                                            <tr key={index}>
+                                                <td className="px-6 py-3">{index + 1}</td>
+                                                <td className="px-6 py-3">{item.question}</td>
+                                                <td className="px-6 py-3">{item.answer}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <p></p>
+                        )}
+                </section>
+            )}
             </div>
-
-
         </div>
 
     );

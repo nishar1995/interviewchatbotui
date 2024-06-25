@@ -1,9 +1,9 @@
-Question: Can you explain the differences between Python and R in terms of their primary use cases, strengths, and weaknesses? How would you decide which language to use for a specific data analysis project?
-Answer: the difference between Python are in terms of the primary use casey's 10th and you decide which angle to use specific data
+Question: Can you explain the differences between Python and R in terms of their primary use cases, strengths, and weaknesses?
+Answer: Candidate did not respond in time or failed to answer.
 
-Question: Can you discuss the concept of vectorization in both Python and R? How does it impact the performance of code written in these languages, and can you provide examples of when and how to leverage vectorization for optimization?
-Answer: impact the performance of Record Written In these language and can you provide example when and how to lead as vector for Optimisation
+Question: Can you discuss the concept of vectorization in both Python and R?
+Answer: yeah not sure about this one
 
-Question: Can you explain the difference between supervised and unsupervised learning, and provide examples of when each type of learning would be used?
-Answer: the difference between supervisor and supervisor learning and provide example of when each type of learning would be used
+Question: Can you explain the difference between supervised and unsupervised learning.
+Answer: Candidate did not respond in time or failed to answer.
 
