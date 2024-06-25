@@ -157,3 +157,6 @@ HR MANAGER
 CANDIDATE 
  	USERNAME :  vand@321, khus@321 
    PASSWORD :  Qwe@123
+
+
+docker build --tag intbot:latest .

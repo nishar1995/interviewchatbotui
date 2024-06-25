@@ -14,6 +14,9 @@ COPY . .
 # Set environment variables
 ENV DJANGO_SETTINGS_MODULE=djangointerviewbot.settings
 ENV PYTHONUNBUFFERED=1
+ENV ZOOM_MEETING_SDK_KEY="UYNhRVI1TmTCd4fX3RzkA"
+ENV ZOOM_MEETING_SDK_SECRET="l8nvqZ5h1EPc3j8eO8GRGrxi9EgF5Amm"
+ENV OPENAI_API_KEY="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"
 
 # Build the Angular project
 FROM node:18 AS angular-build
@@ -32,7 +35,7 @@ RUN npm run build
 FROM django-base AS final
 
 # Copy the built Angular project to Django's static files directory
-COPY --from=angular-build /app/dist /app/myproject/static
+COPY --from=angular-build .next /djangointerviewbot/static
 
 
 # Expose the Django server port
