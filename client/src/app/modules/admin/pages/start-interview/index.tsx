@@ -35,6 +35,7 @@ export default function StartInterviewDashboard({ id }: any) {
     let repeat: any = 0;
     let final_transcript = '';
     let interim_transcript = '';
+    let timeoutResumeInfinity: any;
     //let showAnswerList: any[] = []
 
     const colors = [
@@ -78,13 +79,14 @@ export default function StartInterviewDashboard({ id }: any) {
             utterance = new SpeechSynthesisUtterance(question);
         }
 
-        for (let i = 0; i < voices.length; i++) {
-            if (voices[i].name === 'Nicky') {
-                // utterance.voice = voices[i];
-            }
-          }
+        // for (let i = 0; i < voices.length; i++) {
+        //     if (voices[i].name === 'Nicky') {
+        //         // utterance.voice = voices[i];
+        //     }
+        // }
 
-        utterance.rate = .7;
+        utterance.rate = .5;
+        window.speechSynthesis.cancel();
         synth.speak(utterance);
 
         utterance.onstart = function () {
@@ -113,9 +115,16 @@ export default function StartInterviewDashboard({ id }: any) {
 
         utterance.onend = function () {
             // console.log('Speech has ended.');
+            clearTimeout(timeoutResumeInfinity);
             startRecognition(question); // Start recognition after speaking
         };
     };
+
+    // https://stackoverflow.com/questions/21947730/chrome-speech-synthesis-with-longer-texts
+    const resumeInfinity = () => {
+        window.speechSynthesis.resume();
+        timeoutResumeInfinity = setTimeout(resumeInfinity, 1000);
+    }
 
     const startRecognition = (questions: any) => { 
         recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -148,11 +157,12 @@ export default function StartInterviewDashboard({ id }: any) {
             final_transcript = '';
             interim_transcript = '';
             for (var i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                  final_transcript += event.results[i][0].transcript;
-                } else {
-                  interim_transcript += event.results[i][0].transcript;
-                }
+                // if (event.results[i].isFinal) {
+                //   final_transcript += event.results[i][0].transcript;
+                // } else {
+                //   interim_transcript += event.results[i][0].transcript;
+                // }
+                final_transcript += event.results[i][0].transcript;
             }
             final_transcript = final_transcript;
             interim_transcript = interim_transcript;
