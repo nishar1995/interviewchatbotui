@@ -150,8 +150,8 @@ export default function CreateUser({ onClose, userDetails }: any) {
               defaultValue={defaultValues.role}>
               <option value="">Select a Role</option>
               <option value="1">ADMIN</option>
-              <option value="2">HR_MANAGER</option>
-              <option value="3">HR</option>
+              {/* <option value="2">HR_MANAGER</option> */}
+              {/* <option value="3">HR</option> */}
               <option value="4">CANDIDATE</option>
             </select>
 
