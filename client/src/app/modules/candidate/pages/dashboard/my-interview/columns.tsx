@@ -111,14 +111,15 @@ function RenderAction({
   const onClickMeeting = (id:any) => {
     console.log("start Meeting",id);
     //router.push(`/start-meeting/${id}`);
-    window.open(`/start-meeting/${id}`, '_blank');
+    // window.open(`/start-meeting/${id}`, '_blank');
+    window.open(`/start-interview/${id}`, '_blank');
   }
   
   return (
     <div className="flex items-center justify-end gap-3 pe-3">
       <Tooltip
         size="sm"
-        content={'Start Meeting'}
+        content={'Start Interview'}
         placement="top"
         color="invert"
       >
@@ -126,7 +127,7 @@ function RenderAction({
           as="span"
           size="sm"
           variant="outline"
-          aria-label={'Start Meeting'}
+          aria-label={'Start Interview'}
           onClick={() => onClickMeeting(row.id)
           }
           className="hover:!border-gray-900 hover:text-gray-700"
