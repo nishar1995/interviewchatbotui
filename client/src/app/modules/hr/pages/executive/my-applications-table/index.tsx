@@ -100,7 +100,7 @@ export default function MyApplicationsTable({
       <ControlledTable
         variant="modern"
         columns={visibleColumns}
-        data={paginatedData}
+        data={paginatedData.map((item: any, index: number) => ({ ...item, key: item.id || index }))}
         paginatorOptions={{
           pageSize,
           setPageSize,

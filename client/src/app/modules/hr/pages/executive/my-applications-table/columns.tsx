@@ -371,23 +371,7 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         </div>
       ),
     },
-    // {
-    //   title: (
-    //     <HeaderCell
-    //       title={<span className="whitespace-nowrap">Meeting Schedule</span>}
-    //     />
-    //   ),
-    //   dataIndex: 'meetingSchedule',
-    //   key: 'meetingSchedule',
-    //   width: 130,
-    //   render: (meetingSchedule: string) => (
-    //     <div>
-    //       <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-    //         {meetingSchedule}
-    //       </Text>
-    //     </div>
-    //   ),
-    // },
+
     {
       title: (
         <HeaderCell

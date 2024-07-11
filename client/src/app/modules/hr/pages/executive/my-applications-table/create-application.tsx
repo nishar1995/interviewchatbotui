@@ -18,14 +18,11 @@ import { getJobList } from '../../../../../../services/jobPostingService'
 import { string } from 'zod';
 
 
-type CreateApplicationProps = {
-  candidateId?: string;
-};
-
 export default function CreateApplication({ onClose, candidateList }: any) {
   let counter = 0;
   console.log("get candidate details ", candidateList);
   console.log("candidate name ", candidateList?.job_id);
+
   const defaultValues = {
     name: candidateList?.name || '',
     job_id: Number(candidateList?.job_id) || '',
@@ -35,15 +32,12 @@ export default function CreateApplication({ onClose, candidateList }: any) {
     phone_number: candidateList?.phone_number || undefined,
     application_id: candidateList?.application_id || ''
   };
-  console.log("candiate executive ", defaultValues)
-  // const queryClient = useQueryClient();
-  // const { closeModal } = useModal();
-  // const [reset, setReset] = useState(defaultValues);
-  // const [isLoading, setLoading] = useState(false);
 
-  // const imageRef = useRef<HTMLInputElement>(null);
+  console.log("candidate executive ", defaultValues);
+
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
+  const [isEditMode, setIsEditMode] = useState(false);
   const [reset, setReset] = useState(defaultValues);
   const [isLoading, setLoading] = useState(false);
   const imageRef = useRef<HTMLInputElement>(null);
@@ -52,25 +46,30 @@ export default function CreateApplication({ onClose, candidateList }: any) {
   const [selectedJobId, setSelectedJobId] = useState<string>('');
   const [selectedUsername, setSelectedUsername] = useState<string>('');
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await jobList();
+      await CandidateUsernameList();
+      if (candidateList) {
+        candidateDetails();
+      }
+    };
+
+    fetchData();
+  }, [candidateList]);
 
   useEffect(() => {
-    jobList();
-    CandidateUsernameList();
     if (candidateList) {
-      candidateDetails();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (candidateList) {
+      setIsEditMode(true);
       setSelectedJobId(candidateList.job_id); // Select job ID if available
-      setSelectedUsername(candidateList.username)
-      // Select candidate ID if available
+      setSelectedUsername(candidateList.username);
+    } else {
+      setIsEditMode(false);
     }
   }, [candidateList]);
+
   const candidateDetails = () => {
     if (candidateList) {
-      console.log("......////////");
       setReset({
         name: candidateList?.name,
         job_id: (candidateList?.job_id),
@@ -83,51 +82,32 @@ export default function CreateApplication({ onClose, candidateList }: any) {
     }
   };
 
-
   const jobList = async () => {
     try {
-      const response = await getJobList()
-      console.log("job lis", response.data)
+      const response = await getJobList();
+      console.log("job list", response.data);
       if (response) {
-        setData(response.data)
-        console.log("data....", data)
+        setData(response.data);
+        console.log("data....", data);
       }
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
     }
-
-  }
+  };
 
   const CandidateUsernameList = async () => {
     try {
       const response = await getCandidateUsername();
       console.log("username......", response);
       if (response) {
-
-        setUsername(response.data.usernames)
+        setUsername(response.data.usernames);
       }
-
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
     }
-  }
+  };
 
-  //   const CandidateById = async()=>{
-  //     try{
-  //       console.log("candidate id",candidateId)
-  //       const response = await getCandidateById(candidateId);
-  //       console.log("get details",response)
-  //     }catch(error){
-  // console.log("error",error)
-  //     }
-  //   }
   const generateApplicationId = () => {
-    // let data = '#AiInfox' + (Math.floor(Math.random() * 30) + 1);
-    // return data;
-    // const timestamp = Date.now(); // Current timestamp
-    // const randomComponent = Math.floor(Math.random() * 100000); // Random number between 0 and 99999
-    // const uniqueId = `#AiInfox${timestamp}${randomComponent}`;
-    // return uniqueId;
     counter += 1;
     if (counter >= 10000) {
       counter = 0;
@@ -135,74 +115,73 @@ export default function CreateApplication({ onClose, candidateList }: any) {
     const randomComponent = Math.floor(Math.random() * 1000);
     const uniqueId = `#AiInfox${counter.toString().padStart(2, '0')}${randomComponent.toString().padStart(3, '0')}`;
     return uniqueId;
+  };
 
-  }
   const onSubmit: SubmitHandler<candidateSchema> = async (data: any) => {
-    console.log("add candidate ", data)
+    console.log("submit candidate data:", data);
     setLoading(true);
-    console.log(data);
+
     const formData = new FormData();
     let id = generateApplicationId();
     data.application_id = id;
-    console.log('aPPlication _id.....', data.application_id)
-    //formData.append('application_id', id);
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        if (key === 'resume' && data[key]) {
-          formData.append('resume', data.resume[0]);
-        } else {
+
+    const isEditMode = !!candidateList;
+
+    if (isEditMode) {
+      // Prepare FormData for updating candidate without resume
+      for (const key in data) {
+        if (data.hasOwnProperty(key) && key !== 'resume') {
           formData.append(key, data[key]);
         }
       }
-    }
-    console.log(formData.get('resume'))
-    if (candidateList) {
-      //formData.append('id', candidateList.id); 
-      try {
-        const response = await updateCandidate(candidateList.id, formData);
-
-        console.log("Update candidate response:", response);
-        if (response) {
-          queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
-          closeModal();
-          onClose();
-        }
-      } catch (error) {
-        console.error("Error updating candidate:", error);
-        setLoading(false);
-      }
     } else {
-      try {
-        const response = await addCandidate(formData);
-        console.log("Add candidate response:", response);
-        if (response) {
-          queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
-          closeModal();
-          onClose();
+      // Prepare FormData for adding candidate with resume
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          if (key === 'resume' && data[key]) {
+            formData.append('resume', data.resume[0]);
+          } else {
+            formData.append(key, data[key]);
+          }
         }
-      } catch (error) {
-        console.error('Error adding candidate:', error);
-        setLoading(false);
       }
     }
 
+    console.log(formData.get('resume'));
+
+    try {
+      const response = isEditMode
+        ? await updateCandidate(candidateList.id, formData)
+        : await addCandidate(formData);
+
+      console.log(isEditMode ? "Update candidate response:" : "Add candidate response:", response);
+
+      if (response) {
+        queryClient.invalidateQueries({ queryKey: [applicationQueryKey] });
+        closeModal();
+        onClose();
+      }
+    } catch (error) {
+      console.error(isEditMode ? "Error updating candidate:" : 'Error adding candidate:', error);
+      setLoading(false);
+    }
   };
 
   const onChangeJob = (event: React.ChangeEvent<HTMLSelectElement>) => {
     console.log("selected job value", event.target.value);
     setSelectedJobId(event.target.value);
-    console.log("selected job id", selectedJobId)
+    console.log("selected job id", selectedJobId);
   };
+
   const onChangeUsername = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log("selected job value", event.target.value);
     setSelectedUsername(event.target.value);
-    console.log("selected job id", selectedUsername)
   };
+
   return (
     <Form<candidateSchema>
-      resetValues={reset}
+      // resetValues={reset}
       onSubmit={onSubmit}
-      validationSchema={candidateSchema}
+      //validationSchema={candidateSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
@@ -224,15 +203,6 @@ export default function CreateApplication({ onClose, candidateList }: any) {
               className="col-span-full"
               error={errors.name?.message}
             />
-
-            {/* <Input
-              label="Job"
-              placeholder="Enter Job id"
-              className="col-span-full"
-              {...register('job_id')}
-              error={errors.job_id?.message}
-            /> */}
-            {/* <label>Job Title</label> */}
             <label htmlFor="job">Job</label>
             <select
               id="job-select"
@@ -248,14 +218,6 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 </option>
               ))}
             </select>
-            {/* <Input
-              label="User Name"
-              placeholder="Enter username"
-              {...register('username')}
-              defaultValue={reset.username}
-              className="col-span-full"
-              error={errors.username?.message}
-            /> */}
             <label htmlFor="username">Candidate Username</label>
             <select
               id="username-select"
@@ -288,64 +250,56 @@ export default function CreateApplication({ onClose, candidateList }: any) {
               defaultValue={reset.phone_number}
               error={errors.phone_number?.message}
             />
+            {!isEditMode && (
+              <Controller
+                name="resume"
+                control={control}
+                defaultValue={reset.resume}
+                render={({ field: { value, onChange, onBlur } }) => (
+                  <div className="col-span-full">
+                    <Upload
+                      label={'Upload Resume'}
+                      ref={imageRef}
+                      accept={'pdf'}
+                      multiple={false}
+                      onChange={(event) => {
+                        const uploadedFiles = (event.target as HTMLInputElement).files;
+                        const newFiles = Object.entries(uploadedFiles as object)
+                          .map((file) => {
+                            if (file[1]) return file[1];
+                          })
+                          .filter((file) => file !== undefined);
+                        onChange(newFiles);
+                      }}
+                      className="mb-6 min-h-[280px] justify-center border-dashed bg-gray-50 dark:bg-transparent"
+                    />
+                    {value?.length > 1 && (
+                      <Text className="mb-2 text-gray-500">
+                        {value?.length} files
+                      </Text>
+                    )}
 
-            {/* <Input
-              label="Meeting Schedule"
-              placeholder="Enter Meeting Schedule"
-              className="col-span-full"
-              {...register('meetingSchedule')}
-              error={errors.meetingSchedule?.message}
-            /> */}
-            <Controller
-              name="resume"
-              control={control}
-              defaultValue={reset.resume}
-              render={({ field: { value, onChange, onBlur } }) => (
-                <div className="col-span-full">
-                  <Upload
-                    label={'Upload Resume'}
-                    ref={imageRef}
-                    accept={'pdf'}
-                    multiple={false}
-                    onChange={(event) => {
-                      console.log(event)
-                      const uploadedFiles = (event.target as HTMLInputElement)
-                        .files;
-                      const newFiles = Object.entries(uploadedFiles as object)
-                        .map((file) => {
-                          if (file[1]) return file[1];
-                        })
-                        .filter((file) => file !== undefined);
-                      onChange(newFiles);
-                    }}
-                    className="mb-6 min-h-[280px] justify-center border-dashed bg-gray-50 dark:bg-transparent"
-                  />
-                  {value?.length > 1 ? (
-                    <Text className="mb-2 text-gray-500">
-                      {value?.length} files
-                    </Text>
-                  ) : null}
-
-                  {value?.length > 0 && (
-                    <SimpleBar className="max-h-[280px]">
-                      <div className="grid grid-cols-1 gap-4">
-                        {value?.map((file: File, index: number) => (
-                          <div
-                            className="flex min-h-[58px] w-full items-center rounded-xl border border-muted px-3 dark:border-gray-300"
-                            key={file.name}
-                          >
-                            <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-muted bg-gray-50 object-cover px-2 py-1.5 dark:bg-transparent">
-                              <PiFilePdf className="h-5 w-5" />
+                    {value?.length > 0 && (
+                      <SimpleBar className="max-h-[280px]">
+                        <div className="grid grid-cols-1 gap-4">
+                          {value?.map((file: File, index: number) => (
+                            <div
+                              className="flex min-h-[58px] w-full items-center rounded-xl border border-muted px-3 dark:border-gray-300"
+                              key={file.name}
+                            >
+                              <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border border-muted bg-gray-50 object-cover px-2 py-1.5 dark:bg-transparent">
+                                <PiFilePdf className="h-5 w-5" />
+                              </div>
+                              <div className="truncate px-2.5">{reset.resume}</div>
                             </div>
-                            <div className="truncate px-2.5">{reset.resume}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </SimpleBar>
-                  )}
-                </div>
-              )}
-            />
+                          ))}
+                        </div>
+                      </SimpleBar>
+                    )}
+                  </div>
+                )}
+              />
+            )}
 
             <div className="col-span-full flex items-center justify-end gap-4">
               <Button
