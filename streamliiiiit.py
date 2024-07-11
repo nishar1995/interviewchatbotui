@@ -41,8 +41,7 @@ st.markdown("<h1 style='font-family:Courier; color:Brown; font-size: 70px;text-a
 
 
 # Example JWT token (replace with your actual JWT token)
-token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIwNjE4NDgzLCJpYXQiOjE3MjA2MTQ4ODMsImp0aSI6IjYxNWNhZWFkMWUxYjRiMDRhNzdmM2EyOTYzZTYyZmY4IiwidXNlcl9pZCI6MX0.2sL99Hjc5_NAOftOzws4tDx-ms0vMXhrEyzhR048Nvo'
-
+token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzIwNjc2NTk5LCJpYXQiOjE3MjA2NzI5OTksImp0aSI6ImFlNmNhOWNmYTg5YTQ3ODVhYjg3OWEyOTM1ZmE5N2Y2IiwidXNlcl9pZCI6MX0.llzRfeDCzIWACQdejyvNSH7SqvRxiBekvxKLWLK9Cgg'
 def text_to_speech(text):
     def run_engine(text):
         engine = pyttsx3.init()
@@ -131,6 +130,62 @@ def save_interview_history():
 
 
 
+
+def main():
+    st.title('Interview Bot Questions')
+
+    candidate_id = 18   
+    job_id = 4
+
+    # Fetch questions from Django API
+    questions = fetch_intbot_questions(candidate_id, job_id)
+
+    if questions:
+        for question in questions:
+            st.session_state.questions.append(question['question']) 
+
+        while st.session_state.overall_question_index < len(st.session_state.questions):
+            if st.session_state.question_index < len(st.session_state.questions):
+                question_text = show_next_question()
+                if question_text:
+                    st.subheader(f"Question {st.session_state.overall_question_index + 1}")
+                    st.write(question_text)
+                    text_to_speech(question_text)
+
+                    if st.session_state.repeated_question:
+                        st.session_state.repeated_question = False
+                    else:
+                        answer = speech_to_text()
+                        if answer == 'repeat_question':
+                            if not st.session_state.repeated_question:
+                                st.session_state.repeated_question = True
+                        elif answer is None:
+                            answer = "Answer not given"  
+                            st.session_state.repeated_question = False
+                        else:
+                            st.session_state.repeated_question = False
+                            st.session_state.answers.append(answer)
+
+                        # st.session_state.question_index += 1
+                        st.session_state.overall_question_index += 1
+
+                    st.write("")  # Spacer
+
+            # Display interview history
+            display_interview_history()
+            save_interview_history()
+
+            st.rerun()
+        if st.session_state.overall_question_index == len(st.session_state.questions):
+            st.write("Interview complete. Thank you!")
+
+
+    else:
+        st.write("No questions available.")
+
+
+if __name__ == '__main__':
+    main()
 # def main():
 #     st.title('Interview Bot Questions')
 
@@ -273,59 +328,3 @@ def save_interview_history():
 
 #     else:
 #         st.write("No questions available.")
-
-def main():
-    st.title('Interview Bot Questions')
-
-    candidate_id = 18   
-    job_id = 4
-
-    # Fetch questions from Django API
-    questions = fetch_intbot_questions(candidate_id, job_id)
-
-    if questions:
-        for question in questions:
-            st.session_state.questions.append(question['question']) 
-
-        while st.session_state.overall_question_index < len(st.session_state.questions):
-            if st.session_state.question_index < len(st.session_state.questions):
-                question_text = show_next_question()
-                if question_text:
-                    st.subheader(f"Question {st.session_state.overall_question_index + 1}")
-                    st.write(question_text)
-                    text_to_speech(question_text)
-
-                    if st.session_state.repeated_question:
-                        st.session_state.repeated_question = False
-                    else:
-                        answer = speech_to_text()
-                        if answer == 'repeat_question':
-                            if not st.session_state.repeated_question:
-                                st.session_state.repeated_question = True
-                        elif answer is None:
-                            answer = "Answer not given"  
-                            st.session_state.repeated_question = False
-                        else:
-                            st.session_state.repeated_question = False
-                            st.session_state.answers.append(answer)
-
-                        # st.session_state.question_index += 1
-                        st.session_state.overall_question_index += 1
-
-                    st.write("")  # Spacer
-
-            # Display interview history
-            display_interview_history()
-            save_interview_history()
-
-            st.rerun()
-            if st.session_state.overall_question_index == len(st.session_state.questions):
-                st.write("Interview complete. Thank you!")
-
-
-    else:
-        st.write("No questions available.")
-
-
-if __name__ == '__main__':
-    main()
