@@ -1,4 +1,5 @@
 import axiosInterceptorInstance from './authInterceptorService';
+import Cookies from 'js-cookie';
 
 // export async function getInterViewQuestions() {
 //     try {
@@ -20,8 +21,10 @@ import axiosInterceptorInstance from './authInterceptorService';
 // 
 
 export async function getInterViewQuestions(candidateId,jobId) {
+    const cookieValue = Cookies.get('token');
+    const token = cookieValue ? JSON.parse(cookieValue) : null;
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/intbot/?candidate_id=${candidateId}&job_id=${jobId}`, {
+        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/start_interview/?candidate_id=${candidateId}&job_id=${jobId}&token=${token}`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {

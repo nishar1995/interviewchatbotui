@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'zoomsdk',
     'django_nextjs',
     'rest_framework.authtoken',
+    'streamlit_app'
     
 ]
 

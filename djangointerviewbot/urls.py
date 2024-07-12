@@ -34,6 +34,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('zoomsdk.urls')),
     path('', include('django_nextjs.urls')),
+    path('',include('streamlit_app.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.BASE_DIR, document_root=settings.MEDIA_ROOT)

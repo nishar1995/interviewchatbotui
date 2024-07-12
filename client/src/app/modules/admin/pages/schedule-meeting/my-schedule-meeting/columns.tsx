@@ -16,6 +16,8 @@ import { deleteMeeting } from '@/services/meetingScheduleService';
 import PencilIcon from '@/components/icons/pencil';
 import VideoIcon from '@/components/icons/video-solid'
 import { routes } from '@/config/routes';
+import { getInterViewQuestions } from '@/services/interviewService';
+
 
 
 
@@ -445,11 +447,28 @@ function RenderAction({
     window.open(`/start-meeting/${id}`, '_blank');
   }
 
-  const onClickStartInterview = (id: any) => {
-    console.log("start interview", id);
+  const onClickStartInterview = async (candidateId: any, jobId: any) => {
+    console.log("start interview", candidateId);
+    console.log("start interview", jobId);
     //router.push(`/start-meeting/${id}`);
-    window.open(`/start-interview/${id}`, '_blank');
+    //window.open(`/start-interview/${id}`, '_blank');
+    if (candidateId && jobId) {
+      try {
+        const response = await getInterViewQuestions(candidateId, jobId);
+        console.log("response",response)
+        // interViewQuestions = response.data;
+        //setQuestions(response.data);
+        // if (response.data.length > 0) {
+        //     speakQuestion(response.data[0].question);
+        // }
+      } catch (error) {
+        console.log("Error fetching questions: ", error);
+      }
+    }
+
   }
+
+
   function handleCreateModal(row: any) {
     console.log("row////////", row)
     closeModal(),
@@ -523,7 +542,7 @@ function RenderAction({
           size="sm"
           variant="outline"
           aria-label={'Start Interview'}
-          onClick={() => onClickStartInterview(row.id)
+          onClick={() => onClickStartInterview(row.candidate, row.job)
           }
           className="hover:!border-gray-900 hover:text-gray-700"
         >
