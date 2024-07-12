@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final
+    image: aiinfox/repo:interviewbot-api
+    container_name: interview-bot
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    # depends_on:
+      # - mysql
+    command: python manage.py runserver 0.0.0.0:8000
+
+  nextjs:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: aiinfox/repo:interviewbot-ui
+    container_name: nextjs
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./client:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - django
+    command: npm run start
+
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: mysql
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   environment:
+  #     MYSQL_DATABASE: djangointerviewdb
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: Lucky@11
+  #     MYSQL_ROOT_PASSWORD: Lucky@11
+  #   ports:
+  #     - "3307:3307"
+
+# volumes:
+#   mysql_data:
