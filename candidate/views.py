@@ -169,12 +169,15 @@ from candidate.ques_framework import *
 import os
 import threading
 import pandas as pd
+from users.views import UserSerializer
 
 # Serializer for Candidate model
+
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = '__all__'
+  
 
 # View for managing Candidates
 class CandidateView(APIView):
@@ -220,6 +223,20 @@ class CandidateView(APIView):
         
         candidate = serializer.save()
         print("candidate",candidate)
+        user_data = {
+            'username': request.data.get('username'),
+            'password': request.data.get('password'),
+            'first_name': request.data.get('first_name'),
+            'last_name': request.data.get('last_name'),
+            'email': request.data.get('email'),
+            'role': request.data.get('role'), 
+        }
+        print("fnskjz",user_data)
+
+        serializer = UserSerializer(data=user_data)
+
+        if serializer.is_valid():
+            user = serializer.save()
        
         threading.Thread(target=self.generate_questions, args=(candidate, job, job_title, resume_file, job_description, vector_db)).start()
         
