@@ -370,7 +370,7 @@ class UserLoginView(ObtainAuthToken):
                 try:
                     candidate = Candidate.objects.get(username=username)
                     response_data['candidate_details'] = {
-                        'name': candidate.name,
+                        'name': candidate.first_name,
                         'id':candidate.id,
                         'email': candidate.email,
                         'phone_number': candidate.phone_number,
