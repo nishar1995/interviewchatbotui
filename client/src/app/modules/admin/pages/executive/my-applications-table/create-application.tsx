@@ -20,17 +20,21 @@ import { string } from 'zod';
 
 export default function CreateApplication({ onClose, candidateList }: any) {
   let counter = 0;
+  let candidateRole = '4'
   console.log("get candidate details ", candidateList);
   console.log("candidate name ", candidateList?.job_id);
 
   const defaultValues = {
-    name: candidateList?.name || '',
+    first_name: candidateList?.first_name || '',
+    last_name: candidateList?.last_name || '',
+    role: candidateList?.role || candidateRole,
     job_id: Number(candidateList?.job_id) || '',
     resume: candidateList?.resume ? Array.isArray(candidateList.resume) ? candidateList.resume : [candidateList.resume] : [],
     username: candidateList?.username || '',
     email: candidateList?.email || '',
     phone_number: candidateList?.phone_number || undefined,
-    application_id: candidateList?.application_id || ''
+    application_id: candidateList?.application_id || '',
+    password : candidateList?.application_id || '',
   };
 
   console.log("candidate executive ", defaultValues);
@@ -71,13 +75,16 @@ export default function CreateApplication({ onClose, candidateList }: any) {
   const candidateDetails = () => {
     if (candidateList) {
       setReset({
-        name: candidateList?.name,
+        first_name: candidateList?.first_name,
+        last_name: candidateList?.last_name,
         job_id: (candidateList?.job_id),
+        role : candidateList?.candidateRole,
         resume: candidateList?.resume ? Array.isArray(candidateList.resume) ? candidateList.resume : [candidateList.resume] : [],
         username: candidateList?.username,
         email: candidateList?.email,
         phone_number: String(candidateList?.phone_number),
-        application_id: candidateList?.application_id
+        application_id: candidateList?.application_id,
+        password : candidateList?.password
       });
     }
   };
@@ -119,6 +126,8 @@ export default function CreateApplication({ onClose, candidateList }: any) {
 
   const onSubmit: SubmitHandler<candidateSchema> = async (data: any) => {
     console.log("submit candidate data:", data);
+    data.role = candidateRole;
+    console.log("candidate data.......:", data);
     setLoading(true);
 
     const formData = new FormData();
@@ -195,14 +204,6 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 <PiXBold className="h-auto w-5" />
               </ActionIcon>
             </div>
-            <Input
-              label="Candidate Name"
-              placeholder="Enter Candidate's full name"
-              {...register('name')}
-              defaultValue={reset.name}
-              className="col-span-full"
-              error={errors.name?.message}
-            />
             <label htmlFor="job">Job</label>
             <select
               id="job-select"
@@ -218,21 +219,31 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 </option>
               ))}
             </select>
-            <label htmlFor="username">Candidate Username</label>
-            <select
-              id="username-select"
+
+            <Input
+              label="First Name"
+              placeholder="Enter Candidate's full name"
+              {...register('first_name')}
+              defaultValue={reset.first_name}
               className="col-span-full"
+              error={errors.first_name?.message}
+            />
+              <Input
+              label="Last Name"
+              placeholder="Enter Candidate's last name"
+              {...register('last_name')}
+              defaultValue={reset.last_name}
+              className="col-span-full"
+              error={errors.last_name?.message}
+            />
+            <Input
+              label="UserName"
+              placeholder="Enter Candidate UserName"
               {...register('username')}
-              value={selectedUsername}
-              onChange={onChangeUsername}
-            >
-              <option value="">Select a Candidate Username</option>
-              {candidateUsernameList.map((username: string, index: number) => (
-                <option key={index} value={username}>
-                  {username}
-                </option>
-              ))}
-            </select>
+              className="col-span-full"
+              defaultValue={reset.username}
+              error={errors.username?.message}
+            />
 
             <Input
               label="Email"
@@ -250,6 +261,16 @@ export default function CreateApplication({ onClose, candidateList }: any) {
               defaultValue={reset.phone_number}
               error={errors.phone_number?.message}
             />
+ {!isEditMode && (
+            <Input
+              label="Password"
+              placeholder="Enter Candidate Password"
+              {...register('password')}
+              className="col-span-full"
+              defaultValue={reset.password}
+              error={errors.password?.message}
+            />
+ )}
             {!isEditMode && (
               <Controller
                 name="resume"

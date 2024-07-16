@@ -3,15 +3,17 @@ import { z } from 'zod';
 // form zod validation schema
 export const candidateSchema = z.object({
 
-    name: z.string(),
+    first_name: z.string(),
+    last_name : z.string(),
     job_id: z.string(),
     resume: z.array(z.instanceof(File)),
     username: z.string(),
-    //role: z.string(),
+    role: z.string(),
     //meetingSchedule: z.string(),
     email:z.string(),
     phone_number : z.string(),
-    application_id:z.string()
+    application_id:z.string(),
+    password:z.string()
     // id: z.number(),
     // active: z.string(),
     // candidateEmail: z.string(),

@@ -6,7 +6,7 @@ import { PiCheckCircleBold, PiClockBold } from 'react-icons/pi';
 import { Text, Checkbox, Select, Tooltip, ActionIcon } from 'rizzui';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import CreateApplication from '../../../../hr/pages/executive/my-applications-table/create-application';
+import CreateApplication from '../../../../admin/pages/executive/my-applications-table/create-application';
 import { useModal } from '@/app/shared/modal-views/use-modal';
 import EyeIcon from '@/components/icons/eye';
 import DeletePopover from '@/app/shared/delete-popover';
@@ -345,13 +345,13 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
     {
       title: <HeaderCell title="Candidate Name" />,
       //onHeaderCell: () => onHeaderCellClick('candidateName'),
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'first_name',
+      key: 'first_name',
       width: 150,
-      render: (name: string) => (
+      render: (first_name: string) => (
         <div>
           <Text className="text-sm font-medium text-gray-900 dark:text-gray-700">
-            {name}
+            {first_name}
           </Text>
         </div>
       ),

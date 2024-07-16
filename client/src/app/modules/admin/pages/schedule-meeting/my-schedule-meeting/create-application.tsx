@@ -380,7 +380,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
               <option value="">Select a candidate</option>
               {filteredCandidates.map((candidate: any) => (
                 <option key={candidate.id} value={candidate.id}>
-                  {candidate.name}
+                  {candidate.first_name}
                 </option>
               ))}
 

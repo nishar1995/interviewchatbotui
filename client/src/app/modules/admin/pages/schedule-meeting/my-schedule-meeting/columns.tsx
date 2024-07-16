@@ -257,32 +257,52 @@ export function handleSelectAll() {
   console.log("handle select all")
 }
 export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
+  const onClickStartInterview = async (candidateId: any, jobId: any) => {
+    console.log("start interview", candidateId);
+    console.log("start interview", jobId);
+    //router.push(`/start-meeting/${id}`);
+    //window.open(`/start-interview/${id}`, '_blank');
+    if (candidateId && jobId) {
+      try {
+        const response = await getInterViewQuestions(candidateId, jobId);
+        console.log("response",response)
+        // interViewQuestions = response.data;
+        //setQuestions(response.data);
+        // if (response.data.length > 0) {
+        //     speakQuestion(response.data[0].question);
+        // }
+      } catch (error) {
+        console.log("Error fetching questions: ", error);
+      }
+    }
+
+  }
   return [
-    {
-      title: (
-        <div className="ps-3.5">
-          <Checkbox
-            title={'Select All'}
-            onChange={handleSelectAll}
-            //checked={checkedItems.length === data.length}
-            className="cursor-pointer"
-          />
-        </div>
-      ),
-      dataIndex: 'checked',
-      key: 'checked',
-      width: 30,
-      render: (_: any, row: any) => (
-        <div className="inline-flex ps-3.5">
-          <Checkbox
-            aria-label={'ID'}
-            className="cursor-pointer"
-          //checked={checkedItems.includes(row.id)}
-          //{...(onChecked && { onChange: () => onChecked(row.id) })}
-          />
-        </div>
-      ),
-    },
+    // {
+    //   title: (
+    //     <div className="ps-3.5">
+    //       <Checkbox
+    //         title={'Select All'}
+    //         onChange={handleSelectAll}
+    //         //checked={checkedItems.length === data.length}
+    //         className="cursor-pointer"
+    //       />
+    //     </div>
+    //   ),
+    //   dataIndex: 'checked',
+    //   key: 'checked',
+    //   width: 30,
+    //   render: (_: any, row: any) => (
+    //     <div className="inline-flex ps-3.5">
+    //       <Checkbox
+    //         aria-label={'ID'}
+    //         className="cursor-pointer"
+    //       //checked={checkedItems.includes(row.id)}
+    //       //{...(onChecked && { onChange: () => onChecked(row.id) })}
+    //       />
+    //     </div>
+    //   ),
+    // },
     // {
     //   title: <HeaderCell title="Tenant Id" />,
     //   //onHeaderCell: () => onHeaderCellClick('tenantId'),
@@ -291,6 +311,22 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
     //   width: 130,
     //   render: (tenant_id: string) => <Text>#{tenant_id}</Text>,
     // },
+    {
+      title: <HeaderCell title="Start Meeting" />,
+      dataIndex: 'start_meeting',
+      key: 'start_meeting',
+      width: 150,
+      render: (_: any, row: any) => (
+        <div>
+          <button
+            className="text-sm font-medium text-gray-900 dark:text-gray-700 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => onClickStartInterview(row.candidate, row.job)}
+          >
+            Start Meeting
+          </button>
+        </div>
+      ),
+    },
     {
       title: (
         <HeaderCell
@@ -447,26 +483,7 @@ function RenderAction({
     window.open(`/start-meeting/${id}`, '_blank');
   }
 
-  const onClickStartInterview = async (candidateId: any, jobId: any) => {
-    console.log("start interview", candidateId);
-    console.log("start interview", jobId);
-    //router.push(`/start-meeting/${id}`);
-    //window.open(`/start-interview/${id}`, '_blank');
-    if (candidateId && jobId) {
-      try {
-        const response = await getInterViewQuestions(candidateId, jobId);
-        console.log("response",response)
-        // interViewQuestions = response.data;
-        //setQuestions(response.data);
-        // if (response.data.length > 0) {
-        //     speakQuestion(response.data[0].question);
-        // }
-      } catch (error) {
-        console.log("Error fetching questions: ", error);
-      }
-    }
-
-  }
+  
 
 
   function handleCreateModal(row: any) {
@@ -531,7 +548,7 @@ function RenderAction({
         </ActionIcon>
       </Tooltip> */}
 
-      <Tooltip
+      {/* <Tooltip
         size="sm"
         content={'Start Interview'}
         placement="top"
@@ -548,7 +565,7 @@ function RenderAction({
         >
           <VideoIcon className="h-4 w-4" />
         </ActionIcon>
-      </Tooltip>
+      </Tooltip> */}
 
       <DeletePopover
         title={`Delete the Schedule Meetting`}
