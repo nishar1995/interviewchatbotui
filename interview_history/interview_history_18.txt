@@ -1,0 +1,34 @@
+Interview History for Candidate 18
+Question 1: Can you explain what Angular is and how it differs from other front-end frameworks like React or Vue.js?
+Answer 1: distance from the other content
+
+Interview History for Candidate 18
+Question 1: Can you explain what Angular is and how it differs from other front-end frameworks like React or Vue.js?
+Answer 1: distance from the other content
+
+Question 2: How does data binding work in Angular, and what are the different types of data binding supported by the framework?
+Answer 2: computer and what are the different type of data mining
+
+Interview History for Candidate 18
+Question 1: Can you explain what Angular is and how it differs from other front-end frameworks like React or Vue.js?
+Answer 1: distance from the other content
+
+Question 2: How does data binding work in Angular, and what are the different types of data binding supported by the framework?
+Answer 2: computer and what are the different type of data mining
+
+Question 3: Can you discuss the lifecycle hooks in Angular and provide examples of when you would use each hook in a component?
+Answer 3: discuss about the machine learning difference between supervised and supervised learning
+
+Interview History for Candidate 18
+Question 1: Can you explain what Angular is and how it differs from other front-end frameworks like React or Vue.js?
+Answer 1: distance from the other content
+
+Question 2: How does data binding work in Angular, and what are the different types of data binding supported by the framework?
+Answer 2: computer and what are the different type of data mining
+
+Question 3: Can you discuss the lifecycle hooks in Angular and provide examples of when you would use each hook in a component?
+Answer 3: discuss about the machine learning difference between supervised and supervised learning
+
+Question 4: What are Angular services, and how do they facilitate code reusability and maintainability in an application?
+Answer 4: how the different from other
+

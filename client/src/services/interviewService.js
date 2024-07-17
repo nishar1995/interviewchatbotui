@@ -19,12 +19,32 @@ import Cookies from 'js-cookie';
     
 // }
 // 
+    // --------------function of using steamlit api--------------
+
+// export async function getInterViewQuestions(candidateId,jobId) {
+//     const cookieValue = Cookies.get('token');
+//     const token = cookieValue ? JSON.parse(cookieValue) : null;
+//     try {
+//         const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/start_interview/?candidate_id=${candidateId}&job_id=${jobId}&token=${token}`, {
+//             mode: 'no-cors',
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         });
+
+//         return response;
+//     } catch (error) {
+//         console.error("error", error);
+//         throw new error("error by question");
+//     }
+    
+// }
+
 
 export async function getInterViewQuestions(candidateId,jobId) {
-    const cookieValue = Cookies.get('token');
-    const token = cookieValue ? JSON.parse(cookieValue) : null;
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/start_interview/?candidate_id=${candidateId}&job_id=${jobId}&token=${token}`, {
+        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/intbot/?candidate_id=${candidateId}&job_id=${jobId}`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {

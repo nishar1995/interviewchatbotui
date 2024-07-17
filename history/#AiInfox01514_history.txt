@@ -1,9 +1,9 @@
 Question: Can you explain the differences between Python and R in terms of their primary use cases, strengths, and weaknesses?
-Answer: Candidate did not respond in time or failed to answer.
+Answer: can you explain the difference between Python and R in terms of their family whose case 10th and agents in the Python programming language
 
 Question: Can you discuss the concept of vectorization in both Python and R?
-Answer: yeah not sure about this one
+Answer: can you discuss the concept of vectorisation in Python and hour in technology
 
 Question: Can you explain the difference between supervised and unsupervised learning.
-Answer: Candidate did not respond in time or failed to answer.
+Answer: can you explain with the difference between the supervisor and supervis machine learning in Python programming language can you explain difference between Python and terms of their family whose strength of the agent in Python programming language
 

@@ -7,7 +7,7 @@ import { getMeetingById } from "@/services/meetingScheduleService";
 
 declare global {
     interface Window {
-        SpeechRecognition:any;
+        SpeechRecognition: any;
         webkitSpeechRecognition: any;
         SpeechGrammarList: any;
         webkitSpeechGrammarList: any;
@@ -16,7 +16,6 @@ declare global {
     }
 }
 
-
 export default function StartInterviewDashboard({ id }: any) {
     const router = useRouter();
     const [questions, setQuestions] = useState<any[]>([]);
@@ -24,19 +23,17 @@ export default function StartInterviewDashboard({ id }: any) {
     const [answers, setAnswers]: any = useState([]);
     const [isRecording, setIsRecording] = useState(false);
     const [showAnswerList, setShowAnswerList] = useState([]);
-    let [final_transcript_all] = useState('');
+    const [final_transcript, setFinalTranscript] = useState('');
+    const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(true);
     let recognition: any;
     let silenceDetectionTimeout: any;
     let interViewQuestions: any[] = [];
     let nextIndex: any = 0;
-    let totalAnswer: any;
     let candidate_id: any;
     let job_id: any;
     let repeat: any = 0;
-    let final_transcript = '';
     let interim_transcript = '';
     let timeoutResumeInfinity: any;
-    //let showAnswerList: any[] = []
 
     const colors = [
         "aqua",
@@ -48,15 +45,15 @@ export default function StartInterviewDashboard({ id }: any) {
         "brown",
         "chocolate",
         "coral" /* … */,
-      ];
-      const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(
+    ];
+    const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(
         " | ",
-      )};`;
-
+    )};`;
 
     const getMeetingDetailsById = async () => {
         try {
             const response = await getMeetingById(id);
+            console.log("response...", response)
             candidate_id = response.data.candidate;
             job_id = response.data.job;
             if (candidate_id && job_id) {
@@ -67,23 +64,18 @@ export default function StartInterviewDashboard({ id }: any) {
             console.log("Error fetching questions: ", error);
         }
     };
-    const speakQuestion = (question: any) => { 
 
+    const speakQuestion = (question: any) => {
+        setIsInterviewerSpeaking(true);
         let utterance = new SpeechSynthesisUtterance('');
         let synth = window.speechSynthesis;
         let voices = synth.getVoices();
 
-        if(repeat == 1) {
+        if (repeat == 1) {
             utterance = new SpeechSynthesisUtterance('Okay, I will repeat the question. ' + question);
         } else {
             utterance = new SpeechSynthesisUtterance(question);
         }
-
-        // for (let i = 0; i < voices.length; i++) {
-        //     if (voices[i].name === 'Nicky') {
-        //         // utterance.voice = voices[i];
-        //     }
-        // }
 
         utterance.rate = .5;
         window.speechSynthesis.cancel();
@@ -112,30 +104,28 @@ export default function StartInterviewDashboard({ id }: any) {
         utterance.onerror = function (event: any) {
             console.error('Speech error occurred:', event.error);
         };
-
         utterance.onend = function () {
-            // console.log('Speech has ended.');
             clearTimeout(timeoutResumeInfinity);
             startRecognition(question); // Start recognition after speaking
         };
     };
 
-    // https://stackoverflow.com/questions/21947730/chrome-speech-synthesis-with-longer-texts
     const resumeInfinity = () => {
         window.speechSynthesis.resume();
         timeoutResumeInfinity = setTimeout(resumeInfinity, 1000);
     }
-
-    const startRecognition = (questions: any) => { 
+    const startRecognition = (question: any) => {
+        setIsInterviewerSpeaking(false);
+        console.log("Setting isInterviewerSpeaking to false");
+    
         recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         const SpeechGrammarList = new (window.SpeechGrammarList || window.webkitSpeechGrammarList)();
-        // const SpeechRecognitionEvent = new (window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent)();
-
+    
         SpeechGrammarList.addFromString(grammar, 1);
         recognition.interimResults = true;
         recognition.lang = 'en-US';
         recognition.continuous = true;
-
+    
         recognition.onstart = () => {
             setIsRecording(true);
             const recordingIndicator = document.getElementById('recording-indicator');
@@ -143,39 +133,38 @@ export default function StartInterviewDashboard({ id }: any) {
                 recordingIndicator.style.display = 'block';
             }
         };
-
+    
         recognition.onspeechstart = () => {
             // console.log('Speech has been detected.');
         };
-
+    
         recognition.onspeechend = () => {
             // console.log('Speech has stopped being detected.');
         };
-
+    
         recognition.onresult = (event: any) => {
             clearTimeout(silenceDetectionTimeout);
-            final_transcript = '';
+            let final_transcript = '';
             interim_transcript = '';
             for (var i = event.resultIndex; i < event.results.length; ++i) {
-                // if (event.results[i].isFinal) {
-                //   final_transcript += event.results[i][0].transcript;
-                // } else {
-                //   interim_transcript += event.results[i][0].transcript;
-                // }
-                final_transcript += event.results[i][0].transcript;
+                if (event.results[i][0].transcript) {
+                    final_transcript += event.results[i][0].transcript;
+                }
             }
-            final_transcript = final_transcript;
-            interim_transcript = interim_transcript;
-            final_transcript_all =  final_transcript;
-
-            console.log(final_transcript);
-
-            if (event.results[event.results.length - 1].isFinal) {
-                // const answer = event.results[event.results.length - 1][0].transcript;
-                setTimeout(() => handleAnswer(final_transcript), 2000);
-            }
+    
+            setIsInterviewerSpeaking((prevIsInterviewerSpeaking) => {
+                if (!prevIsInterviewerSpeaking) {
+                    setFinalTranscript(final_transcript);
+                    console.log(final_transcript);
+    
+                    if (event.results[event.results.length - 1].isFinal) {
+                        setTimeout(() => handleAnswer(final_transcript), 2000);
+                    }
+                }
+                return prevIsInterviewerSpeaking;
+            });
         };
-
+    
         recognition.onend = () => {
             setIsRecording(false);
             const recordingIndicator = document.getElementById('recording-indicator');
@@ -183,21 +172,18 @@ export default function StartInterviewDashboard({ id }: any) {
                 recordingIndicator.style.display = 'none';
             }
         };
+    
         recognition.start();
-
-        if (interViewQuestions.length) {
-            //Check length of the question and Clear the timeout
-        }
-
+    
         silenceDetectionTimeout = setTimeout(() => {
-            if(repeat == 0) {
+            if (repeat == 0) {
                 repeat++;
-                speakQuestion(questions);
+                speakQuestion(question);
             } else {
                 interViewQuestions[nextIndex].answer = 'Candidate did not respond in time or failed to answer.';
                 interViewQuestions[nextIndex].isDone = true;
                 interViewQuestions[nextIndex].isAnswered = false;
-                if(interViewQuestions[nextIndex]) {
+                if (interViewQuestions[nextIndex]) {
                     setShowAnswerList(prevList => [...prevList, {
                         question: interViewQuestions[nextIndex].question,
                         answer: interViewQuestions[nextIndex].answer,
@@ -207,13 +193,13 @@ export default function StartInterviewDashboard({ id }: any) {
             }
         }, 5000); // Adjust the timeout duration to suit your needs
     };
-
+    
     const handleAnswer = (answer: any) => {
         setAnswers((prevAnswers: any) => {
             interViewQuestions[nextIndex].answer = answer;
             interViewQuestions[nextIndex].isDone = true;
             interViewQuestions[nextIndex].isAnswered = true;
-            if(interViewQuestions[nextIndex]) {
+            if (interViewQuestions[nextIndex]) {
                 setShowAnswerList(prevList => [...prevList, {
                     question: interViewQuestions[nextIndex].question,
                     answer: interViewQuestions[nextIndex].answer,
@@ -224,12 +210,11 @@ export default function StartInterviewDashboard({ id }: any) {
             }
             return interViewQuestions;
         });
-
-        // 10 seconds delay before asking the next question
     };
 
     const moveToNextQuestion = () => {
         repeat = 0;
+        setFinalTranscript('');
         setCurrentQuestionIndex(prevIndex => {
             nextIndex = prevIndex + 1;
             if (nextIndex < interViewQuestions.length) {
@@ -241,7 +226,6 @@ export default function StartInterviewDashboard({ id }: any) {
             }
         });
     };
-
 
     const getQuestions = async () => {
         try {
@@ -255,8 +239,6 @@ export default function StartInterviewDashboard({ id }: any) {
             console.log("Error fetching questions: ", error);
         }
     };
-
-
 
     async function captureAnswer(answer: any) {
         let body = {
@@ -287,70 +269,76 @@ export default function StartInterviewDashboard({ id }: any) {
         };
     }, []);
 
-
     return (
         <div>
-            {showAnswerList.length !== questions.length && (
+            <div>
                 <div>
                     <h1>Interview Dashboard</h1>
-                    <div className="question" id="question">
-                        <div className="card">
-                            <div className="card-header">Question</div>
-                            <div className="card-body">
-                                <p className="card-text">{questions[currentQuestionIndex]?.question}</p>
-                            </div>
-
+                    {showAnswerList.length === questions.length && (
+                        <h1>Please Wait Prepare your Question...</h1>
+                    )}
+                    <div className="card-row">
+                        <div className={`interviewee-card ${isInterviewerSpeaking ? 'green-border' : ''}`}>
+                            <h3 className="text-gray-700">Interviewer</h3>
+                            <p>{questions[currentQuestionIndex]?.question}</p>
+                        </div>
+                        <div className={`interviewer-card ${!isInterviewerSpeaking ? 'green-border' : ''}`}>
+                            <h3 className="text-gray-700">Candidate</h3>
+                            <p>Candidate Speak......</p>
+                            <p>{final_transcript}</p>
                         </div>
                     </div>
                 </div>
-            )
-            }
+            </div>
             <div>
-                {showAnswerList.length === questions.length && (
-                       <h1>Interview Complete, Saving...</h1>
-                )}
+                <div>
+                    
 
-                {showAnswerList.length !== questions.length && (
-                    <section>
-                        <div id="recording-indicator" style={{ display: 'none' }}>
-                            <p>Recording...</p>
-                        </div>
-        
-                        <h3>Interview Question/Answer</h3>
-                        {showAnswerList.length > 0 ? (
-                            <div className="relative overflow-x-auto">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3">
-                                                Sr.no
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Questions
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Answer
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {showAnswerList.map((item: any, index) => (
-                                            <tr key={index}>
-                                                <td className="px-6 py-3">{index + 1}</td>
-                                                <td className="px-6 py-3">{item.question}</td>
-                                                <td className="px-6 py-3">{item.answer}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                    {showAnswerList.length !== questions.length && (
+                        <section>
+                            <div id="recording-indicator" style={{ display: 'none' }}>
+                                <p>Recording...</p>
                             </div>
-                        ) : (
-                            <p></p>
-                        )}
-                </section>
-            )}
+
+                            {showAnswerList.length > 0 ? (
+                                <div className="table-wrapper">
+                                    <h3>Interview Question/Answer</h3>
+                                    <div className="table-container">
+
+
+                                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Sr.no
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Questions
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3">
+                                                        Answer
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {showAnswerList.map((item: any, index) => (
+                                                    <tr key={index}>
+                                                        <td className="px-6 py-3">{index + 1}</td>
+                                                        <td className="px-6 py-3">{item.question}</td>
+                                                        <td className="px-6 py-3">{item.answer}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p></p>
+                            )}
+                        </section>
+                    )}
+                </div>
             </div>
         </div>
-
     );
 }

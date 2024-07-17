@@ -17,3 +17,6 @@ pandas == 2.2.2
 celery == 5.4.0
 chromadb == 0.5.0
 wheel
+streamlit==1.36.0
+pyttsx3==2.90
+SpeechRecognition==3.10.4

@@ -257,25 +257,30 @@ export function handleSelectAll() {
   console.log("handle select all")
 }
 export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
-  const onClickStartInterview = async (candidateId: any, jobId: any) => {
-    console.log("start interview", candidateId);
-    console.log("start interview", jobId);
-    //router.push(`/start-meeting/${id}`);
-    //window.open(`/start-interview/${id}`, '_blank');
-    if (candidateId && jobId) {
-      try {
-        const response = await getInterViewQuestions(candidateId, jobId);
-        console.log("response",response)
-        // interViewQuestions = response.data;
-        //setQuestions(response.data);
-        // if (response.data.length > 0) {
-        //     speakQuestion(response.data[0].question);
-        // }
-      } catch (error) {
-        console.log("Error fetching questions: ", error);
-      }
-    }
+  // const onClickStartInterview = async (candidateId: any, jobId: any) => {
+  //   console.log("start interview", candidateId);
+  //   console.log("start interview", jobId);
+  //   //router.push(`/start-meeting/${id}`);
+  //   //window.open(`/start-interview/${id}`, '_blank');
+  //   if (candidateId && jobId) {
+  //     try {
+  //       const response = await getInterViewQuestions(candidateId, jobId);
+  //       console.log("response",response)
+  //       // interViewQuestions = response.data;
+  //       //setQuestions(response.data);
+  //       // if (response.data.length > 0) {
+  //       //     speakQuestion(response.data[0].question);
+  //       // }
+  //     } catch (error) {
+  //       console.log("Error fetching questions: ", error);
+  //     }
+  //   }
 
+  // }
+  const onClickStartInterview = (id: any) => {
+    console.log("start interview", id);
+    //router.push(`/start-meeting/${id}`);
+    window.open(`/start-interview/${id}`, '_blank');
   }
   return [
     // {
@@ -320,7 +325,9 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
         <div>
           <button
             className="text-sm font-medium text-gray-900 dark:text-gray-700 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => onClickStartInterview(row.candidate, row.job)}
+            // onClick={() => onClickStartInterview(row.candidate, row.job)}
+            onClick={() => onClickStartInterview(row.id)
+            }
           >
             Start Interview
           </button>

@@ -1,0 +1,6 @@
+Interview History:
+
+Question 1: How would you approach identifying outliers in a dataset during exploratory data analysis? Can you discuss different techniques and algorithms that can be used for outlier detection?
+Answer: outline
+Question 2: Explain the process of data cleaning and preprocessing in the context of exploratory data analysis. What are some common data quality issues you might encounter and how would you address them?
+Answer: clinical practice

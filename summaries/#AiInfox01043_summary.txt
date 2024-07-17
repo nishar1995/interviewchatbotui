@@ -1,2 +1,2 @@
-The interview covered various topics related to data analysis, machine learning, programming languages, and statistical concepts. The candidate mentioned using the box technique for outlier detection but did not provide detailed explanations for data cleaning, supervised and unsupervised learning, bias-variance tradeoff, handling missing data, differences between Tableau, Power BI, and Matplotlib, creating dynamic dashboards in Tableau, dynamic typing vs. static typing, closures in programming languages, and Type I and Type II errors in hypothesis testing. The candidate displayed some knowledge gaps in certain areas and provided incomplete or inaccurate responses to some questions.
+The candidate did not provide relevant or coherent responses to the interview questions.
 

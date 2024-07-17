@@ -17,7 +17,7 @@ class Candidate(models.Model):
     username = models.CharField(max_length=100, default='')
     password=models.CharField(max_length=100,default='')
     email=models.EmailField(max_length=254,default='')
-    phone_number = models.IntegerField(default=0)
+    phone_number = models.BigIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)

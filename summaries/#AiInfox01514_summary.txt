@@ -1,2 +1,2 @@
-The candidate did not provide responses to the questions asked in the interview.
+The interview covered topics related to the differences between Python and R in terms of their primary use cases, strengths, and weaknesses. It also touched on the concept of vectorization in both languages and the difference between supervised and unsupervised learning. However, there seems to be some confusion or repetition in the responses provided by the interviewee, as the answers do not directly address the questions asked.
 

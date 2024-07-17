@@ -89,7 +89,9 @@ class IntBotView(APIView):
         if candidate_id and job_id:
             # retrieve and return the instance with this primary key
             questions = Question.objects.filter(candidate_id=candidate_id, job_id=job_id)
+            
             serializer = QuestionSerializer(questions, many=True)
+            print("line@@@@@@@@@@@@@@@@",serializer.data)
             data=[]
             for i in questions:
                 int_ques=IntBot(
@@ -98,9 +100,14 @@ class IntBotView(APIView):
                     question=i.question
                 )
                 int_ques.save()
+                
                 data.append(int_ques)
+                # print("#################")
+                # print(data)
+                # print("@@@@@@@@@@@@@@@@@")
                 print(f"Saved IntBot object with question: {i.question}")
             serializer=IntBotSerializer(data,many=True)
+            print("!!!!!!!!!!!!!!!!!!!!!!!!\n",serializer.data)
             return Response(serializer.data)
         elif pk:
             # retrieve and return the instance with this primary key

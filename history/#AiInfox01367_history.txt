@@ -1,75 +1,75 @@
 Question: Can you explain what Angular is and how it differs from other front-end frameworks like React or Vue.js?
-Answer: I don't know maybe angular use you know very famous and has a large community to support
+Answer: the angular and Furious front and Technology it is used to create the website mobile application but angular is a single phase framework and embroidery a senior single phase in work angular is create the four components like a first is estimate 5 second is uses file testing file and logical farm but views only for wire the one part to create a new create email and more logical functionality
 
 Question: How does data binding work in Angular, and what are the different types of data binding supported by the framework?
-Answer: there are two types of data bindings single one way binding or two way binding these are two supported by the frameworks those are different types of bindings and the requirements are different when you just want to update the view then you need a one way if you want update the controller as well or the template then you need to use the two way winding and both winding uses change detections are the things actually yes
+Answer: the two types of data minings in angular one is one way data binding and second is to a Tata winding means to binti data to activate is used to MG models and angular frame
 
 Question: Can you discuss the lifecycle hooks in Angular and provide examples of when you would use each hook in a component?
-Answer: so there are multiple types of life cycle works like NG on it and G destroy NG after NET content in it contentist was kind of things are there and you need when you have specific like when components loaded the uses and Gionee but when it is destroyed the news and you on destroy to avoid memory dick to on subscribe all the subscriptions or anything that you don't want to leak it from the compound interest self
+Answer: the different different use the life cycles in Angular and first is MG on it NGO change
 
 Question: What are Angular services, and how do they facilitate code reusability and maintainability in an application?
-Answer: Candidate did not respond in time or failed to answer.
+Answer:  NG after we need
 
 Question: How would you implement routing in an Angular application, and what are some best practices to follow when setting up routes?
-Answer: so louds the basically and do you know on land person on a different page so lazy loading is the best practices among the other breast best practices to you know like implement can active deactive Odh card or those things
+Answer: how would you implement Routing in a angle application that what are some best practice award when setting up roads in the data binding of they applications
 
 Question: Explain the concept of dependency injection in Angular and how it helps manage dependencies between different components.
-Answer: so dependency Injection or Di is a basically way of injecting the code on demand and services are the example of dependency injection
+Answer: dependency injection is most important part in the angular frameworks them the user create the multiple services and use services in component that inject the service in the constructor file then use the all services method one by one in the components the services are used into integrated
 
 Question: What are Angular directives, and can you provide examples of built-in directives as well as how to create custom directives?
-Answer: yeah there are merit many types of directors like a structural or behaviour and NG if NG for all structural directly which ads you know HTML to the Dom but the other behaviour structures are like just to change the behaviour of the may be like adding a class adding a whole effect those kind of things those are the directive
+Answer: the multiple directors the angular provides the multiples like a structure that tribute gauties and the selected multiple reactive custom can be provide example of the return how to create the custom create angular Can you provide example
 
 Question: How does Angular handle form validation, and what are some techniques you can use to validate user input in forms?
-Answer: yeah I mean I'm not sure about this
+Answer: the multipurpose day 200 days validation in angular applications and group avoid pain group valuation in which units to multiple properties to use to set the validation in second way is doing strategy validates in input output in the HTML 200 gravitational conditions
 
 Question: Discuss the different ways to communicate between components in Angular, including parent-child communication, sibling communication, and using services.
-Answer: yeah like in the question is solve the answer is there so basicly if you want to communicate between the parents and child then the input output using you can do it and siblings also if you want to do on related to components you can do it through the services just create a satellite and you can get the data set the data and communicate between them
+Answer:  and using
 
 Question: How would you optimize the performance of an Angular application, and what tools or techniques would you use to identify bottlenecks and improve speed?
-Answer: yeah as we mention like you can use lazy loading and like optimise the you know the services data all those things you can certain things you can do in order to optim ID performance of any application or angular application I would say
+Answer: how would you optimise the performance of an angular application and tool so techniques were used to 25 who the next and improves in the data set acknowledge of the angular application the tools or techniques we use students and import speed of the data
 
 Question: Can you explain what Sass is and how it differs from regular CSS?
-Answer: so sad is a basically a kind of a preprocessor for CSS it supports function mixings and dynamics CSS outside which is not available through the regular season so it is enhanced version of it so that is house being used
+Answer: the CSS file in which it is used to set the styles of HTML5 in which used the single single styling of the class but SAS file also used to set this timing of the HTML page but in which create the parent of siding class and another child classes
 
 Question: What are some of the key features of Sass that make it a preferred choice for styling web pages?
-Answer: yes like mixing function and all those things are there so interpretation dynamic in a classes those things are there for the association
+Answer: multiple ki preference to Asus that make it a preposition choice of styling web pages
 
 Question: How do you declare variables in Sass and how can they be useful in managing styles?
-Answer: yes obviously you what we can do it we can set some base you know styling on the numbers for the variables using the dollar and then what we can do it we can do the dynamic calculations like plus minus and multiplication and based on that we can actually calculate the overall style of the elements and how they will react to the multiple of different viewpose things you can do and also you can use the variables for the dynamic like border radius or create just one function pass the number like to 4:10 a and then what are radius will be generated accordingly so those things are there actually
+Answer: how do you declare variables and how can we use in the Managing style in the data set of the technology in angular angles
 
 Question: What is nesting in Sass and how can it help organize your CSS code more efficiently?
-Answer: nesting is like a serious inside your function inside function so that is basically is awards or prevention duplicacy so what you can do it you can code right code under the CSS without having to change it basically right it with the multiple curly braces and it will help you remove the duplication of the code and also the scope of the series is very clear actually
-
-Question: How does Sass handle mixins and why are they beneficial in writing reusable styles?
-Answer: Soya so basic ke liye if you write mixings then again it's benefits in the usability the reason is when you create mixing you create functions or methods so you just need to pass styles or numbers as a variables for example phone to you know create a mixing for the border radius just pass like 4 then it will create a four pixel border it is 10 it will create a 10 pixel border radius without furthering or writing a external or extra repeated classes for 10 pixel 8 pixel all that of same goes for the font size if you want to add font size 12 13 15 20 so you just need one create one mixing and pass the number it will generator same font size a style for u actually
-
-Question: Can you provide an example of using inheritance in Sass to demonstrate its advantages over traditional CSS?
-Answer: ya inheritance I'm not sure about this but it's seems like you can extend the default functionality and you what you can do it you can extend the base function of methods and then you can extended and use it in your code
-
-Question: How do you compile Sass code into standard CSS for browser interpretation?
-Answer: 800 basically Rubi Rubi used actually for to compile it and if you want to compile using another compiler that is also they but I'm not sure about this once so that's how you can actually compiled from the hcss to CSS actually
-
-Question: Can you explain the key differences between TypeScript and JavaScript?
-Answer: Soya types gift is actually super set of JavaScript I would say like JavaScript is loosely type for the typescript is the name say this quickly typely so you need to create interfaces and classes in all that but in JavaScript is losely type and you are free to choose any variable and use it how the way you want and but in touchscreen there are certain methods that you need to follow and there are certain things should be there any type should be there and those and the support which was not there in the plane JavaScript has been added to the types and very familiar and the community louds it is good actually
-
-Question: How does TypeScript support static typing? Can you provide an example of defining types in TypeScript?
 Answer: Candidate did not respond in time or failed to answer.
 
+Question: How does Sass handle mixins and why are they beneficial in writing reusable styles?
+Answer: how does these has handle mixing and why the veneti inviting reuseable data
+
+Question: Can you provide an example of using inheritance in Sass to demonstrate its advantages over traditional CSS?
+Answer: Can you provide an example of using inheritance and demonstrate is advantage over traditional CSS file in pythons famous language
+
+Question: How do you compile Sass code into standard CSS for browser interpretation?
+Answer: the compiler sad scored into standard CHS for browser intervations it is answer compound application is the application
+
+Question: Can you explain the key differences between TypeScript and JavaScript?
+Answer: the main difference of data on Javascript types it in the single phase application which javasc it is not a single page application type skate is used to compiled it travels to create the mobile application but JavaScript also was not the late any mobile activation that excito in which are doing is very easy but JavaScript easily to the people
+
+Question: How does TypeScript support static typing? Can you provide an example of defining types in TypeScript?
+Answer: how does type of superstating types of pink can you provide an example of behind types and types data can provide an example of refining type two types keeps data in them
+
 Question: What are the benefits of using TypeScript in a project compared to plain JavaScript?
-Answer: so if you use types kept in a project so basically what you it is when it is a strictly type so you know the interface you know the a blueprint of the data that is coming from the back end and which is actually if this that is incorrect so it will generated you know compile time error itself and the runtime error you will get when in the browser so in JavaScript you will get the error the run time but in the types kept you will get at the compile time itself it will tell you I had a time if you are trying to access the data which is not according to the response so what you need to do it you need to create a blueprint of the data that you are expecting from the back and then you will get the same data you can access those variables in the code editor research so it is less error prone less because he said it is strictly tight
+Answer: the types keeps in a project compare to plane JavaScript Deepak functionality of the data types of
 
 Question: How do you handle type checking in TypeScript to prevent runtime errors?
-Answer: again just we can create a interfaces actually for classes which will give us the all the properties that the data is going to have then it will actually prevent us error accessing you know the variables which should not be there in the or which is not there in the original data will you know prevent or mitigate the possibility of the errors
+Answer: how to handle the tight steps to prevent and times of the data in that of the value the types of saving and times of the data sometimes
 
 Question: Can you explain the concept of Interfaces in TypeScript and why they are important in building scalable applications?
-Answer: yeah so interfaces basically I create a layout actually a creative I know I copy of the blueprint of data actually which we are expecting from the back and again it is actually resembled with the previous question but they answer is same so once you want to build a scalebal application you need to make sure that it is properly variables are properly check the it is according to the data that we are expecting from the back end all those out of things actually if you create a interfaces it will tell you like whether this properties Bully and string or date types of example if in the back and some it is expecting a day but you added a date type filter there but it will not work because you have written for the string for those cases interfaces are required
+Answer: the interface is like of the model the interviews used to define the property of the data it is a used to easy to factory data from interface is used to define the vehicle is very busy and SSB data
 
 Question: How does TypeScript compile to JavaScript? Explain the compilation process.
-Answer: I am not sure about this how it compass but yeah it compass through the compiler and in the browser automatically gets into this JavaScript based
+Answer: how does type compared to JavaScript explain the completion process how does data mining work in Angular and what are the reasons type of data winding sported by which number can it this be like chess books in Angular and why example of using computer what are the angular services can explain the concept of interface types and why the incoming applications
 
 Question: What are some of the popular IDEs or text editors that have good support for developing projects in TypeScript?
-Answer: the most advanced and their capital of popular the open source we have vs cold which has a full support of typescript and it is very popular among the community it is open source also from the Microsoft side it has a lot of extensions and a lot of tooling available and same goes for the idea intellect actually that I don't know actually that is again support for the front project for the types but it is a paid one actually so you need a licence in order to have that but that is not it is also very famous some of the community but since it is not open source it is not or less recommended
+Answer: what are the sum of the popular ideas over text editor that have good sport for the developing project in type slips how does we that are winding work reducing the account by framework
 
 Question: Can you discuss some of the advanced features available in TypeScript, such as Generics or Decorators, and how they can be used in development?
-Answer: Yahan Sujat generics or decorators are actually that tell us which type of classes they so for example if this is a class then the decorator will be class in if this is the directive than the decorative will be directive in same goes for the services so basically when it is compass so it else the compiler which type of class is this according to that only it is actually gets compiled and in the development it help us to to use in a different way as according to the decorators
+Answer: 
 
