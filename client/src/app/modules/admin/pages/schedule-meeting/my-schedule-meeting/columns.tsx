@@ -312,9 +312,9 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
     //   render: (tenant_id: string) => <Text>#{tenant_id}</Text>,
     // },
     {
-      title: <HeaderCell title="Start Meeting" />,
-      dataIndex: 'start_meeting',
-      key: 'start_meeting',
+      title: <HeaderCell title="Start Interview" />,
+      dataIndex: 'start_interview',
+      key: 'start_interview',
       width: 150,
       render: (_: any, row: any) => (
         <div>
@@ -322,7 +322,7 @@ export const getColumnsData = ({ handlePopupClose, onDeleteItem }: any) => {
             className="text-sm font-medium text-gray-900 dark:text-gray-700 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => onClickStartInterview(row.candidate, row.job)}
           >
-            Start Meeting
+            Start Interview
           </button>
         </div>
       ),

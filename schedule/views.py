@@ -91,7 +91,7 @@ class ScheduleView(APIView):
         data['candidate_id'] = candidate.id
         data['job_title'] = job.title
         data['application_id']=candidate.application_id
-        data['username']=candidate.name
+        data['username']=candidate.first_name
         data['meeting_id']=response['id']
         data['topic']=response['topic']
         data['agenda']=response['agenda']

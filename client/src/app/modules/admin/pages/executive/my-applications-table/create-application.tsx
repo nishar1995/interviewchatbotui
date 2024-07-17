@@ -188,9 +188,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
 
   return (
     <Form<candidateSchema>
-      // resetValues={reset}
       onSubmit={onSubmit}
-      //validationSchema={candidateSchema}
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
@@ -204,7 +202,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 <PiXBold className="h-auto w-5" />
               </ActionIcon>
             </div>
-            <label htmlFor="job">Job</label>
+            <label htmlFor="job" className="col-span-full">Job</label>
             <select
               id="job-select"
               className="col-span-full"
@@ -219,58 +217,62 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 </option>
               ))}
             </select>
-
+  
             <Input
               label="First Name"
-              placeholder="Enter Candidate's full name"
+              placeholder="Enter first name"
               {...register('first_name')}
               defaultValue={reset.first_name}
-              className="col-span-full"
+              className="col-span-1"
               error={errors.first_name?.message}
             />
-              <Input
+            <Input
               label="Last Name"
-              placeholder="Enter Candidate's last name"
+              placeholder="Enter last name"
               {...register('last_name')}
               defaultValue={reset.last_name}
-              className="col-span-full"
+              className="col-span-1"
               error={errors.last_name?.message}
             />
+  
             <Input
               label="UserName"
               placeholder="Enter Candidate UserName"
               {...register('username')}
-              className="col-span-full"
               defaultValue={reset.username}
+              className="col-span-1"
               error={errors.username?.message}
             />
-
+  
             <Input
               label="Email"
               placeholder="Enter candidate email"
               {...register('email')}
-              className="col-span-full"
               defaultValue={reset.email}
+              className="col-span-1"
               error={errors.email?.message}
             />
+  
             <Input
               label="Contact No."
               placeholder="Enter contact no."
               {...register('phone_number')}
-              className="col-span-full"
               defaultValue={reset.phone_number}
+              className="col-span-1"
               error={errors.phone_number?.message}
             />
- {!isEditMode && (
-            <Input
-              label="Password"
-              placeholder="Enter Candidate Password"
-              {...register('password')}
-              className="col-span-full"
-              defaultValue={reset.password}
-              error={errors.password?.message}
-            />
- )}
+  
+            {!isEditMode && (
+              <Input
+                label="Password"
+                placeholder="Enter Candidate Password"
+                {...register('password')}
+                defaultValue={reset.password}
+                className="col-span-1"
+                error={errors.password?.message}
+              />
+            )}
+  
             {!isEditMode && (
               <Controller
                 name="resume"
@@ -292,14 +294,14 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                           .filter((file) => file !== undefined);
                         onChange(newFiles);
                       }}
-                      className="mb-6 min-h-[280px] justify-center border-dashed bg-gray-50 dark:bg-transparent"
+                      className="mb-6 min-h-[200px] justify-center border-dashed bg-gray-50 dark:bg-transparent"
                     />
                     {value?.length > 1 && (
                       <Text className="mb-2 text-gray-500">
                         {value?.length} files
                       </Text>
                     )}
-
+  
                     {value?.length > 0 && (
                       <SimpleBar className="max-h-[280px]">
                         <div className="grid grid-cols-1 gap-4">
@@ -321,7 +323,7 @@ export default function CreateApplication({ onClose, candidateList }: any) {
                 )}
               />
             )}
-
+  
             <div className="col-span-full flex items-center justify-end gap-4">
               <Button
                 variant="outline"
@@ -343,4 +345,5 @@ export default function CreateApplication({ onClose, candidateList }: any) {
       }}
     </Form>
   );
+  
 }

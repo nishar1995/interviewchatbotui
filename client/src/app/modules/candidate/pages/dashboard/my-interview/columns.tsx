@@ -22,6 +22,23 @@ export const getColumnsData = ({interviewDetails}:any) => {
   console.log("interView Details.........",interviewDetails)
   return [
     {
+      title: <HeaderCell title="Start Interview" />,
+      dataIndex: 'start_interview',
+      key: 'start_interview',
+      width: 150,
+      colors:"red",
+      render: (_: any, row: any) => (
+        <div>
+          <button
+            className="text-sm font-medium text-gray-900 dark:text-gray-700 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            //onClick={() => onClickStartInterview(row.candidate, row.job)}
+          >
+            Start Interview
+          </button>
+        </div>
+      ),
+    },
+    {
       title: <HeaderCell title="Application Id" />,
       //onHeaderCell: () => onHeaderCellClick('applicationId'),
       dataIndex: 'application_id',
