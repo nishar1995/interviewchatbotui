@@ -198,10 +198,10 @@ export default function CreateApplication({ onClose, candidateList }: any) {
             <Input
               label="Candidate Name"
               placeholder="Enter Candidate's full name"
-              {...register('name')}
+              {...register('first_name')}
               defaultValue={reset.name}
               className="col-span-full"
-              error={errors.name?.message}
+              error={errors.first_name?.message}
             />
             <label htmlFor="job">Job</label>
             <select

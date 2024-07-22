@@ -206,7 +206,7 @@ export default function AppointmentStats({ className }: AppointmentStatsType) {
   // Function to fetch scheduled candidates data
   // const fetchScheduledCandidatesData = async () => {
   //   try {
-  //     const response = await fetch('http://127.0.0.1:5000/upload_application_data');
+  //     const response = await fetch('http://localhost:5000/upload_application_data');
   //     if (!response.ok) {
   //       throw new Error('Failed to fetch data');
   //     }

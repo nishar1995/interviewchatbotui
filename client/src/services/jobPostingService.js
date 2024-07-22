@@ -4,7 +4,7 @@ import axiosInterceptorInstance from './authInterceptorService';
 // function to get job list
 export async function getJobList() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/job/`, {
+        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/job/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -48,7 +48,7 @@ export async function fetchDataById(jobPostingId) {
 export async function addJob(data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/job/', data);
+        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/job/', data);
         return response;
     } catch (error) {
         console.error('Error add job:', error);
@@ -61,7 +61,7 @@ export async function addJob(data) {
 export async function updateJob(jobId, data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/job/${jobId}/`, data
+        const response = await axiosInterceptorInstance.put(`http://localhost:8000/api/job/${jobId}/`, data
         );
         return response;
     } catch (error) {
@@ -73,7 +73,7 @@ export async function updateJob(jobId, data) {
 // function of delete the job post
 export async function deleteJob(jobId) {
     try {
-        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/job/${jobId}/`, {
+        const response = await axiosInterceptorInstance.delete(`http://localhost:8000/api/job/${jobId}/`, {
             method: 'DELETE',
         });
         return response;

@@ -171,7 +171,7 @@ export default function MyJobTable({ className }: { className?: string }) {
   //   // const [data, setData] = useState<jobData[]>([]);
 
   //   // useEffect(() => {
-  //   //   fetch('http://127.0.0.1:5000/upload_job_data')
+  //   //   fetch('http://localhost:5000/upload_job_data')
   //   //     .then((response) => response.json())
   //   //     .then((json) => {
   //   //       setData(json as jobData[]);
@@ -181,7 +181,7 @@ export default function MyJobTable({ className }: { className?: string }) {
   //   // const { data } = useQuery<jobData[]>({
   //   //   queryKey: [jobQueryKey],
   //   //   queryFn: async () => {
-  //   //     const response = await fetch('http://127.0.0.1:5000/upload_job_data', {
+  //   //     const response = await fetch('http://localhost:5000/upload_job_data', {
   //   //       method: 'GET',
   //   //     });
   //   //     if (!response.ok) {

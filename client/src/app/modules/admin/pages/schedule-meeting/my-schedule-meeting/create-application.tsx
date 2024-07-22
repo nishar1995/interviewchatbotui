@@ -221,7 +221,7 @@ export default function CreateMeeting({ onClose, meetingDetails }: any) {
     // let uploadedFilePath = '';
     // console.log(formData);
     // formData.append('candidateFiles', uploadedFilePath);
-    // fetch('http://127.0.0.1:5000/upload_application_data', {
+    // fetch('http://localhost:5000/upload_application_data', {
     //   method: 'POST',
     //   body: formData,
     //   headers: {

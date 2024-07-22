@@ -266,7 +266,7 @@ export default function MyApplicationsTable({
 //     queryKey: [applicationQueryKey],
 //     queryFn: async () => {
 //       const response = await fetch(
-//         'http://127.0.0.1:5000/upload_application_data',
+//         'http://localhost:5000/upload_application_data',
 //         { method: 'GET' }
 //       );
 //       if (!response.ok) {

@@ -13,7 +13,7 @@ export async function fetchDataById(questionId) {
 
 export async function getQuestions() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/question/`, {
+        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/question/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -43,7 +43,7 @@ export async function getQuestions() {
 // fuction of add tenant questions
 export async function addQuestion(data) {
     try {
-        const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/question/', data);
+        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/question/', data);
         // const responseData = await response.json();
         return response.data;
     } catch (error) {
@@ -55,7 +55,7 @@ export async function addQuestion(data) {
 
 export async function deleteQuestion(questionId) {
     try {
-        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/question/${questionId}/`
+        const response = await axiosInterceptorInstance.delete(`http://localhost:8000/api/question/${questionId}/`
        );
         return response;
 
@@ -72,7 +72,7 @@ export async function deleteQuestion(questionId) {
 export async function updateQuestions(jobId, data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/question/${jobId}/`, data
+        const response = await axiosInterceptorInstance.put(`http://localhost:8000/api/question/${jobId}/`, data
         );
         return response;
     } catch (error) {

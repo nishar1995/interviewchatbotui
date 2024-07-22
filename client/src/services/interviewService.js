@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 // export async function getInterViewQuestions() {
 //     try {
-//         const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/conduct_interview/?candidate_id=9&job_id=5`, {
+//         const response = await axiosInterceptorInstance.get(`http://localhost:8000/conduct_interview/?candidate_id=9&job_id=5`, {
 //             mode: 'no-cors',
 //             method: 'GET',
 //             headers: {
@@ -25,7 +25,7 @@ import Cookies from 'js-cookie';
 //     const cookieValue = Cookies.get('token');
 //     const token = cookieValue ? JSON.parse(cookieValue) : null;
 //     try {
-//         const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/start_interview/?candidate_id=${candidateId}&job_id=${jobId}&token=${token}`, {
+//         const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/start_interview/?candidate_id=${candidateId}&job_id=${jobId}&token=${token}`, {
 //             mode: 'no-cors',
 //             method: 'GET',
 //             headers: {
@@ -44,7 +44,7 @@ import Cookies from 'js-cookie';
 
 export async function getInterViewQuestions(candidateId,jobId) {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/intbot/?candidate_id=${candidateId}&job_id=${jobId}`, {
+        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/intbot/?candidate_id=${candidateId}&job_id=${jobId}`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -63,7 +63,7 @@ export async function getInterViewQuestions(candidateId,jobId) {
 
 export async function captureResponse(data) {
     try {
-        const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/intbot/', data);
+        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/intbot/', data);
         // const responseData = await response.json();
         return response.data;
     } catch (error) {

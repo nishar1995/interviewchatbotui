@@ -3,7 +3,7 @@ import axiosInterceptorInstance from './authInterceptorService';
 // fuction of get candidate by id
 export async function getCandidateById(candidateId) {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/candidate/${candidateId}/`, {
+        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/candidate/${candidateId}/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -20,7 +20,7 @@ export async function getCandidateById(candidateId) {
 // fuction of get candidate list
 export async function candidateList() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/candidate/`, {
+        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/candidate/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -37,7 +37,7 @@ export async function candidateList() {
 // function get Candidate username
 export async function getCandidateUsername() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/candidate/usernames/`, {
+        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/candidate/usernames/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -55,7 +55,7 @@ export async function getCandidateUsername() {
 export async function addCandidate(data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/candidate/', data
+        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/candidate/', data
             // method: 'POST',
             // headers: {
             //     'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export async function addCandidate(data) {
 export async function updateCandidate(candidateId, data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/candidate/${candidateId}/`, data
+        const response = await axiosInterceptorInstance.put(`http://localhost:8000/api/candidate/${candidateId}/`, data
         );
         return response;
     } catch (error) {
@@ -88,7 +88,7 @@ export async function updateCandidate(candidateId, data) {
 // function of delete candidate 
 export async function deleteCandidate(candidateId) {
     try {
-        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/candidate/${candidateId}/`, {
+        const response = await axiosInterceptorInstance.delete(`http://localhost:8000/api/candidate/${candidateId}/`, {
             method: 'DELETE',
         });
         return response;

@@ -1,6 +1,6 @@
 // fuction of get tenant by id
 
-// http://127.0.0.1:8000/
+// http://localhost:8000/
 import axiosInterceptorInstance from './authInterceptorService';
 export async function fetchDataById(tenantId) {
     try {
@@ -17,7 +17,7 @@ export async function fetchDataById(tenantId) {
 
 export async function fetchData() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://127.0.0.1:8000/api/tenant/`, {
+        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/tenant/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -35,7 +35,7 @@ export async function fetchData() {
 // fuction of add tenant
 export async function addTenant(data) {
     try {
-        const response = await axiosInterceptorInstance.post('http://127.0.0.1:8000/api/tenant/', data);
+        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/tenant/', data);
         // const responseData = await response.json();
         return response.data;
     } catch (error) {
@@ -48,7 +48,7 @@ export async function addTenant(data) {
 export async function updateTenant(tenantId, data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.put(`http://127.0.0.1:8000/api/tenant/${tenantId}/`, data
+        const response = await axiosInterceptorInstance.put(`http://localhost:8000/api/tenant/${tenantId}/`, data
         );
         return response;
     } catch (error) {
@@ -60,7 +60,7 @@ export async function updateTenant(tenantId, data) {
 // function of delete the tenant
 export async function deleteTenant(tenantId) {
     try {
-        const response = await axiosInterceptorInstance.delete(`http://127.0.0.1:8000/api/tenant/${tenantId}/`, {
+        const response = await axiosInterceptorInstance.delete(`http://localhost:8000/api/tenant/${tenantId}/`, {
             method: 'DELETE',
         });
         return response;
