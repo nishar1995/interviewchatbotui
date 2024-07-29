@@ -182,18 +182,18 @@ def generate_questions(skill, experience_level, num_questions=10):
     else:
         difficulty = "basic"
  
-    prompt = f"Generate {difficulty} level technical interview questions for the skill: {skill} \n\n the number of questions to generate greater than {num_questions}"
+    prompt = f"Generate {difficulty} level technical interview questions for the skill: {skill} \n\n the number of questions to less than {num_questions}"
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful interviewer."},
             {"role": "user", "content": prompt},
         ],
-        max_tokens=1024,
+        max_tokens=2048,
         temperature=0.8,
         top_p=1.0,
         frequency_penalty=0.4,
-        presence_penalty=0
+        presence_penalty=0.4
     )
     questions = response.choices[0].message['content'].strip().split('\n')
     questions = [re.sub(r'^\d+\.', '', element.strip()) for element in questions]

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from "react";
-import { getInterViewQuestions, captureResponse } from '../../../../../services/interviewService'
+import { useEffect, useState, useRef } from "react";
+import { getInterViewQuestions, captureResponse } from '../../../../../services/interviewService';
 import { useRouter } from 'next/navigation';
 import { getMeetingById } from "@/services/meetingScheduleService";
 
@@ -20,46 +20,41 @@ export default function StartInterviewDashboard({ id }: any) {
     const router = useRouter();
     const [questions, setQuestions] = useState<any[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers]: any = useState([]);
+    const [answers, setAnswers] = useState<any[]>([]);
     const [isRecording, setIsRecording] = useState(false);
-    const [showAnswerList, setShowAnswerList] = useState([]);
-    const [final_transcript, setFinalTranscript] = useState('');
-    const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(true);
-    let recognition: any;
-    let silenceDetectionTimeout: any;
-    let interViewQuestions: any[] = [];
-    let nextIndex: any = 0;
+    const [showAnswerList, setShowAnswerList] = useState<any[]>([]);
+    const [finalTranscript, setFinalTranscript] = useState('');
+    const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
+    const [isCandidateSpeaking, setIsCandidateSpeaking] = useState(false);
+    const [showStartButton, setShowStartButton] = useState(true);
+    const [showSpeakButton, setShowSpeakButton] = useState(false);
+    const [showStopButton, setShowStopButton] = useState(false);
+    const [showNextButton, setShowNextButton] = useState(false);
+    const [showAnswerSection, setShowAnswerSection] = useState(false);
+
+    const recognitionRef = useRef<any>(null);
+    const timeoutResumeInfinityRef = useRef<any>(null);
+    const silenceDetectionTimeoutRef = useRef<any>(null);
+    const interim_transcriptRef = useRef<string>('');
+    const repeatRef = useRef<number>(0);
+
     let candidate_id: any;
     let job_id: any;
-    let repeat: any = 0;
-    let interim_transcript = '';
-    let timeoutResumeInfinity: any;
 
     const colors = [
-        "aqua",
-        "azure",
-        "beige",
-        "bisque",
-        "black",
-        "blue",
-        "brown",
-        "chocolate",
-        "coral" /* … */,
+        "aqua", "azure", "beige", "bisque", "black", "blue", "brown", "chocolate", "coral" /* … */
     ];
-    const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(
-        " | ",
-    )};`;
+    const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(" | ")};`;
 
     const getMeetingDetailsById = async () => {
         try {
             const response = await getMeetingById(id);
-            console.log("response...", response)
+            console.log("response...", response);
             candidate_id = response.data.candidate;
             job_id = response.data.job;
             if (candidate_id && job_id) {
                 getQuestions();
             }
-
         } catch (error) {
             console.log("Error fetching questions: ", error);
         }
@@ -67,161 +62,128 @@ export default function StartInterviewDashboard({ id }: any) {
 
     const speakQuestion = (question: any) => {
         setIsInterviewerSpeaking(true);
+        console.log("repeat......", repeatRef.current);
         let utterance = new SpeechSynthesisUtterance('');
         let synth = window.speechSynthesis;
-        let voices = synth.getVoices();
 
-        if (repeat == 1) {
-            utterance = new SpeechSynthesisUtterance('Okay, I will repeat the question. ' + question);
+        if (repeatRef.current === 1) {
+            if(showStopButton){
+            
+            }
+            else{
+                utterance = new SpeechSynthesisUtterance('Okay, I will repeat the question. ' + question);
+
+            }
         } else {
             utterance = new SpeechSynthesisUtterance(question);
         }
 
-        utterance.rate = .5;
+        utterance.rate = 0.5;
         window.speechSynthesis.cancel();
         synth.speak(utterance);
 
-        utterance.onstart = function () {
-            // console.log('Speech has started.');
-        };
-
-        utterance.onpause = function () {
-            // console.log('Speech has been paused.');
-        };
-
-        utterance.onresume = function () {
-            // console.log('Speech has been resumed.');
-        };
-
-        utterance.onboundary = function (event: any) {
-            // console.log('Speech boundary has been reached.', event);
-        };
-
-        utterance.onmark = function (event: any) {
-            // console.log('Speech mark has been reached.', event);
-        };
-
-        utterance.onerror = function (event: any) {
-            console.error('Speech error occurred:', event.error);
-        };
         utterance.onend = function () {
-            clearTimeout(timeoutResumeInfinity);
-            startRecognition(question); // Start recognition after speaking
+            clearTimeout(timeoutResumeInfinityRef.current);
+            setIsInterviewerSpeaking(false);
+            setShowSpeakButton(true);
+            setShowStopButton(true);
         };
     };
 
     const resumeInfinity = () => {
         window.speechSynthesis.resume();
-        timeoutResumeInfinity = setTimeout(resumeInfinity, 1000);
-    }
+        timeoutResumeInfinityRef.current = setTimeout(resumeInfinity, 1000);
+    };
+
     const startRecognition = (question: any) => {
+        setIsCandidateSpeaking(true);
+        setShowStopButton(true);
+        setShowNextButton(true);
+        setShowAnswerSection(false);
         setIsInterviewerSpeaking(false);
-        console.log("Setting isInterviewerSpeaking to false");
-    
-        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        setShowSpeakButton(false);
+
+        recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         const SpeechGrammarList = new (window.SpeechGrammarList || window.webkitSpeechGrammarList)();
-    
+
         SpeechGrammarList.addFromString(grammar, 1);
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-        recognition.continuous = true;
-    
-        recognition.onstart = () => {
+        recognitionRef.current.interimResults = true;
+        recognitionRef.current.lang = 'en-US';
+        recognitionRef.current.continuous = true;
+
+        recognitionRef.current.onstart = () => {
             setIsRecording(true);
             const recordingIndicator = document.getElementById('recording-indicator');
             if (recordingIndicator) {
                 recordingIndicator.style.display = 'block';
             }
         };
-    
-        recognition.onspeechstart = () => {
-            // console.log('Speech has been detected.');
-        };
-    
-        recognition.onspeechend = () => {
-            // console.log('Speech has stopped being detected.');
-        };
-    
-        recognition.onresult = (event: any) => {
-            clearTimeout(silenceDetectionTimeout);
+
+        recognitionRef.current.onresult = (event: any) => {
+            clearTimeout(silenceDetectionTimeoutRef.current);
             let final_transcript = '';
-            interim_transcript = '';
+            interim_transcriptRef.current = '';
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i][0].transcript) {
                     final_transcript += event.results[i][0].transcript;
                 }
             }
-    
-            setIsInterviewerSpeaking((prevIsInterviewerSpeaking) => {
-                if (!prevIsInterviewerSpeaking) {
-                    setFinalTranscript(final_transcript);
-                    console.log(final_transcript);
-    
-                    if (event.results[event.results.length - 1].isFinal) {
-                        setTimeout(() => handleAnswer(final_transcript), 2000);
-                    }
-                }
-                return prevIsInterviewerSpeaking;
-            });
+
+            setFinalTranscript(final_transcript);
+
+            if (event.results[event.results.length - 1].isFinal) {
+                handleAnswer(final_transcript);
+            }
         };
-    
-        recognition.onend = () => {
+
+        recognitionRef.current.onend = () => {
             setIsRecording(false);
             const recordingIndicator = document.getElementById('recording-indicator');
             if (recordingIndicator) {
                 recordingIndicator.style.display = 'none';
             }
         };
-    
-        recognition.start();
-    
-        silenceDetectionTimeout = setTimeout(() => {
-            if (repeat == 0) {
-                repeat++;
+
+        recognitionRef.current.start();
+
+        silenceDetectionTimeoutRef.current = setTimeout(() => {
+            if (repeatRef.current === 0) {
+                repeatRef.current++;
                 speakQuestion(question);
             } else {
-                interViewQuestions[nextIndex].answer = 'Candidate did not respond in time or failed to answer.';
-                interViewQuestions[nextIndex].isDone = true;
-                interViewQuestions[nextIndex].isAnswered = false;
-                if (interViewQuestions[nextIndex]) {
-                    setShowAnswerList(prevList => [...prevList, {
-                        question: interViewQuestions[nextIndex].question,
-                        answer: interViewQuestions[nextIndex].answer,
-                    }] as any);
-                }
-                moveToNextQuestion();
+                handleAnswer('Candidate did not respond in time or failed to answer.');
             }
         }, 5000); // Adjust the timeout duration to suit your needs
     };
-    
+
     const handleAnswer = (answer: any) => {
         setAnswers((prevAnswers: any) => {
-            interViewQuestions[nextIndex].answer = answer;
-            interViewQuestions[nextIndex].isDone = true;
-            interViewQuestions[nextIndex].isAnswered = true;
-            if (interViewQuestions[nextIndex]) {
-                setShowAnswerList(prevList => [...prevList, {
-                    question: interViewQuestions[nextIndex].question,
-                    answer: interViewQuestions[nextIndex].answer,
-                }] as any);
-            }
-            if (nextIndex < interViewQuestions.length) {
-                moveToNextQuestion();
-            }
-            return interViewQuestions;
+            const updatedQuestions = [...questions];
+            updatedQuestions[currentQuestionIndex].answer = answer;
+            updatedQuestions[currentQuestionIndex].isDone = true;
+            updatedQuestions[currentQuestionIndex].isAnswered = true;
+            setQuestions(updatedQuestions);
+            setShowAnswerList(prevList => [...prevList, {
+                question: updatedQuestions[currentQuestionIndex].question,
+                answer: answer,
+            }] as any);
+            //setIsCandidateSpeaking(false);
+            //setShowAnswerSection(true);
+           
+            return updatedQuestions;
         });
     };
 
     const moveToNextQuestion = () => {
-        repeat = 0;
+        repeatRef.current = 0;
         setFinalTranscript('');
         setCurrentQuestionIndex(prevIndex => {
-            nextIndex = prevIndex + 1;
-            if (nextIndex < interViewQuestions.length) {
-                speakQuestion(interViewQuestions[nextIndex]?.question);
+            const nextIndex = prevIndex + 1;
+            if (nextIndex < questions.length) {
+                speakQuestion(questions[nextIndex].question);
                 return nextIndex;
             } else {
-                captureAnswer(interViewQuestions)
+                captureAnswer(questions);
                 return prevIndex;
             }
         });
@@ -230,10 +192,10 @@ export default function StartInterviewDashboard({ id }: any) {
     const getQuestions = async () => {
         try {
             const response = await getInterViewQuestions(candidate_id, job_id);
-            interViewQuestions = response.data;
-            setQuestions(response.data);
-            if (response.data.length > 0) {
-                speakQuestion(response.data[0].question);
+            const fetchedQuestions = response.data;
+            setQuestions(fetchedQuestions);
+            if (fetchedQuestions.length > 0) {
+                speakQuestion(fetchedQuestions[0].question);
             }
         } catch (error) {
             console.log("Error fetching questions: ", error);
@@ -245,99 +207,131 @@ export default function StartInterviewDashboard({ id }: any) {
             candidate_id: candidate_id,
             job_id: job_id,
             answers: answer,
-        }
+        };
         try {
             const response = await captureResponse(body);
-            if (response.status == 'success') {
+            if (response.status === 'success') {
                 router.push("/successfull-interview");
             }
         } catch (error) {
-            console.log("error", error)
+            console.log("error", error);
         }
     }
 
-    useEffect(() => {
+    function onStart() {
+        console.log("on click start");
         if (id) {
             getMeetingDetailsById();
+            setShowStartButton(false);
         }
-        return () => {
-            window.speechSynthesis.cancel();
-            if (recognition) {
-                recognition.stop();
-            }
-            clearTimeout(silenceDetectionTimeout);
-        };
-    }, []);
+    }
+
+    function onSpeak() {
+        console.log("on click speak");
+        setShowSpeakButton(false);
+        setShowStopButton(false);
+        setShowNextButton(false);
+        startRecognition(questions[currentQuestionIndex].question);
+    }
+
+    function onStop() {
+        console.log("on click stop");
+        setIsRecording(false);
+        setIsCandidateSpeaking(false);
+        const recordingIndicator = document.getElementById('recording-indicator');
+        if (recordingIndicator) {
+            recordingIndicator.style.display = 'none';
+        }
+        if (recognitionRef.current) {
+            recognitionRef.current.stop();
+        }
+        setShowStopButton(false);
+        setShowNextButton(true);
+        setShowAnswerSection(true);
+    }
+
+    function onNext() {
+        console.log("on click next ");
+        setShowNextButton(false);
+        setShowStopButton(false);
+        setShowSpeakButton(false);
+        setIsCandidateSpeaking(false);
+        setShowAnswerSection(false);
+        moveToNextQuestion();
+    }
 
     return (
         <div>
             <div>
-                <div>
-                    <h1>Interview Dashboard</h1>
-                    {showAnswerList.length === questions.length && (
-                        <h1>Please Wait Prepare your Question...</h1>
-                    )}
-                    <div className="card-row">
-                        <div className={`interviewee-card ${isInterviewerSpeaking ? 'green-border' : ''}`}>
-                            <h3 className="text-gray-700">Interviewer</h3>
-                            <p>{questions[currentQuestionIndex]?.question}</p>
-                        </div>
-                        <div className={`interviewer-card ${!isInterviewerSpeaking ? 'green-border' : ''}`}>
-                            <h3 className="text-gray-700">Candidate</h3>
-                            <p>Candidate Speak......</p>
-                            <p>{final_transcript}</p>
-                        </div>
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-bold">Interview Dashboard</h1>
+                    <div className="space-x-2">
+                        {showStartButton && (
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={onStart}>Start</button>
+                        )}
+                        {!showStartButton && (
+                            <>
+                                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={onSpeak} disabled={!showSpeakButton}>Speak</button>
+                                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={onStop} disabled={!showStopButton}>Stop</button>
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={onNext} disabled={!showNextButton}>Next</button>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                <div className="card-row">
+                    <div className={`interviewee-card ${isInterviewerSpeaking ? 'green-border' : ''}`}>
+                        <h3 className="text-gray-700">Interviewer</h3>
+                        <p>{questions[currentQuestionIndex]?.question}</p>
+                    </div>
+                    <div className={`interviewer-card ${isCandidateSpeaking ? 'green-border' : ''}`}>
+                        <h3 className="text-gray-700">Candidate</h3>
+                        <p>Candidate Speak......</p>
+                        <p>{finalTranscript}</p>
                     </div>
                 </div>
             </div>
             <div>
-                <div>
-                    
-
-                    {showAnswerList.length !== questions.length && (
-                        <section>
-                            <div id="recording-indicator" style={{ display: 'none' }}>
-                                <p>Recording...</p>
-                            </div>
-
-                            {showAnswerList.length > 0 ? (
-                                <div className="table-wrapper">
-                                    <h3>Interview Question/Answer</h3>
-                                    <div className="table-container">
-
-
-                                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                                <tr>
-                                                    <th scope="col" className="px-6 py-3">
-                                                        Sr.no
-                                                    </th>
-                                                    <th scope="col" className="px-6 py-3">
-                                                        Questions
-                                                    </th>
-                                                    <th scope="col" className="px-6 py-3">
-                                                        Answer
-                                                    </th>
+                {showAnswerSection && (
+                    <section>
+                        <div id="recording-indicator" style={{ display: 'none' }}>
+                            <p>Recording...</p>
+                        </div>
+                        {showAnswerList.length > 0 ? (
+                            <div className="table-wrapper">
+                                <h3>Interview Question/Answer</h3>
+                                <div className="table-container">
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th scope="col" className="px-6 py-3">
+                                                    Sr.no
+                                                </th>
+                                                <th scope="col" className="px-6 py-3">
+                                                    Questions
+                                                </th>
+                                                <th scope="col" className="px-6 py-3">
+                                                    Answer
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {showAnswerList.map((item: any, index) => (
+                                                <tr key={index}>
+                                                    <td className="px-6 py-3">{index + 1}</td>
+                                                    <td className="px-6 py-3">{item.question}</td>
+                                                    <td className="px-6 py-3">{item.answer}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {showAnswerList.map((item: any, index) => (
-                                                    <tr key={index}>
-                                                        <td className="px-6 py-3">{index + 1}</td>
-                                                        <td className="px-6 py-3">{item.question}</td>
-                                                        <td className="px-6 py-3">{item.answer}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
-                            ) : (
-                                <p></p>
-                            )}
-                        </section>
-                    )}
-                </div>
+                            </div>
+                        ) : (
+                            <p></p>
+                        )}
+                    </section>
+                )}
             </div>
         </div>
     );
