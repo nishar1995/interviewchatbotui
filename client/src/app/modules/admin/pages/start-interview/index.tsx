@@ -4,7 +4,14 @@ import { useEffect, useState, useRef } from "react";
 import { getInterViewQuestions, captureResponse } from '../../../../../services/interviewService';
 import { useRouter } from 'next/navigation';
 import { getMeetingById } from "@/services/meetingScheduleService";
+import dynamic from 'next/dynamic';
+import { Loader } from 'rizzui';
 
+// // Dynamic import of Loader with no server-side rendering
+// const NoSSR = dynamic(() => Promise.resolve(() => null), {
+//   ssr: false,
+//   loading: () => <Loader variant="spinner" size="lg" />,
+// });
 declare global {
     interface Window {
         SpeechRecognition: any;
@@ -31,7 +38,7 @@ export default function StartInterviewDashboard({ id }: any) {
     const [showStopButton, setShowStopButton] = useState(false);
     const [showNextButton, setShowNextButton] = useState(false);
     const [showAnswerSection, setShowAnswerSection] = useState(false);
-
+    const [isLoading, setLoading] = useState(false);
     const recognitionRef = useRef<any>(null);
     const timeoutResumeInfinityRef = useRef<any>(null);
     const silenceDetectionTimeoutRef = useRef<any>(null);
@@ -67,10 +74,10 @@ export default function StartInterviewDashboard({ id }: any) {
         let synth = window.speechSynthesis;
 
         if (repeatRef.current === 1) {
-            if(showStopButton){
-            
+            if (showStopButton) {
+
             }
-            else{
+            else {
                 utterance = new SpeechSynthesisUtterance('Okay, I will repeat the question. ' + question);
 
             }
@@ -86,7 +93,7 @@ export default function StartInterviewDashboard({ id }: any) {
             clearTimeout(timeoutResumeInfinityRef.current);
             setIsInterviewerSpeaking(false);
             setShowSpeakButton(true);
-            setShowStopButton(true);
+            setShowStopButton(false);
         };
     };
 
@@ -169,7 +176,7 @@ export default function StartInterviewDashboard({ id }: any) {
             }] as any);
             //setIsCandidateSpeaking(false);
             //setShowAnswerSection(true);
-           
+
             return updatedQuestions;
         });
     };
@@ -192,11 +199,15 @@ export default function StartInterviewDashboard({ id }: any) {
     const getQuestions = async () => {
         try {
             const response = await getInterViewQuestions(candidate_id, job_id);
-            const fetchedQuestions = response.data;
-            setQuestions(fetchedQuestions);
-            if (fetchedQuestions.length > 0) {
-                speakQuestion(fetchedQuestions[0].question);
+            if (response) {
+                setLoading(false)
+                const fetchedQuestions = response.data;
+                setQuestions(fetchedQuestions);
+                if (fetchedQuestions.length > 0) {
+                    speakQuestion(fetchedQuestions[0].question);
+                }
             }
+
         } catch (error) {
             console.log("Error fetching questions: ", error);
         }
@@ -221,6 +232,7 @@ export default function StartInterviewDashboard({ id }: any) {
     function onStart() {
         console.log("on click start");
         if (id) {
+            setLoading(true);
             getMeetingDetailsById();
             setShowStartButton(false);
         }
@@ -262,77 +274,101 @@ export default function StartInterviewDashboard({ id }: any) {
 
     return (
         <div>
-            <div>
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl font-bold">Interview Dashboard</h1>
-                    <div className="space-x-2">
-                        {showStartButton && (
-                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={onStart}>Start</button>
-                        )}
-                        {!showStartButton && (
-                            <>
-                                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={onSpeak} disabled={!showSpeakButton}>Speak</button>
-                                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={onStop} disabled={!showStopButton}>Stop</button>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={onNext} disabled={!showNextButton}>Next</button>
-                            </>
-                        )}
-                    </div>
+            {isLoading ? (
+                <div className="flex items-center justify-center h-screen">
+                    <Loader variant="spinner" size="lg" />
+                    <p>Please wait Prepare the Questions...</p>
                 </div>
-
-                <div className="card-row">
-                    <div className={`interviewee-card ${isInterviewerSpeaking ? 'green-border' : ''}`}>
-                        <h3 className="text-gray-700">Interviewer</h3>
-                        <p>{questions[currentQuestionIndex]?.question}</p>
-                    </div>
-                    <div className={`interviewer-card ${isCandidateSpeaking ? 'green-border' : ''}`}>
-                        <h3 className="text-gray-700">Candidate</h3>
-                        <p>Candidate Speak......</p>
-                        <p>{finalTranscript}</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                {showAnswerSection && (
-                    <section>
-                        <div id="recording-indicator" style={{ display: 'none' }}>
-                            <p>Recording...</p>
-                        </div>
-                        {showAnswerList.length > 0 ? (
-                            <div className="table-wrapper">
-                                <h3>Interview Question/Answer</h3>
-                                <div className="table-container">
-                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                            <tr>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Sr.no
-                                                </th>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Questions
-                                                </th>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Answer
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {showAnswerList.map((item: any, index) => (
-                                                <tr key={index}>
-                                                    <td className="px-6 py-3">{index + 1}</td>
-                                                    <td className="px-6 py-3">{item.question}</td>
-                                                    <td className="px-6 py-3">{item.answer}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+            ) : (
+                <>
+                    <div className={`${isLoading ? 'opacity-20' : ''}`}>
+                        <div>
+                            <div className="flex justify-between items-center mb-4">
+                                <h1 className="text-2xl font-bold">Interview Dashboard</h1>
+                                <div className="space-x-2">
+                                    {showStartButton && (
+                                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={onStart}>Start</button>
+                                    )}
+                                    {!showStartButton && (
+                                        <>
+                                            <button
+                                                className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${!showSpeakButton ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                onClick={onSpeak}
+                                                disabled={!showSpeakButton}
+                                            >
+                                                Speak
+                                            </button>
+                                            <button
+                                                className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ${!showStopButton ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                onClick={onStop}
+                                                disabled={!showStopButton}
+                                            >
+                                                Stop
+                                            </button>
+                                            <button
+                                                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${!showNextButton ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                onClick={onNext}
+                                                disabled={!showNextButton}
+                                            >
+                                                Next
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
-                        ) : (
-                            <p></p>
-                        )}
-                    </section>
-                )}
-            </div>
+
+                            <div className="card-row">
+                                <div className={`interviewee-card ${isInterviewerSpeaking ? 'green-border' : ''}`}>
+                                    <h3 className="text-gray-700">Interviewer</h3>
+                                    <p>{questions[currentQuestionIndex]?.question}</p>
+                                </div>
+                                <div className={`interviewer-card ${isCandidateSpeaking ? 'green-border' : ''}`}>
+                                    <h3 className="text-gray-700">Candidate</h3>
+                                    <p>Candidate Speak......</p>
+                                    <p>{finalTranscript}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            {showAnswerSection && (
+                                <section>
+                                    <div id="recording-indicator" style={{ display: 'none' }}>
+                                        <p>Recording...</p>
+                                    </div>
+                                    {showAnswerList.length > 0 ? (
+                                        <div className="table-wrapper">
+                                            <h3>Interview Question/Answer</h3>
+                                            <div className="table-container">
+                                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                        <tr>
+                                                            <th scope="col" className="px-6 py-3">Sr.no</th>
+                                                            <th scope="col" className="px-6 py-3">Questions</th>
+                                                            <th scope="col" className="px-6 py-3">Answer</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {showAnswerList.map((item: any, index) => (
+                                                            <tr key={index}>
+                                                                <td className="px-6 py-3">{index + 1}</td>
+                                                                <td className="px-6 py-3">{item.question}</td>
+                                                                <td className="px-6 py-3">{item.answer}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p>No answers yet</p>
+                                    )}
+                                </section>
+                            )}
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
+
 }
