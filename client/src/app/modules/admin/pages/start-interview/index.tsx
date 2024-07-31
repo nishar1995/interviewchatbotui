@@ -1,17 +1,11 @@
 'use client';
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useDebugValue } from "react";
 import { getInterViewQuestions, captureResponse } from '../../../../../services/interviewService';
 import { useRouter } from 'next/navigation';
 import { getMeetingById } from "@/services/meetingScheduleService";
-import dynamic from 'next/dynamic';
 import { Loader } from 'rizzui';
 
-// // Dynamic import of Loader with no server-side rendering
-// const NoSSR = dynamic(() => Promise.resolve(() => null), {
-//   ssr: false,
-//   loading: () => <Loader variant="spinner" size="lg" />,
-// });
 declare global {
     interface Window {
         SpeechRecognition: any;
@@ -25,6 +19,7 @@ declare global {
 
 export default function StartInterviewDashboard({ id }: any) {
     const router = useRouter();
+    const [que, setNextQuestions] = useState<any[]>([]);
     const [questions, setQuestions] = useState<any[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<any[]>([]);
@@ -44,10 +39,9 @@ export default function StartInterviewDashboard({ id }: any) {
     const silenceDetectionTimeoutRef = useRef<any>(null);
     const interim_transcriptRef = useRef<string>('');
     const repeatRef = useRef<number>(0);
-
-    let candidate_id: any;
-    let job_id: any;
-
+    const [candidateId, setCandidateId] = useState<any>(null); // State for candidate_id
+    const [jobId, setJobId] = useState<any>(null); // State for job_id
+    
     const colors = [
         "aqua", "azure", "beige", "bisque", "black", "blue", "brown", "chocolate", "coral" /* … */
     ];
@@ -57,10 +51,10 @@ export default function StartInterviewDashboard({ id }: any) {
         try {
             const response = await getMeetingById(id);
             console.log("response...", response);
-            candidate_id = response.data.candidate;
-            job_id = response.data.job;
-            if (candidate_id && job_id) {
-                getQuestions();
+            setCandidateId(response.data.candidate);
+            setJobId(response.data.job);
+            if (response.data.candidate && response.data.job) {
+                getQuestions(response.data.candidate, response.data.job);
             }
         } catch (error) {
             console.log("Error fetching questions: ", error);
@@ -105,7 +99,7 @@ export default function StartInterviewDashboard({ id }: any) {
     const startRecognition = (question: any) => {
         setIsCandidateSpeaking(true);
         setShowStopButton(true);
-        setShowNextButton(true);
+        setShowNextButton(false);
         setShowAnswerSection(false);
         setIsInterviewerSpeaking(false);
         setShowSpeakButton(false);
@@ -165,24 +159,34 @@ export default function StartInterviewDashboard({ id }: any) {
 
     const handleAnswer = (answer: any) => {
         setAnswers((prevAnswers: any) => {
-            const updatedQuestions = [...questions];
-            updatedQuestions[currentQuestionIndex].answer = answer;
-            updatedQuestions[currentQuestionIndex].isDone = true;
-            updatedQuestions[currentQuestionIndex].isAnswered = true;
-            setQuestions(updatedQuestions);
+            console.log("answer",answer);
+            const que = questions[currentQuestionIndex];
+            que.answer = answer;
+            que.isDone = true;
+            que.isAnswered = true;
+            console.log("ques...",que)
+            // const updatedQuestions = [...questions];
+            // updatedQuestions[currentQuestionIndex].answer = answer;
+            // updatedQuestions[currentQuestionIndex].isDone = true;
+            // updatedQuestions[currentQuestionIndex].isAnswered = true;
+            console.log("answer...",que)
+            setNextQuestions(que);
+            // setQuestions(que);
             setShowAnswerList(prevList => [...prevList, {
-                question: updatedQuestions[currentQuestionIndex].question,
+                // question: que[currentQuestionIndex].question,
+                question : que.question,
                 answer: answer,
             }] as any);
             //setIsCandidateSpeaking(false);
             //setShowAnswerSection(true);
 
-            return updatedQuestions;
+            return que;
         });
     };
 
+
     const moveToNextQuestion = () => {
-        repeatRef.current = 0;
+        captureAnswer(que);
         setFinalTranscript('');
         setCurrentQuestionIndex(prevIndex => {
             const nextIndex = prevIndex + 1;
@@ -190,40 +194,61 @@ export default function StartInterviewDashboard({ id }: any) {
                 speakQuestion(questions[nextIndex].question);
                 return nextIndex;
             } else {
-                captureAnswer(questions);
+                console.log("Interview completed.");
+                router.push("/successfull-interview");
                 return prevIndex;
             }
         });
-    };
+           
+    }
+    
+    // const moveToNextQuestion = () => {
+    //     repeatRef.current = 0;
+    //     setFinalTranscript('');
+    //     setCurrentQuestionIndex(prevIndex => {
+    //         const nextIndex = prevIndex + 1;
+    //         if (nextIndex < questions.length) {
+    //             speakQuestion(questions[nextIndex].question);
+    //             return nextIndex;
+    //         } else {
+    //             captureAnswer(questions);
+    //             return prevIndex;
+    //         }
+    //     });
+    // };
 
-    const getQuestions = async () => {
+
+    const getQuestions = async (candidate_id: any, job_id: any) => {
         try {
             const response = await getInterViewQuestions(candidate_id, job_id);
             if (response) {
-                setLoading(false)
+                setLoading(false);
                 const fetchedQuestions = response.data;
                 setQuestions(fetchedQuestions);
                 if (fetchedQuestions.length > 0) {
                     speakQuestion(fetchedQuestions[0].question);
                 }
             }
-
         } catch (error) {
             console.log("Error fetching questions: ", error);
         }
     };
 
     async function captureAnswer(answer: any) {
+        console.log("candidate id", candidateId);
+        console.log("job id", jobId);
         let body = {
-            candidate_id: candidate_id,
-            job_id: job_id,
+            candidate_id: candidateId,
+            job_id: jobId,
             answers: answer,
         };
+
+        console.log("body", body);
         try {
             const response = await captureResponse(body);
-            if (response.status === 'success') {
-                router.push("/successfull-interview");
-            }
+            // if (response.status === 'success') {
+            //     // router.push("/successfull-interview");
+            // }
         } catch (error) {
             console.log("error", error);
         }
@@ -289,7 +314,7 @@ export default function StartInterviewDashboard({ id }: any) {
                         <h1 className="text-2xl font-bold">Interview Dashboard</h1>
                         <div className="space-x-2">
                             {showStartButton && (
-                                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={onStart}>Start</button>
+                                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={onStart}>Start Interview</button>
                             )}
                             {!showStartButton && (
                                 <>
@@ -298,7 +323,7 @@ export default function StartInterviewDashboard({ id }: any) {
                                         onClick={onSpeak}
                                         disabled={!showSpeakButton}
                                     >
-                                        Speak
+                                        Candidate Speak
                                     </button>
                                     <button
                                         className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ${!showStopButton ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -326,7 +351,7 @@ export default function StartInterviewDashboard({ id }: any) {
                         </div>
                         <div className={`interviewer-card ${isCandidateSpeaking ? 'green-border' : ''}`}>
                             <h3 className="text-gray-700">Candidate</h3>
-                            <p>Candidate Speak...</p>
+                            {/* <p>Candidate Speak...</p> */}
                             <p>{finalTranscript}</p>
                         </div>
                     </div>

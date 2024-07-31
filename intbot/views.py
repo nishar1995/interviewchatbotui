@@ -18,6 +18,7 @@ import openai
 from gtts import gTTS  
 from openai import ChatCompletion  
 import os
+import threading
 
 
 
@@ -52,7 +53,7 @@ def save_history(history, resume_filename, history_dir="history", summary_dir="s
     os.makedirs(audio_dir, exist_ok=True)
 
     history_filename = os.path.join(history_dir, f"{resume_filename}_history.txt")
-    with open(history_filename, 'w') as file:
+    with open(history_filename, 'a') as file:
         for item in history:
             file.write(f"Question: {item['Question']}\n")
             file.write(f"Answer: {item['response']}\n\n")
@@ -91,7 +92,7 @@ class IntBotView(APIView):
             questions = Question.objects.filter(candidate_id=candidate_id, job_id=job_id)
             
             serializer = QuestionSerializer(questions, many=True)
-            print("line@@@@@@@@@@@@@@@@",serializer.data)
+            # print("line@@@@@@@@@@@@@@@@",serializer.data)
             data=[]
             for i in questions:
                 int_ques=IntBot(
@@ -105,9 +106,9 @@ class IntBotView(APIView):
                 # print("#################")
                 # print(data)
                 # print("@@@@@@@@@@@@@@@@@")
-                print(f"Saved IntBot object with question: {i.question}")
+                # print(f"Saved IntBot object with question: {i.question}")
             serializer=IntBotSerializer(data,many=True)
-            print("!!!!!!!!!!!!!!!!!!!!!!!!\n",serializer.data)
+            # print("!!!!!!!!!!!!!!!!!!!!!!!!\n",serializer.data)
             return Response(serializer.data)
         elif pk:
             # retrieve and return the instance with this primary key
@@ -122,25 +123,24 @@ class IntBotView(APIView):
 
 
     def post(self, request, *args, **kwargs):
-        print("Request data:", request.data)
+        # print("Request data:", request.data)
         candidate_id = request.data.get('candidate_id')
         job_id = request.data.get('job_id')
-        answers = request.data.get('answers', [])
+        answers = [request.data.get('answers', [])]
         
         if not candidate_id or not job_id:
             return Response({'detail': 'candidate_id, job_id, and answers are required fields.'},
                             status=status.HTTP_400_BAD_REQUEST)
         history = []
+        
         for answer_data in answers:
+            print('answer_data--',answer_data)
             question = answer_data.get('question')
             answer = answer_data.get('answer')
-
+            print('question,',question)
             if not question:
                 return Response({'detail': 'Each answer must include a question and an answer.'},
                                 status=status.HTTP_400_BAD_REQUEST)
-
-            history.append({'Question': question, 'response': answer})
-
             intbot_instance = IntBot(
                 candidate_id=candidate_id,
                 job_id=job_id,
@@ -148,8 +148,12 @@ class IntBotView(APIView):
                 answer=answer
             )
             intbot_instance.save()
+            history.append({'Question': question, 'response': answer})
+              
+        
+            
         candidate = get_object_or_404(Candidate, id=candidate_id)
         application_id=candidate.application_id
         save_history(history, application_id)
-
+        
         return Response({'status': 'success'}, status=status.HTTP_201_CREATED)
