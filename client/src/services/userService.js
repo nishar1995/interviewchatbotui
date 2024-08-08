@@ -3,7 +3,7 @@ import axiosInterceptorInstance from './authInterceptorService';
 // fuction of get user list
 export async function getUsersList() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/user/`, {
+        const response = await axiosInterceptorInstance.get(`http://13.233.184.104:8000/api/user/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -23,7 +23,7 @@ export async function getUsersList() {
 // fuction of get user count
 export async function getUsersRoleCount() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/user/user-role-count/`, {
+        const response = await axiosInterceptorInstance.get(`http://13.233.184.104:8000/api/user/user-role-count/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -45,7 +45,7 @@ export async function getUsersRoleCount() {
 export async function updateUser(userId, data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.put(`http://localhost:8000/api/user/${userId}/`, data
+        const response = await axiosInterceptorInstance.put(`http://13.233.184.104:8000/api/user/${userId}/`, data
         );
         return response;
     } catch (error) {
@@ -58,7 +58,7 @@ export async function updateUser(userId, data) {
 // function of delete the user
 export async function deleteUser(userId) {
     try {
-        const response = await axiosInterceptorInstance.delete(`http://localhost:8000/api/user/${userId}/`, {
+        const response = await axiosInterceptorInstance.delete(`http://13.233.184.104:8000/api/user/${userId}/`, {
             method: 'DELETE',
         });
         return response;

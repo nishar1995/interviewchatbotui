@@ -32,7 +32,7 @@ export async function fetchAuthenticateUserData() {
 export async function login(data) {
     console.log("data", data)
     try {
-        const response = await fetch('http://localhost:8000/api/user/login/', {
+        const response = await fetch('http://13.233.184.104:8000/api/user/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export async function login(data) {
 export async function registration(data) {
 
     try {
-        const response = await fetch('http://localhost:8000//api/user/register/', {
+        const response = await fetch('http://13.233.184.104:8000//api/user/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export async function registration(data) {
 // fuction of refresh token
 export async function refreshToken(data) {
     try {
-        const response = await fetch('http://localhost:8000//api/user/token/refresh/', {
+        const response = await fetch('http://13.233.184.104:8000//api/user/token/refresh/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

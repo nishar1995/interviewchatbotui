@@ -3,7 +3,7 @@ import refreshToken from '../services/authService';
 import Cookies from 'js-cookie';
 
 const axiosInterceptorInstance = axios.create({
-    baseURL: process.env.BASE_URL || 'http://localhost:8000/api/'
+    baseURL: process.env.BASE_URL || 'http://13.233.184.104:8000/api/'
     
 });
 

@@ -3,7 +3,7 @@ import axiosInterceptorInstance from './authInterceptorService';
 // fuction of get meeting schedule list
 export async function getMeetingScheduleList() {
     try {
-        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/schedule/`, {
+        const response = await axiosInterceptorInstance.get(`http://13.233.184.104:8000/api/schedule/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -22,7 +22,7 @@ export async function getMeetingScheduleList() {
 // fuction of add meeting
 export async function addMeeting(data) {
     try {
-        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/schedule/', data);
+        const response = await axiosInterceptorInstance.post('http://13.233.184.104:8000/api/schedule/', data);
         return response.data;
     } catch (error) {
         console.error('Error add meeting:', error);
@@ -35,7 +35,7 @@ export async function addMeeting(data) {
 export async function updateMeeting(candidateId, data) {
     try {
         console.log(data);
-        const response = await axiosInterceptorInstance.put(`http://localhost:8000/api/schedule/${candidateId}/`, data
+        const response = await axiosInterceptorInstance.put(`http://13.233.184.104:8000/api/schedule/${candidateId}/`, data
         );
         return response;
     } catch (error) {
@@ -47,7 +47,7 @@ export async function updateMeeting(candidateId, data) {
 // function of delete meeting
 export async function deleteMeeting(candidateId) {
     try {
-        const response = await axiosInterceptorInstance.delete(`http://localhost:8000/api/schedule/${candidateId}/`, {
+        const response = await axiosInterceptorInstance.delete(`http://13.233.184.104:8000/api/schedule/${candidateId}/`, {
             method: 'DELETE',
         });
         return response;
@@ -62,7 +62,7 @@ export async function deleteMeeting(candidateId) {
 // function of start meeting 
 export async function startMeeting(data) {
     try {
-        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/zoomsdk/', data);
+        const response = await axiosInterceptorInstance.post('http://13.233.184.104:8000/api/zoomsdk/', data);
         return response.data;
     } catch (error) {
         console.error('Error start meeting:', error);
@@ -74,7 +74,7 @@ export async function startMeeting(data) {
 // function of get meeting by id
 export async function getMeetingById(meetingId) {
     try {
-        const response = await axiosInterceptorInstance.get(`http://localhost:8000/api/schedule/${meetingId}/`, {
+        const response = await axiosInterceptorInstance.get(`http://13.233.184.104:8000/api/schedule/${meetingId}/`, {
             mode: 'no-cors',
             method: 'GET',
             headers: {
@@ -93,7 +93,7 @@ export async function getMeetingById(meetingId) {
 // fuction of add host 
 export async function addHostJoin(data) {
     try {
-        const response = await axiosInterceptorInstance.post('http://localhost:8000/api/hostjoin/', data);
+        const response = await axiosInterceptorInstance.post('http://13.233.184.104:8000/api/hostjoin/', data);
         return response.data;
     } catch (error) {
         console.error('Error add meeting:', error);

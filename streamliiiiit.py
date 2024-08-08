@@ -75,7 +75,7 @@ def speech_to_text():
  
 
 def fetch_intbot_questions(candidate_id, job_id):
-    url = f"http://localhost:8000/api/intbot/?candidate_id={candidate_id}&job_id={job_id}"
+    url = f"http://13.233.184.104:8000/api/intbot/?candidate_id={candidate_id}&job_id={job_id}"
     headers = {
         'Authorization': f'Bearer {token}'
     }
