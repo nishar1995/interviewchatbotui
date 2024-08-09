@@ -139,14 +139,14 @@ ASGI_APPLICATION = 'Flask_Bot1 2.asgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'interviewbot',
-        'USER': 'chatappdev',
-        'PASSWORD': 'IamChatAppDJapp001',
-        'HOST': 'intapp.learninginbits.com',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'interviewbot',
+        # 'USER': 'chatappdev',
+        # 'PASSWORD': 'IamChatAppDJapp001',
+        # 'HOST': 'intapp.learninginbits.com',
+        # 'PORT': '3306',
     }
 }
 
